@@ -1,14 +1,16 @@
+'use client'
+
 import React, { useState } from "react";
 
 interface Option {
-  value: string;
+  value: string | number;
   label: string;
 }
 
 interface SelectProps {
   options: Option[];
   placeholder?: string;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
   name?: string;
   id?: string;
   className?: string;
@@ -30,7 +32,7 @@ const Select: React.FC<SelectProps> = ({
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     setSelectedValue(value);
-    onChange(value); // Trigger parent handler
+    if (onChange) onChange(value); // Trigger parent handler
   };
 
   return (
@@ -54,9 +56,9 @@ const Select: React.FC<SelectProps> = ({
         {placeholder}
       </option>
       {/* Map over options */}
-      {options.map((option) => (
+      {options.map((option, idx) => (
         <option
-          key={option.value}
+          key={idx}
           value={option.value}
           className="text-gray-700 dark:bg-gray-900 dark:text-gray-400"
         >
