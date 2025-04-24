@@ -8,10 +8,10 @@ import Button from '@/components/ui/button/Button';
 import { ChevronDownIcon } from '@/icons';
 import { useActionState, useEffect, useState } from 'react';
 import { createDocumentAction, FormState } from '@/app/jagratama/documents/actions';
-import InputFieldPasword from '@/components/form/input/InputFieldPassword';
 import { toast } from "sonner"
 import { redirect } from 'next/navigation';
 import TextArea from '@/components/form/input/TextArea';
+import { MultiSelectOption, Option } from '@/components/form/input/MultiSelectOption';
 
 const DocumentCreate = () => {
   const initialState: FormState = {
@@ -22,12 +22,27 @@ const DocumentCreate = () => {
 
   const [state, formAction, isPending] = useActionState(createDocumentAction, initialState);
   const [message, setMessage] = useState<string>("")
+  const [selectedCountries, setSelectedCountries] = useState<string[]>([])
 
   const options = [
     { value: 1, label: "Requester" },
     { value: 1, label: "Reviewer" },
     { value: 1, label: "Approver" },
   ];
+
+  // Sample data for demonstration
+  const COUNTRIES: Option[] = [
+    { value: "zaki@gmail.com", label: "United States" },
+    { value: "zaki2@gmail.com", label: "Canada" },
+    { value: "zaki3@gmail.com", label: "Mexico" },
+  ]
+
+  const handleSubmit = async (formData: FormData) => {
+    // Append selectedCountries as JSON string
+    formData.append("approvers", JSON.stringify(selectedCountries));
+
+    formAction(formData); // Call the action
+  };
 
   useEffect(() => {
     if (state.success) {
@@ -43,7 +58,7 @@ const DocumentCreate = () => {
 
   return (
     <ComponentCard title="Create user">
-      <form action={formAction}>
+      <form action={handleSubmit}>
         <div className="space-y-6">
           <div>
             <Label htmlFor='title'>Title</Label>
@@ -90,6 +105,17 @@ const DocumentCreate = () => {
                 {state.errors.category_id}
               </p>
             )}
+          </div>
+
+          <div>
+            <Label htmlFor='approvers'>Approvers</Label>
+            <MultiSelectOption
+              options={COUNTRIES}
+              selected={selectedCountries}
+              onChange={setSelectedCountries}
+              placeholder="Select countries..."
+              searchPlaceholder="Search countries..."
+            />
           </div>
 
           <Button size="md" variant="primary" disabled={isPending || state.success}>

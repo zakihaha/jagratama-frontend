@@ -49,6 +49,10 @@ const DocumentTracker: FC<DocumentTrackerProps> = ({ steps, currentStepIndex, cl
             }
           }
 
+          if (isCurrent) {
+            stepNote = "In progress"
+          }
+
           return (
             <div key={step.id} className="relative">
               {/* Connector Line */}

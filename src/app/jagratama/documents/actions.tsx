@@ -11,6 +11,7 @@ export type Errors = {
   title?: string[];
   description?: string[];
   category_id?: string[];
+  approvers?: string[];
 };
 
 export type FormState = {
@@ -25,6 +26,7 @@ export async function createDocumentAction(prevState: FormState, formData: FormD
   let title = formData.get('title') as string
   let description = formData.get('description') as string
   let category_id_str = formData.get('category_id')
+  let approvers_str = formData.get('approvers') as string
 
   let category_id = 0
 
@@ -34,10 +36,17 @@ export async function createDocumentAction(prevState: FormState, formData: FormD
     category_id = category_id_str
   }
 
+  let approvers: string[] = []
+
+  if (approvers_str && approvers_str.length > 0) {
+    approvers = JSON.parse(approvers_str) as string[]
+  }
+
   const data: DocumentCreateRequest = {
     title,
     description,
     category_id,
+    approvers,
   }
 
   const parsed = CreateDocumentSchema.safeParse(data)
@@ -46,6 +55,7 @@ export async function createDocumentAction(prevState: FormState, formData: FormD
     parsed.error.flatten().fieldErrors.title && (errors.title = parsed.error.flatten().fieldErrors.title)
     parsed.error.flatten().fieldErrors.description && (errors.description = parsed.error.flatten().fieldErrors.description)
     parsed.error.flatten().fieldErrors.category_id && (errors.category_id = parsed.error.flatten().fieldErrors.category_id)
+    parsed.error.flatten().fieldErrors.approvers && (errors.approvers = parsed.error.flatten().fieldErrors.approvers)
     return { success: false, message: "Failed to create document.", errors }
   }
 
