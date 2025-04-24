@@ -7,9 +7,8 @@ interface Props {
     id: string
   }
 }
-const UserCreate = async ({ params }: Props) => {
+const UserEdit = async ({ params }: Props) => {
   const user = await getUser(params.id);
-  console.log(user);
 
   const userCreateRequest: UserCreateRequest = {
     name: user.name,
@@ -22,4 +21,4 @@ const UserCreate = async ({ params }: Props) => {
   return <UserUpdateForm id={user.id} user={userCreateRequest} />;
 };
 
-export default UserCreate;
+export default UserEdit;
