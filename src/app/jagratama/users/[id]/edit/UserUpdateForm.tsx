@@ -12,7 +12,7 @@ import { UserCreateRequest } from '@/types/user';
 import { toast } from 'sonner';
 import { redirect } from 'next/navigation';
 
-export default function UserUpdateForm({ id, user }: { id: string, user: UserCreateRequest }) {
+export default function UserUpdateForm({ id, user }: { id: number, user: UserCreateRequest }) {
   const initialState: FormState = {
     success: false,
     message: "",
@@ -47,20 +47,20 @@ export default function UserUpdateForm({ id, user }: { id: string, user: UserCre
           <div>
             <Label htmlFor='name'>Full Name</Label>
             <Input type="text" id='name' name='name' placeholder="Justin Hubner" defaultValue={user?.name} />
-            {/* {state.errors.name && (
+            {state.errors.name && (
               <p className="text-red-500 text-sm mt-1">
                 {state.errors.name}
               </p>
-            )} */}
+            )}
           </div>
           <div>
             <Label htmlFor='email'>Email</Label>
             <Input type="email" id='email' name='email' placeholder="jussa@mail.com" defaultValue={user?.email} />
-            {/* {state.errors.email && (
+            {state.errors.email && (
               <p className="text-red-500 text-sm mt-1">
                 {state.errors.email}
               </p>
-            )} */}
+            )}
           </div>
 
           <div>
@@ -78,11 +78,11 @@ export default function UserUpdateForm({ id, user }: { id: string, user: UserCre
                 <ChevronDownIcon />
               </span>
             </div>
-            {/* {state.errors.role_id && (
+            {state.errors.role_id && (
               <p className="text-red-500 text-sm mt-1">
                 {state.errors.role_id}
               </p>
-            )} */}
+            )}
           </div>
 
           <div>
@@ -100,11 +100,11 @@ export default function UserUpdateForm({ id, user }: { id: string, user: UserCre
                 <ChevronDownIcon />
               </span>
             </div>
-            {/* {state.errors.position_id && (
+            {state.errors.position_id && (
               <p className="text-red-500 text-sm mt-1">
                 {state.errors.position_id}
               </p>
-            )} */}
+            )}
           </div>
 
           <Button size="md" variant="primary" disabled={isPending || state.success} >
