@@ -66,6 +66,11 @@ const navItems: NavItem[] = [
     name: "Users",
     path: "/jagratama/users",
   },
+  {
+    icon: <PageIcon />,
+    name: "Documents",
+    path: "/jagratama/documents",
+  },
 ];
 
 const othersItems: NavItem[] = [

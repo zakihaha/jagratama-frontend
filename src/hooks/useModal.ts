@@ -3,16 +3,16 @@ import { useState, useCallback } from "react";
 
 export const useModal = (initialState: boolean = false) => {
   const [isOpen, setIsOpen] = useState(initialState);
-  const [id, setId] = useState<string>("");
+  const [id, setId] = useState<number>(0);
 
-  const openModal = useCallback((id: string) => {
+  const openModal = useCallback((id: number) => {
     setIsOpen(true)
     setId(id);
   }, []);
 
   const closeModal = useCallback(() => {
     setIsOpen(false)
-    setId("");
+    setId(0);
   }, []);
 
   const toggleModal = useCallback(() => setIsOpen((prev) => !prev), []);
