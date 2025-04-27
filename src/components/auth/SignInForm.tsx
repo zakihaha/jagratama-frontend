@@ -1,15 +1,35 @@
-"use client";
+import { signIn } from "@/auth";
 import Checkbox from "@/components/form/input/Checkbox";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import Button from "@/components/ui/button/Button";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
 import Link from "next/link";
-import React, { useState } from "react";
+// import React, { useState } from "react";
 
 export default function SignInForm() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
+  // const [showPassword, setShowPassword] = useState(false);
+  // const [isChecked, setIsChecked] = useState(false);
+
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+
+  // const submit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   // Handle form submission
+
+  //   console.log({
+  //     email,
+  //     password,
+  //   });
+
+
+  //   await signIn("credentials", {
+  //     email,
+  //     password,
+  //   })
+  // };
+
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full">
       <div className="w-full max-w-md sm:pt-10 mx-auto mb-5">
@@ -84,13 +104,27 @@ export default function SignInForm() {
                 </span>
               </div>
             </div>
-            <form>
+            <form
+              action={async (formData) => {
+                "use server"
+                await signIn("credentials", {
+                  email: formData.get("email"),
+                  password: formData.get("password"),
+                  redirect: true,
+                  redirectTo: "/jagratama",
+                });
+              }}>
               <div className="space-y-6">
                 <div>
                   <Label>
                     Email <span className="text-error-500">*</span>{" "}
                   </Label>
-                  <Input placeholder="info@gmail.com" type="email" />
+                  <Input
+                    placeholder="info@gmail.com"
+                    type="email"
+                    name="email"
+                  // onChange={(e) => setEmail(e.target.value)}
+                  />
                 </div>
                 <div>
                   <Label>
@@ -98,22 +132,25 @@ export default function SignInForm() {
                   </Label>
                   <div className="relative">
                     <Input
-                      type={showPassword ? "text" : "password"}
+                      // type={showPassword ? "text" : "password"}
+                      type="password"
+                      name="password"
                       placeholder="Enter your password"
+                    // onChange={(e) => setPassword(e.target.value)}
                     />
                     <span
-                      onClick={() => setShowPassword(!showPassword)}
+                      // onClick={() => setShowPassword(!showPassword)}
                       className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
                     >
-                      {showPassword ? (
+                      {/* {showPassword ? (
                         <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
                       ) : (
                         <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
-                      )}
+                      )} */}
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
+                {/* <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Checkbox checked={isChecked} onChange={setIsChecked} />
                     <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
@@ -126,9 +163,13 @@ export default function SignInForm() {
                   >
                     Forgot password?
                   </Link>
-                </div>
+                </div> */}
                 <div>
-                  <Button className="w-full" size="sm">
+                  <Button
+                    className="w-full"
+                    size="sm"
+                    type="submit"
+                  >
                     Sign in
                   </Button>
                 </div>

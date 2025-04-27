@@ -1,14 +1,11 @@
 import { UserCreateRequest, UserModel } from '@/types/user'
 import { API_V1_BASE_URL } from '@/lib/config';
+import { fetchWithAuth } from '../fetchWithAuth';
 
 export async function fetchUsers(): Promise<UserModel[]> {
-  const res = await fetch(`${API_V1_BASE_URL}/users`, {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/users`, {
     next: { tags: ['users'] }, // Enables cache invalidation if needed
     cache: 'no-store', // Or 'force-cache' if data is not updated often
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer`,
-    },
   })
 
   if (!res.ok) {
@@ -20,12 +17,8 @@ export async function fetchUsers(): Promise<UserModel[]> {
 }
 
 export async function createUser(data: UserCreateRequest): Promise<void> {
-  const res = await fetch(`${API_V1_BASE_URL}/users`, {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/users`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer`,
-    },
     body: JSON.stringify(data),
   })
   if (!res.ok) {
@@ -36,13 +29,9 @@ export async function createUser(data: UserCreateRequest): Promise<void> {
 }
 
 export async function getUser(id: string): Promise<UserModel> {
-  const res = await fetch(`${API_V1_BASE_URL}/users/${id}`, {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/users/${id}`, {
     next: { tags: ['users'] }, // Enables cache invalidation if needed
     cache: 'no-store', // Or 'force-cache' if data is not updated often
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer`,
-    },
   })
 
   if (!res.ok) {
@@ -54,12 +43,8 @@ export async function getUser(id: string): Promise<UserModel> {
 }
 
 export async function updateUser(id: string, data: UserCreateRequest): Promise<void> {
-  const res = await fetch(`${API_V1_BASE_URL}/users/${id}`, {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/users/${id}`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer`,
-    },
     body: JSON.stringify(data),
   })
   if (!res.ok) {
@@ -70,16 +55,12 @@ export async function updateUser(id: string, data: UserCreateRequest): Promise<v
 }
 
 export async function deleteUser(id: string): Promise<void> {
-  const res = await fetch(`${API_V1_BASE_URL}/users/${id}`, {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/users/${id}`, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer`,
-    },
   })
   if (!res.ok) {
     throw new Error('Failed to delete user')
   }
-  
+
   return
 }

@@ -1,16 +1,12 @@
 import { API_V1_BASE_URL } from '@/lib/config';
-import { DocumentCreateRequest, DocumentModel, DocumentTrackingModel } from '@/types/document';
+import { DocumentCreateRequest, DocumentModel, DocumentToReviewModel, DocumentTrackingModel } from '@/types/document';
+import { fetchWithAuth } from '../fetchWithAuth';
 
 export async function fetchDocuments(): Promise<DocumentModel[]> {
-  const res = await fetch(`${API_V1_BASE_URL}/documents`, {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents`, {
     next: { tags: ['document'] }, // Enables cache invalidation if needed
     cache: 'no-store', // Or 'force-cache' if data is not updated often
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer`,
-    },
   })
-
   if (!res.ok) {
     throw new Error('Failed to fetch documents')
   }
@@ -20,14 +16,9 @@ export async function fetchDocuments(): Promise<DocumentModel[]> {
 }
 
 export async function createDocument(data: DocumentCreateRequest): Promise<void> {
-  console.log(data);
-
-  const res = await fetch(`${API_V1_BASE_URL}/documents`, {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer`,
-    },
+    cache: 'no-store', // Or 'force-cache' if data is not updated often
     body: JSON.stringify(data),
   })
   if (!res.ok) {
@@ -38,15 +29,9 @@ export async function createDocument(data: DocumentCreateRequest): Promise<void>
 }
 
 export async function getDocument(slug: string): Promise<DocumentModel> {
-  const res = await fetch(`${API_V1_BASE_URL}/documents/${slug}`, {
-    next: { tags: ['documents'] }, // Enables cache invalidation if needed
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents/${slug}`, {
     cache: 'no-store', // Or 'force-cache' if data is not updated often
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer`,
-    },
   })
-
   if (!res.ok) {
     throw new Error('Failed to fetch document')
   }
@@ -56,12 +41,8 @@ export async function getDocument(slug: string): Promise<DocumentModel> {
 }
 
 export async function updateDocument(slug: string, data: DocumentCreateRequest): Promise<void> {
-  const res = await fetch(`${API_V1_BASE_URL}/documents/${slug}`, {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents/${slug}`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer`,
-    },
     body: JSON.stringify(data),
   })
   if (!res.ok) {
@@ -72,12 +53,8 @@ export async function updateDocument(slug: string, data: DocumentCreateRequest):
 }
 
 export async function deleteDocument(slug: string): Promise<void> {
-  const res = await fetch(`${API_V1_BASE_URL}/documents/${slug}`, {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents/${slug}`, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer`,
-    },
   })
   if (!res.ok) {
     throw new Error('Failed to delete document')
@@ -87,16 +64,26 @@ export async function deleteDocument(slug: string): Promise<void> {
 }
 
 export async function getDocumentTracking(slug: string): Promise<DocumentTrackingModel[]> {
-  const res = await fetch(`${API_V1_BASE_URL}/documents/${slug}/tracking`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer`,
-    },
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents/${slug}/tracking`, {
+    cache: 'no-store', // Or 'force-cache' if data is not updated often
   })
+
   if (!res.ok) {
     throw new Error('Failed to fetch document tracking')
   }
   const json = await res.json()
   return json.data as DocumentTrackingModel[]
+}
+
+export async function fetchDocumentToReview(): Promise<DocumentToReviewModel[]> {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents/to-review`, {
+    next: { tags: ['document-to-review'] }, // Enables cache invalidation if needed
+    cache: 'no-store', // Or 'force-cache' if data is not updated often
+  })
+  if (!res.ok) {
+    throw new Error('Failed to fetch documents to review')
+  }
+
+  const json = await res.json()
+  return json.data as DocumentToReviewModel[]
 }
