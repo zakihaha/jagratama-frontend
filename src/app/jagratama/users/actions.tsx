@@ -1,9 +1,9 @@
 'use server'
 
-import { CreateUserSchema } from '@/lib/schemas/user'
-import { createUser, deleteUser, updateUser } from '@/lib/api/users';
+import { CreateUserSchema, UpdateUserProfileSchema } from '@/lib/schemas/user'
+import { createUser, deleteUser, updateUser, updateUserProfile } from '@/lib/api/users';
 import { revalidatePath } from 'next/cache';
-import { UserCreateRequest } from '@/types/user';
+import { UserCreateRequest, UserProfileRequest } from '@/types/user';
 
 export type Errors = {
   general?: string[];
@@ -115,5 +115,29 @@ export async function deleteUserAction(prevState: FormState, formData: FormData)
   } catch (error) {
     errors.general = ['Failed to delete user']
     return { success: false, message: "Failed to delete user", errors: errors }
+  }
+}
+
+export async function updateProfileAction(prevState: FormState, formData: FormData) {
+  const name = formData.get('name') as string;
+
+  const errors: Errors = {}
+  const data: UserProfileRequest = {
+    name,
+  }
+
+  const parsed = UpdateUserProfileSchema.safeParse(data)
+
+  if (!parsed.success) {
+    parsed.error.flatten().fieldErrors.name && (errors.name = parsed.error.flatten().fieldErrors.name)
+    return { success: false, message: "Failed to update user.", errors }
+  }
+
+  try {
+    await updateUserProfile(data)
+    return { success: true, message: "Profile updated successfully", errors: {} };
+  } catch (err) {
+    errors.general = ['Failed to update user']
+    return { success: false, message: "Failed to update profile", errors };
   }
 }

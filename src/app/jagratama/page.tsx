@@ -1,5 +1,4 @@
 import { auth } from "@/auth";
-import { Session } from "next-auth";
 
 const JagratamaIndex = async () => {
   const session = await auth();
@@ -18,6 +17,7 @@ const JagratamaIndex = async () => {
         <h1>Welcome, {session.user?.name}</h1>
         <p>Your email: {session.user?.email}</p>
         <p>Your role: {session.user?.role}</p>
+        <p>Your position: {session.user?.position}</p>
       </div>
     </div>
   );

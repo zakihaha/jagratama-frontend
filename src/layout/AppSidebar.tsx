@@ -18,6 +18,7 @@ import {
   UserCircleIcon,
 } from "../icons/index";
 import SidebarWidget from "./SidebarWidget";
+import Profile from "@/app/jagratama/profile/page";
 
 type NavItem = {
   name: string;
@@ -63,6 +64,11 @@ const navItems: NavItem[] = [
   },
   {
     icon: <UserCircleIcon />,
+    name: "Jagratama",
+    path: "/jagratama",
+  },
+  {
+    icon: <UserCircleIcon />,
     name: "Users",
     path: "/jagratama/users",
   },
@@ -75,6 +81,11 @@ const navItems: NavItem[] = [
     icon: <PageIcon />,
     name: "Documents To Review",
     path: "/jagratama/documents-to-review",
+  },
+  {
+    icon: <PageIcon />,
+    name: "Profile",
+    path: "/jagratama/profile",
   },
 ];
 

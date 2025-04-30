@@ -21,3 +21,7 @@ export type UserCreateRequest = {
   role_id: number;
   position_id: number;
 }
+
+export type UserProfileRequest = {
+  name: string;
+}

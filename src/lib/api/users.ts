@@ -1,4 +1,4 @@
-import { UserCreateRequest, UserModel } from '@/types/user'
+import { UserCreateRequest, UserModel, UserProfileRequest } from '@/types/user'
 import { API_V1_BASE_URL } from '@/lib/config';
 import { fetchWithAuth } from '../fetchWithAuth';
 
@@ -60,6 +60,18 @@ export async function deleteUser(id: string): Promise<void> {
   })
   if (!res.ok) {
     throw new Error('Failed to delete user')
+  }
+
+  return
+}
+
+export async function updateUserProfile(data: UserProfileRequest): Promise<void> {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/users/profile`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  })
+  if (!res.ok) {
+    throw new Error('Failed to update user profile')
   }
 
   return
