@@ -71,6 +71,11 @@ const navItems: NavItem[] = [
     name: "Documents",
     path: "/jagratama/documents",
   },
+  {
+    icon: <PageIcon />,
+    name: "Documents To Review",
+    path: "/jagratama/documents-to-review",
+  },
 ];
 
 const othersItems: NavItem[] = [

@@ -9,9 +9,6 @@ interface Props {
 }
 const DocumentEdit = async ({ params }: Props) => {
   const document = await getDocument(params.slug);
-  console.log(document);
-  
-
   const documentCreateRequest: DocumentCreateRequest = {
     title: document.title,
     description: document.description,

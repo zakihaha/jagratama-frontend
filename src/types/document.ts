@@ -39,3 +39,7 @@ export type DocumentTrackingModel = {
     image_path: string
   }
 }
+
+export type DocumentToReviewModel = DocumentModel & {
+  status: string
+}

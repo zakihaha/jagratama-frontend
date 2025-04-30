@@ -118,7 +118,7 @@ const DocumentCreate = () => {
             />
           </div>
 
-          <Button size="md" variant="primary" disabled={isPending || state.success}>
+          <Button size="md" variant="primary" type='submit' disabled={isPending || state.success}>
             {isPending || state.success ? 'Loading...' : 'Create Document'}
           </Button>
         </div>
