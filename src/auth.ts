@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { API_V1_BASE_URL } from "./lib/config";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -14,7 +15,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           throw new Error("No credentials provided");
         }
 
-        const res = await fetch("http://localhost:8000/api/v1/auth/login", {
+        const res = await fetch(`${API_V1_BASE_URL}/auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -80,7 +81,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
 async function refreshAccessToken(token: any) {
   try {
-    const res = await fetch("http://localhost:8000/api/v1/auth/refresh-token", {
+    const res = await fetch(`${API_V1_BASE_URL}/auth/refresh-token`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
