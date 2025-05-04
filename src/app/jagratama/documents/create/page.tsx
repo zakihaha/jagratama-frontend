@@ -108,14 +108,21 @@ const DocumentCreate = () => {
           </div>
 
           <div>
-            <Label htmlFor='approvers'>Approvers</Label>
-            <MultiSelectOption
-              options={COUNTRIES}
-              selected={selectedCountries}
-              onChange={setSelectedCountries}
-              placeholder="Select countries..."
-              searchPlaceholder="Search countries..."
-            />
+            <div>
+              <Label htmlFor='approvers'>Approvers</Label>
+              <MultiSelectOption
+                options={COUNTRIES}
+                selected={selectedCountries}
+                onChange={setSelectedCountries}
+                placeholder="Select countries..."
+                searchPlaceholder="Search countries..."
+              />
+            </div>
+            {state.errors.approvers && (
+              <p className="text-red-500 text-sm mt-1">
+                {state.errors.approvers}
+              </p>
+            )}
           </div>
 
           <Button size="md" variant="primary" type='submit' disabled={isPending || state.success}>
