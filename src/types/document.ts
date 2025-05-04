@@ -30,9 +30,10 @@ export type DocumentModel = {
 
 export type DocumentCreateRequest = {
   title: string
+  file_id: number
   description?: string
   category_id: number
-  approvers?: string[]
+  approvers: string[]
 }
 
 export type DocumentTrackingModel = {

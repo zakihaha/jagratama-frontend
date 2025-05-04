@@ -8,6 +8,7 @@ import { createDocument, deleteDocument, updateDocument } from '@/lib/api/docume
 export type Errors = {
   general?: string[];
 
+  file_id?: string[];
   title?: string[];
   description?: string[];
   category_id?: string[];
@@ -43,6 +44,7 @@ export async function createDocumentAction(prevState: FormState, formData: FormD
   }
 
   const data: DocumentCreateRequest = {
+    file_id: 1,
     title,
     description,
     category_id,
@@ -52,6 +54,7 @@ export async function createDocumentAction(prevState: FormState, formData: FormD
   const parsed = CreateDocumentSchema.safeParse(data)
 
   if (!parsed.success) {
+    parsed.error.flatten().fieldErrors.file_id && (errors.file_id = parsed.error.flatten().fieldErrors.file_id)
     parsed.error.flatten().fieldErrors.title && (errors.title = parsed.error.flatten().fieldErrors.title)
     parsed.error.flatten().fieldErrors.description && (errors.description = parsed.error.flatten().fieldErrors.description)
     parsed.error.flatten().fieldErrors.category_id && (errors.category_id = parsed.error.flatten().fieldErrors.category_id)
@@ -81,6 +84,7 @@ export async function updateDocumentAction(prevState: FormState, formData: FormD
 
   const errors: Errors = {}
   const data: DocumentCreateRequest = {
+    file_id: 1,
     title,
     description,
     category_id: parseInt(category_id),
