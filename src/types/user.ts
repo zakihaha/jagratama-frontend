@@ -2,6 +2,7 @@ export type UserModel = {
   id: number
   name: string
   email: string
+  image: string
   role_id: number
   position_id: number
   role: {
