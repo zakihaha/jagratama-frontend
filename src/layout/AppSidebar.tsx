@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState,useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -19,6 +19,15 @@ import {
 } from "../icons/index";
 import SidebarWidget from "./SidebarWidget";
 import Profile from "@/app/jagratama/profile/page";
+import Button from "@/components/ui/button/Button";
+import {
+  CirclePlus,
+  LayoutDashboard,
+  LayoutDashboardIcon,
+  LayoutGrid,
+  LayoutGridIcon,
+} from "lucide-react";
+import { UserDropdown } from "@/components/dashboard/UserDropdown";
 
 type NavItem = {
   name: string;
@@ -28,43 +37,43 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  {
-    icon: <GridIcon />,
-    name: "Dashboard",
-    subItems: [{ name: "Ecommerce", path: "/", pro: false }],
-  },
-  {
-    icon: <CalenderIcon />,
-    name: "Calendar",
-    path: "/calendar",
-  },
-  {
-    icon: <UserCircleIcon />,
-    name: "User Profile",
-    path: "/profile",
-  },
+  // {
+  //   icon: <GridIcon />,
+  //   name: "Dashboard",
+  //   subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+  // },
+  // {
+  //   icon: <CalenderIcon />,
+  //   name: "Calendar",
+  //   path: "/calendar",
+  // },
+  // {
+  //   icon: <UserCircleIcon />,
+  //   name: "User Profile",
+  //   path: "/profile",
+  // },
 
+  // {
+  //   name: "Forms",
+  //   icon: <ListIcon />,
+  //   subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
+  // },
+  // {
+  //   name: "Tables",
+  //   icon: <TableIcon />,
+  //   subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
+  // },
+  // {
+  //   name: "Pages",
+  //   icon: <PageIcon />,
+  //   subItems: [
+  //     { name: "Blank Page", path: "/blank", pro: false },
+  //     { name: "404 Error", path: "/error-404", pro: false },
+  //   ],
+  // },
   {
-    name: "Forms",
-    icon: <ListIcon />,
-    subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
-  },
-  {
-    name: "Tables",
-    icon: <TableIcon />,
-    subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
-  },
-  {
-    name: "Pages",
-    icon: <PageIcon />,
-    subItems: [
-      { name: "Blank Page", path: "/blank", pro: false },
-      { name: "404 Error", path: "/error-404", pro: false },
-    ],
-  },
-  {
-    icon: <UserCircleIcon />,
-    name: "Jagratama",
+    icon: <LayoutGridIcon className="text-current" />,
+    name: "Dashboard",
     path: "/jagratama",
   },
   {
@@ -82,11 +91,11 @@ const navItems: NavItem[] = [
     name: "Documents To Review",
     path: "/jagratama/documents-to-review",
   },
-  {
-    icon: <PageIcon />,
-    name: "Profile",
-    path: "/jagratama/profile",
-  },
+  // {
+  //   icon: <PageIcon />,
+  //   name: "Profile",
+  //   path: "/jagratama/profile",
+  // },
 ];
 
 const othersItems: NavItem[] = [
@@ -260,7 +269,7 @@ const AppSidebar: React.FC = () => {
   const subMenuRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   // const isActive = (path: string) => path === pathname;
-   const isActive = useCallback((path: string) => path === pathname, [pathname]);
+  const isActive = useCallback((path: string) => path === pathname, [pathname]);
 
   useEffect(() => {
     // Check if the current path matches any submenu item
@@ -286,7 +295,7 @@ const AppSidebar: React.FC = () => {
     if (!submenuMatched) {
       setOpenSubmenu(null);
     }
-  }, [pathname,isActive]);
+  }, [pathname, isActive]);
 
   useEffect(() => {
     // Set the height of the submenu items when the submenu is opened
@@ -331,7 +340,7 @@ const AppSidebar: React.FC = () => {
     >
       <div
         className={`py-8 flex  ${
-          !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
+          !isExpanded && !isHovered ? "lg:justify-center" : "justify-center"
         }`}
       >
         <Link href="/">
@@ -341,15 +350,15 @@ const AppSidebar: React.FC = () => {
                 className="dark:hidden"
                 src="/images/logo/logo.svg"
                 alt="Logo"
-                width={150}
-                height={40}
+                width={190}
+                height={80}
               />
               <Image
                 className="hidden dark:block"
-                src="/images/logo/logo-dark.svg"
+                src="/images/logo/logo.svg"
                 alt="Logo"
-                width={150}
-                height={40}
+                width={190}
+                height={80}
               />
             </>
           ) : (
@@ -366,7 +375,28 @@ const AppSidebar: React.FC = () => {
         <nav className="mb-6">
           <div className="flex flex-col gap-4">
             <div>
-              <h2
+              <Link href={"/jagratama/documents/create"}>
+                <Button
+                  size="sm"
+                  variant="primary"
+                  className="w-full flex items-center !justify-between bg-linear-to-r from-[#20939C] to-[#28B8C3]"
+                >
+                  {isExpanded || isHovered || isMobileOpen ? (
+                    <>
+                      Buat Pengajuan{" "}
+                      <span>
+                        {" "}
+                        <CirclePlus />
+                      </span>
+                    </>
+                  ) : (
+                    <CirclePlus />
+                  )}
+                </Button>
+              </Link>
+            </div>
+            <div>
+              {/* <h2
                 className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
                   !isExpanded && !isHovered
                     ? "lg:justify-center"
@@ -374,15 +404,21 @@ const AppSidebar: React.FC = () => {
                 }`}
               >
                 {isExpanded || isHovered || isMobileOpen ? (
-                  "Menu"
+                  ""
                 ) : (
                   <HorizontaLDots />
                 )}
-              </h2>
+              </h2> */}
               {renderMenuItems(navItems, "main")}
             </div>
 
-            <div className="">
+            <div className="mt-auto pt-6 pb-10">
+              <UserDropdown
+                isCollapsed={!isExpanded && !isHovered && !isMobileOpen}
+              />
+            </div>
+
+            {/* <div className="">
               <h2
                 className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
                   !isExpanded && !isHovered
@@ -397,10 +433,11 @@ const AppSidebar: React.FC = () => {
                 )}
               </h2>
               {renderMenuItems(othersItems, "others")}
-            </div>
+            </div> */}
           </div>
         </nav>
-        {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null}
+
+        {/* {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null} */}
       </div>
     </aside>
   );
