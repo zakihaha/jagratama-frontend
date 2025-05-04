@@ -25,16 +25,16 @@ const DocumentCreate = () => {
   const [selectedCountries, setSelectedCountries] = useState<string[]>([])
 
   const options = [
-    { value: 1, label: "Requester" },
-    { value: 1, label: "Reviewer" },
-    { value: 1, label: "Approver" },
+    { value: 1, label: "Cat 1" },
+    { value: 2, label: "Cat 2" },
+    { value: 3, label: "Cat 3" },
   ];
 
   // Sample data for demonstration
   const COUNTRIES: Option[] = [
-    { value: "zaki@gmail.com", label: "United States" },
-    { value: "zaki2@gmail.com", label: "Canada" },
-    { value: "zaki3@gmail.com", label: "Mexico" },
+    { value: "reviewer@gmail.com", label: "Akun Reviewer" },
+    { value: "approver@gmail.com", label: "Akun Approver" },
+    { value: "admin@gmail.com", label: "Akun Admin" },
   ]
 
   const handleSubmit = async (formData: FormData) => {
