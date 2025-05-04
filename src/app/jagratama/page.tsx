@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import { fetchDocumentCounter } from "@/lib/api/documents";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -10,17 +9,8 @@ export const metadata: Metadata = {
 };
 
 const JagratamaIndex = async () => {
-  const session = await auth();
   const documentCounter = await fetchDocumentCounter();
   const { total_document, total_rejected, total_pending, total_approved } = documentCounter;
-
-  if (!session) {
-    return (
-      <div>
-        <h1>Please log in to access this page.</h1>
-      </div>
-    );
-  }
 
   return (
     <div>
@@ -36,7 +26,7 @@ const JagratamaIndex = async () => {
             />
           </div>
           <div>
-            <p className="text-3xl text-[#262626] font-medium">0</p>
+            <p className="text-3xl text-[#262626] font-medium">{total_document}</p>
             <p className="text-sm text-[#737373]">Total Dokumen</p>
           </div>
         </div>
@@ -51,7 +41,7 @@ const JagratamaIndex = async () => {
             />
           </div>
           <div>
-            <p className="text-3xl text-[#262626] font-medium">0</p>
+            <p className="text-3xl text-[#262626] font-medium">{total_approved}</p>
             <p className="text-sm text-[#737373]">Berhasil Disetujui</p>
           </div>
         </div>
@@ -66,7 +56,7 @@ const JagratamaIndex = async () => {
             />
           </div>
           <div>
-            <p className="text-3xl text-[#262626] font-medium">0</p>
+            <p className="text-3xl text-[#262626] font-medium">{total_pending}</p>
             <p className="text-sm text-[#737373]">Pending Disetujui</p>
           </div>
         </div>
@@ -81,7 +71,7 @@ const JagratamaIndex = async () => {
             />
           </div>
           <div>
-            <p className="text-3xl text-[#262626] font-medium">0</p>
+            <p className="text-3xl text-[#262626] font-medium">{total_rejected}</p>
             <p className="text-sm text-[#737373]">Belum Disetujui</p>
           </div>
         </div>
@@ -99,21 +89,6 @@ const JagratamaIndex = async () => {
             <p className="text-base text-[#262626] font-medium">Belum Ada File</p>
             <p className="text-sm text-[#737373]">Ayo masukan dokumen kamu untuk diajukan hari ini</p>
         </div>
-      </div>
-      <div>
-        <h1>Welcome, {session.user?.name}</h1>
-        <p>Your email: {session.user?.email}</p>
-        <p>Your role: {session.user?.role}</p>
-        <p>Your position: {session.user?.position}</p>
-      </div>
-      <div>
-        <h2>Document Statistics</h2>
-        <ul>
-          <li>Total Documents: {total_document}</li>
-          <li>Total Rejected: {total_rejected}</li>
-          <li>Total Pending: {total_pending}</li>
-          <li>Total Approved: {total_approved}</li>
-        </ul>
       </div>
     </div>
   );
