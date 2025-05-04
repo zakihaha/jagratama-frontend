@@ -76,30 +76,6 @@ export async function createDocumentAction(prevState: FormState, formData: FormD
   }
 }
 
-export async function updateDocumentAction(prevState: FormState, formData: FormData) {
-  const slug = formData.get('slug') as string;
-  const title = formData.get('title') as string
-  const description = formData.get('description') as string
-  const category_id = formData.get('category_id') as string
-
-  const errors: Errors = {}
-  const data: DocumentCreateRequest = {
-    file_id: 1,
-    title,
-    description,
-    category_id: parseInt(category_id),
-  }
-
-  try {
-    await updateDocument(slug, data)
-    revalidatePath('/jagratama/documents');
-    return { success: true, message: "Document updated successfully", errors: {} };
-  } catch (err) {
-    errors.general = ['Failed to update document']
-    return { success: false, message: "Failed to update document", errors };
-  }
-}
-
 export async function deleteDocumentAction(prevState: FormState, formData: FormData) {
   const slug = formData.get('slug') as string;
   const errors: Errors = {}
