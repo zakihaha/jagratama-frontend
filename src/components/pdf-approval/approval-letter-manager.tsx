@@ -10,7 +10,7 @@ import { Card } from "@/components/ui/card"
 import { Download } from "lucide-react"
 import { toast } from "sonner"
 import { API_V1_BASE_URL } from "@/lib/config"
-import { useSession } from "next-auth/react"
+import { getSession, useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { PDFThumbnailNavigator } from "./pdf-thumbnail-navigator"
 
@@ -185,6 +185,13 @@ export const ApprovalLetterManager = ({ slug }: Params) => {
     }
   }
 
+  // if session is not authenticated, re get session
+  useEffect(() => {
+    if (session.status === "unauthenticated") {
+      getSession()
+    }
+  }, [session.status])
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
       {/* Thumbnail Navigator - only show when file is loaded */}
@@ -260,7 +267,7 @@ export const ApprovalLetterManager = ({ slug }: Params) => {
           isPlaced={qrPosition.isPlaced}
         />
         <div className="mt-6">
-          <ActionButtons file={file} qrPosition={qrPosition} disabled={!file || !qrPosition.isPlaced} isLoading approveHandle={approveDocumentHandle} />
+          <ActionButtons file={file} qrPosition={qrPosition} disabled={!file || !qrPosition.isPlaced} isLoading={isLoading} approveHandle={approveDocumentHandle} />
         </div>
       </Card>
     </div>
