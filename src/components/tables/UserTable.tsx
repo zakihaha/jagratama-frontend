@@ -32,15 +32,15 @@ export default function UserTable({ users }: Props) {
 
   const [state, action, isLoading] = useActionState(deleteUserAction, initialState);
 
-  useEffect(() => {
-    if (state.success) {
-      warningModal.closeModal();
-      toast.success(state.message)
-    } else if (!state.success && state.message) {
-      warningModal.closeModal();
-      toast.error(state.message)
-    }
-  }, [state]);
+  // useEffect(() => {
+  //   if (state.success) {
+  //     warningModal.closeModal();
+  //     toast.success(state.message)
+  //   } else if (!state.success && state.message) {
+  //     warningModal.closeModal();
+  //     toast.error(state.message)
+  //   }
+  // }, [state]);
 
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
@@ -113,9 +113,6 @@ export default function UserTable({ users }: Props) {
                         Edit
                       </Button>
                     </Link>
-                    <Button size="sm" variant="primary" onClick={() => warningModal.openModal(user.id)}>
-                      Delete
-                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
