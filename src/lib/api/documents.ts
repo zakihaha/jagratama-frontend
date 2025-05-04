@@ -1,5 +1,5 @@
 import { API_V1_BASE_URL } from '@/lib/config';
-import { DocumentCreateRequest, DocumentModel, DocumentToReviewModel, DocumentTrackingModel } from '@/types/document';
+import { DocumentCounterModel, DocumentCreateRequest, DocumentModel, DocumentToReviewModel, DocumentTrackingModel } from '@/types/document';
 import { fetchWithAuth } from '../fetchWithAuth';
 
 export async function fetchDocuments(): Promise<DocumentModel[]> {
@@ -86,4 +86,32 @@ export async function fetchDocumentToReview(): Promise<DocumentToReviewModel[]> 
 
   const json = await res.json()
   return json.data as DocumentToReviewModel[]
+}
+
+export async function fetchDocumentReviewHistory(): Promise<DocumentToReviewModel[]> {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents/to-review/history`, {
+    next: { tags: ['document-review-history'] }, // Enables cache invalidation if needed
+    cache: 'no-store', // Or 'force-cache' if data is not updated often
+  })
+  if (!res.ok) {
+    throw new Error('Failed to fetch documents review history')
+  }
+
+  const json = await res.json()
+  return json.data as DocumentToReviewModel[]
+}
+
+export async function fetchDocumentCounter(): Promise<DocumentCounterModel> {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents/counter`, {
+    next: { tags: ['document-counter'] }, // Enables cache invalidation if needed
+    cache: 'no-store', // Or 'force-cache' if data is not updated often
+  })
+  if (!res.ok) {
+    console.log(res);
+    
+    throw new Error('Failed to fetch document counter')
+  }
+
+  const json = await res.json()
+  return json.data as DocumentCounterModel  
 }

@@ -43,3 +43,10 @@ export type DocumentTrackingModel = {
 export type DocumentToReviewModel = DocumentModel & {
   status: string
 }
+
+export type DocumentCounterModel = {
+  total_document: number
+  total_rejected: number
+  total_pending: number
+  total_approved: number
+}
