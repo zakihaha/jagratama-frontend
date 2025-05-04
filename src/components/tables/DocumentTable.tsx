@@ -99,7 +99,7 @@ export default function DocumentTable({ documents }: Props) {
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {documents.length > 0 ? documents.map((document, key) => (
+              {documents.map((document, key) => (
                 <TableRow key={key}>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {document.title}
@@ -148,7 +148,8 @@ export default function DocumentTable({ documents }: Props) {
                     </Link>
                   </TableCell>
                 </TableRow>
-              )) : "No documents found"}
+              ))
+              }
             </TableBody>
           </Table>
         </div>
