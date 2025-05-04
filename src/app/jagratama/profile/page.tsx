@@ -5,9 +5,9 @@ import React from "react";
 import ProfileUpdateForm from "./ProfileUpdateForm";
 
 export const metadata: Metadata = {
-  title: "Next.js Profile | TailAdmin - Next.js Dashboard Template",
+  title: "JAGRATAMA | Dashboard Pengajuan Dokumen",
   description:
-    "This is Next.js Profile page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
+    "JAGRATAMA adalah dashboard digital untuk pengajuan, pelacakan, dan pengelolaan dokumen secara mudah dan efisien",
 };
 
 const Profile = async () => {
