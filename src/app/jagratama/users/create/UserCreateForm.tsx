@@ -115,16 +115,6 @@ const UserCreateForm = ({ roles, positions }: Params) => {
             )}
           </div>
 
-          <div>
-            <Label htmlFor='password'>Password</Label>
-            <InputFieldPasword name='password' id='password' />
-            {state.errors.password && (
-              <p className="text-red-500 text-sm mt-1">
-                {state.errors.password}
-              </p>
-            )}
-          </div>
-
           <Button size="md" variant="primary" type='submit' disabled={isPending || state.success} >
             {isPending || state.success ? 'Loading...' : 'Create User'}
           </Button>

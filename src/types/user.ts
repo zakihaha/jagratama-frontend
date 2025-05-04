@@ -17,7 +17,6 @@ export type UserModel = {
 
 export type UserCreateRequest = {
   email: string;
-  password: string;
   name: string;
   role_id: number;
   position_id: number;

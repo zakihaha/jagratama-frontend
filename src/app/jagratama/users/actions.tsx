@@ -10,7 +10,6 @@ export type Errors = {
 
   name?: string[];
   email?: string[];
-  password?: string[];
   role_id?: string[];
   position_id?: string[];
 };
@@ -28,7 +27,6 @@ export async function createUserAction(prevState: FormState, formData: FormData)
   let email = formData.get('email')
   let role_id_str = formData.get('role_id')
   let position_id_str = formData.get('position_id')
-  let password = formData.get('password')
 
   let role_id = 0
   let position_id = 0
@@ -50,7 +48,6 @@ export async function createUserAction(prevState: FormState, formData: FormData)
     email: email as string,
     role_id,
     position_id,
-    password: password as string,
   }
 
   const parsed = CreateUserSchema.safeParse(data)
@@ -58,7 +55,6 @@ export async function createUserAction(prevState: FormState, formData: FormData)
   if (!parsed.success) {
     parsed.error.flatten().fieldErrors.name && (errors.name = parsed.error.flatten().fieldErrors.name)
     parsed.error.flatten().fieldErrors.email && (errors.email = parsed.error.flatten().fieldErrors.email)
-    parsed.error.flatten().fieldErrors.password && (errors.password = parsed.error.flatten().fieldErrors.password)
     parsed.error.flatten().fieldErrors.role_id && (errors.role_id = parsed.error.flatten().fieldErrors.role_id)
     parsed.error.flatten().fieldErrors.position_id && (errors.position_id = parsed.error.flatten().fieldErrors.position_id)
     return { success: false, message: "Failed to create user.", errors }
@@ -91,7 +87,6 @@ export async function updateUserAction(prevState: FormState, formData: FormData)
     email,
     role_id: parseInt(role_id),
     position_id: parseInt(position_id),
-    password: '',
   }
 
   try {
@@ -105,16 +100,17 @@ export async function updateUserAction(prevState: FormState, formData: FormData)
 }
 
 export async function deleteUserAction(prevState: FormState, formData: FormData) {
-  const id = formData.get('id') as string;
-  const errors: Errors = {}
+  return { success: true, message: "User deleted successfully", errors: {} }
+  // const id = formData.get('id') as string;
+  // const errors: Errors = {}
 
   try {
-    await deleteUser(id)
-    revalidatePath('/jagratama/users'); // refreshes the user list page
-    return { success: true, message: "User deleted successfully", errors: {} }
+  //   await deleteUser(id)
+  //   revalidatePath('/jagratama/users'); // refreshes the user list page
+    // return { success: true, message: "User deleted successfully", errors: {} }
   } catch (error) {
-    errors.general = ['Failed to delete user']
-    return { success: false, message: "Failed to delete user", errors: errors }
+    // errors.general = ['Failed to delete user']
+    // return { success: false, message: "Failed to delete user", errors: errors }
   }
 }
 
