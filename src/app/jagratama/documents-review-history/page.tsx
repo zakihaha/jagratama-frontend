@@ -1,6 +1,6 @@
 import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
-import DocumentReviewHistoryTable from "@/components/tables/DocumentReviewTable";
+import DocumentReviewHistoryTable from "@/components/tables/DocumentReviewHistoryTable";
 import { fetchDocumentReviewHistory } from "@/lib/api/documents";
 import { Metadata } from "next";
 import React from "react";

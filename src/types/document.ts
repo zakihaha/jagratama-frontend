@@ -6,13 +6,21 @@ export type DocumentModel = {
   slug: string
   description: string
   file_path: string
+  last_status: string // pending, approved, rejected
+  approved_at: string
   created_at: string
   updated_at: string
   user: {
     id: number
     name: string
     email: string
-    image_path: string
+    image: string
+  }
+  addressed_user: {
+    id: number
+    name: string
+    email: string
+    image: string
   }
   category: {
     id: number

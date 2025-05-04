@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { DocumentModel } from "@/types/document";
 import { formatDate } from "@/lib/utils/formatDate";
+import Badge from "../ui/badge/Badge";
 
 type Props = {
   documents: DocumentModel[]
@@ -55,25 +56,37 @@ export default function DocumentTable({ documents }: Props) {
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
-                  Title
+                  Judul
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
-                  Description
+                  Ditujukan
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
-                  Category
+                  Tanggal Dibuat
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
-                  Date
+                  Tanggal Disetujui
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >
+                  Jenis Surat
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >
+                  Status
                 </TableCell>
                 <TableCell
                   isHeader
@@ -92,13 +105,35 @@ export default function DocumentTable({ documents }: Props) {
                     {document.title}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {document.description}
+                    {document.addressed_user.name}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {formatDate(document.created_at)}
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {formatDate(document.approved_at)}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {document.category.name}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {formatDate(document.created_at)}
+                    {/* pending, approved, rejected */}
+                    <Badge
+                      size="sm"
+                      color={
+                        document.last_status === "approved"
+                          ? "success"
+                          : document.last_status === "pending"
+                            ? "warning"
+                            : "error"
+                      }
+                    >
+                      {document.last_status === "approved"
+                        ? "Disetujui"
+                        : document.last_status === "pending"
+                          ? "Pending"
+                          : "Revisi"}
+                    </Badge>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400 space-x-4">
                     <Link href={`/jagratama/documents/${document.slug}`}>

@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 
-export function formatDate(dateString?: string | null, fallback: string = 'Not available'): string {
+export function formatDate(dateString?: string | null, fallback: string = ''): string {
   if (!dateString) {
     return fallback;
   }

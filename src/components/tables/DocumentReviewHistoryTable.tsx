@@ -17,6 +17,8 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { DocumentToReviewModel } from "@/types/document";
 import { formatDate } from "@/lib/utils/formatDate";
+import Image from "next/image";
+import Badge from "../ui/badge/Badge";
 
 type Props = {
   documents: DocumentToReviewModel[]
@@ -54,25 +56,25 @@ export default function DocumentReviewHistoryTable({ documents }: Props) {
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
-                  Title
+                  Judul
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
-                  Description
+                  Pengaju
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
-                  Category
+                  Jenis Surat
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
-                  Date
+                  Tanggal Diajukan
                 </TableCell>
                 <TableCell
                   isHeader
@@ -97,7 +99,21 @@ export default function DocumentReviewHistoryTable({ documents }: Props) {
                     {document.title}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {document.description}
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 overflow-hidden rounded-full">
+                        <Image
+                          width={40}
+                          height={40}
+                          src={document.user.image}
+                          alt={document.user.name}
+                        />
+                      </div>
+                      <div>
+                        <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                          {document.user.name}
+                        </span>
+                      </div>
+                    </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {document.category.name}
@@ -106,7 +122,22 @@ export default function DocumentReviewHistoryTable({ documents }: Props) {
                     {formatDate(document.created_at)}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {document.status}
+                    <Badge
+                      size="sm"
+                      color={
+                        document.status === "approved"
+                          ? "success"
+                          : document.status === "pending"
+                            ? "warning"
+                            : "error"
+                      }
+                    >
+                      {document.status === "approved"
+                        ? "Disetujui"
+                        : document.status === "pending"
+                          ? "Pending"
+                          : "Revisi"}
+                    </Badge>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400 space-x-4">
                     {
