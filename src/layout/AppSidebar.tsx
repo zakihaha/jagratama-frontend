@@ -78,22 +78,22 @@ const navItems: NavItem[] = [
   },
   {
     icon: <UserCircleIcon />,
-    name: "Users",
+    name: "Pengguna",
     path: "/jagratama/users",
   },
   {
     icon: <PageIcon />,
-    name: "Documents",
+    name: "Riwayat Pengajuan",
     path: "/jagratama/documents",
   },
   {
     icon: <PageIcon />,
-    name: "Documents To Review",
+    name: "Permintaan Pengajuan",
     path: "/jagratama/documents-to-review",
   },
   {
     icon: <PageIcon />,
-    name: "Documents Review History",
+    name: "Riwayat Approval",
     path: "/jagratama/documents-review-history",
   },
   // {
