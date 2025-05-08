@@ -6,16 +6,16 @@ import { cn } from "@/lib/utils"
 import { FileIcon } from "lucide-react"
 
 interface PDFThumbnailNavigatorProps {
-  file: File | null
+  filePath: string
   currentPage: number
   numPages: number
   onPageChange: (page: number) => void
 }
 
-export const PDFThumbnailNavigator = ({ file, currentPage, numPages, onPageChange }: PDFThumbnailNavigatorProps) => {
+export const PDFThumbnailNavigator = ({ filePath, currentPage, numPages, onPageChange }: PDFThumbnailNavigatorProps) => {
   const pageCount = numPages || 0
 
-  if (!file) {
+  if (!filePath) {
     return (
       <div className="h-full flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-4 text-center">
         <FileIcon className="h-12 w-12 mb-3 opacity-50" />
@@ -28,7 +28,7 @@ export const PDFThumbnailNavigator = ({ file, currentPage, numPages, onPageChang
     <div className="h-full flex flex-col">
       {/* Thumbnails */}
         <Document
-          file={file}
+          file={filePath}
           loading={<div className="h-20 w-full animate-pulse bg-slate-200 dark:bg-slate-700 rounded"></div>}
         >
           {Array.from(new Array(pageCount), (_, index) => {

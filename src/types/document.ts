@@ -5,7 +5,7 @@ export type DocumentModel = {
   title: string
   slug: string
   description: string
-  file_path: string
+  file: string
   last_status: string // pending, approved, rejected
   approved_at: string
   created_at: string

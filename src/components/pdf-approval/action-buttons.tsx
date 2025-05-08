@@ -15,14 +15,13 @@ import { Textarea } from "@/components/ui/textarea"
 import { CheckIcon, XIcon, SendIcon, AlertTriangleIcon } from "lucide-react"
 
 interface ActionButtonsProps {
-  file: File | null
   qrPosition: QRPosition
-  disabled: boolean
+  disabled?: boolean
   isLoading: boolean
   approveHandle: ({ approved, note }: { approved: boolean, note?: string }) => void // Add the 'approve' property as an optional function
 }
 
-export const ActionButtons = ({ file, qrPosition, disabled, isLoading, approveHandle }: ActionButtonsProps) => {
+export const ActionButtons = ({ qrPosition, disabled, isLoading, approveHandle }: ActionButtonsProps) => {
   const [isApproveDialogOpen, setIsApproveDialogOpen] = useState(false)
   const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false)
   const [rejectionReason, setRejectionReason] = useState("")
@@ -64,7 +63,7 @@ export const ActionButtons = ({ file, qrPosition, disabled, isLoading, approveHa
           </DialogHeader>
           <div className="py-4">
             <p className="text-sm">
-              Document: <span className="font-medium">{file?.name}</span>
+              Document: <span className="font-medium"> </span>
             </p>
             <p className="text-sm">
               QR Code Position: Page {qrPosition.page}, X: {qrPosition.xPercent.toFixed(1)}%, Y:{" "}

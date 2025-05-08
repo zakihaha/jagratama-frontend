@@ -101,6 +101,19 @@ export async function fetchDocumentReviewHistory(): Promise<DocumentToReviewMode
   return json.data as DocumentToReviewModel[]
 }
 
+export async function getDocumentReview(slug: string): Promise<{ title: string, file: string }> {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents/to-review/${slug}`, {
+    next: { tags: ['document-review'] }, // Enables cache invalidation if needed
+    cache: 'no-store', // Or 'force-cache' if data is not updated often
+  })
+  if (!res.ok) {
+    throw new Error('Failed to get documents review detail')
+  }
+
+  const json = await res.json()
+  return json.data as { title: string,  file: string }
+}
+
 export async function fetchDocumentCounter(): Promise<DocumentCounterModel> {
   const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents/counter`, {
     next: { tags: ['document-counter'] }, // Enables cache invalidation if needed
@@ -108,10 +121,10 @@ export async function fetchDocumentCounter(): Promise<DocumentCounterModel> {
   })
   if (!res.ok) {
     console.log(res);
-    
+
     throw new Error('Failed to fetch document counter')
   }
 
   const json = await res.json()
-  return json.data as DocumentCounterModel  
+  return json.data as DocumentCounterModel
 }

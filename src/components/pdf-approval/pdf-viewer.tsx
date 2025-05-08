@@ -16,7 +16,7 @@ import "react-pdf/dist/esm/Page/AnnotationLayer.css"
 import "react-pdf/dist/esm/Page/TextLayer.css"
 
 interface PDFViewerProps {
-  file: File
+  filePath: string
   currentPage: number
   numPages: number
   onDocumentLoadSuccess: ({ numPages }: { numPages: number }) => void
@@ -30,7 +30,7 @@ interface PDFViewerProps {
 export const PDFViewer = forwardRef<any, PDFViewerProps>(
   (
     {
-      file,
+      filePath,
       currentPage,
       numPages,
       onDocumentLoadSuccess,
@@ -127,8 +127,13 @@ export const PDFViewer = forwardRef<any, PDFViewerProps>(
       }
 
       try {
+        const myFile = await fetch(filePath).then((res) => res.blob())
+        if (!myFile) {
+          throw new Error("File not found")
+        }
+
         // Get the original PDF as an ArrayBuffer
-        const arrayBuffer = await file.arrayBuffer()
+        const arrayBuffer = await myFile.arrayBuffer()
 
         // Use pdf-lib for PDF manipulation
         const pdfDoc = await PDFDocument.load(arrayBuffer)
@@ -202,8 +207,11 @@ export const PDFViewer = forwardRef<any, PDFViewerProps>(
         console.error("Error generating PDF:", error)
 
         // Fallback: return the original PDF if there's an error
-        console.log("Using fallback method to return original PDF")
-        return new Blob([await file.arrayBuffer()], { type: "application/pdf" })
+        // const myFile = await fetch(filePath).then((res) => res.blob())
+        // if (!myFile) {
+        //   throw new Error("File not found")
+        // }
+        // return new Blob([await myFile.arrayBuffer()], { type: "application/pdf" })
       }
     }
 
@@ -323,7 +331,7 @@ export const PDFViewer = forwardRef<any, PDFViewerProps>(
           </div>
         )}
         <Document
-          file={file}
+          file={filePath}
           onLoadSuccess={handleLoadSuccess}
           onLoadError={handleLoadError}
           className="flex justify-center"
