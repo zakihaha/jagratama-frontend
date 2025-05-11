@@ -1,6 +1,6 @@
 import React from "react";
 
-type BadgeVariant = "light" | "solid";
+type BadgeVariant = "light" | "solid" | "outline";
 type BadgeSize = "sm" | "md";
 type BadgeColor =
   | "primary"
@@ -12,12 +12,12 @@ type BadgeColor =
   | "dark";
 
 interface BadgeProps {
-  variant?: BadgeVariant; // Light or solid variant
-  size?: BadgeSize; // Badge size
-  color?: BadgeColor; // Badge color
-  startIcon?: React.ReactNode; // Icon at the start
-  endIcon?: React.ReactNode; // Icon at the end
-  children: React.ReactNode; // Badge content
+  variant?: BadgeVariant;
+  size?: BadgeSize;
+  color?: BadgeColor;
+  startIcon?: React.ReactNode;
+  endIcon?: React.ReactNode;
+  children: React.ReactNode;
 }
 
 const Badge: React.FC<BadgeProps> = ({
@@ -31,13 +31,11 @@ const Badge: React.FC<BadgeProps> = ({
   const baseStyles =
     "inline-flex items-center px-2.5 py-0.5 justify-center gap-1 rounded-full font-medium";
 
-  // Define size styles
   const sizeStyles = {
-    sm: "text-theme-xs", // Smaller padding and font size
-    md: "text-sm", // Default padding and font size
+    sm: "text-theme-xs",
+    md: "text-sm",
   };
 
-  // Define color styles for variants
   const variants = {
     light: {
       primary:
@@ -61,9 +59,17 @@ const Badge: React.FC<BadgeProps> = ({
       light: "bg-gray-400 dark:bg-white/5 text-white dark:text-white/80",
       dark: "bg-gray-700 text-white dark:text-white",
     },
+    outline: {
+      primary: "border border-brand-500 text-brand-500",
+      success: "border border-success-500 text-success-600",
+      error: "border border-error-500 text-error-600",
+      warning: "border border-warning-500 text-warning-600",
+      info: "border border-blue-light-500 text-blue-light-500",
+      light: "border border-gray-300 text-gray-700",
+      dark: "border border-gray-700 text-gray-700",
+    },
   };
 
-  // Get styles based on size and color variant
   const sizeClass = sizeStyles[size];
   const colorStyles = variants[variant][color];
 

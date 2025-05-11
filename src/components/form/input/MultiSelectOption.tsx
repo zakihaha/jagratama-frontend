@@ -103,11 +103,11 @@ export function MultiSelectOption({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className={cn("w-full justify-between text-left font-normal h-auto py-2.5", !selected.length && "text-muted-foreground")}
+            className={cn("w-full justify-between text-left font-normal h-auto py-2.5 rounded-2xl", !selected.length && "text-muted-foreground")}
           >
             <div className="flex flex-col items-start">
               {
-                selected.length === 0 && (<div className="flex items-center">
+                selected.length === 0 && (<div className="flex items-center text-[#A1A1A1]">
                   {placeholder}
                 </div>
                 )}

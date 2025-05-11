@@ -22,10 +22,15 @@ import Profile from "@/app/jagratama/profile/page";
 import Button from "@/components/ui/button/Button";
 import {
   CirclePlus,
+  FileClockIcon,
+  FileDownIcon,
+  FileLockIcon,
+  FilesIcon,
   LayoutDashboard,
   LayoutDashboardIcon,
   LayoutGrid,
   LayoutGridIcon,
+  UsersIcon,
 } from "lucide-react";
 import { UserDropdown } from "@/components/dashboard/UserDropdown";
 
@@ -77,22 +82,22 @@ const navItems: NavItem[] = [
     path: "/jagratama",
   },
   {
-    icon: <UserCircleIcon />,
+    icon: <UsersIcon />,
     name: "Pengguna",
     path: "/jagratama/users",
   },
   {
-    icon: <PageIcon />,
+    icon: <FileClockIcon />,
     name: "Riwayat Pengajuan",
     path: "/jagratama/documents",
   },
   {
-    icon: <PageIcon />,
+    icon: <FileDownIcon />,
     name: "Permintaan Pengajuan",
     path: "/jagratama/documents-to-review",
   },
   {
-    icon: <PageIcon />,
+    icon: <FilesIcon />,
     name: "Riwayat Approval",
     path: "/jagratama/documents-review-history",
   },

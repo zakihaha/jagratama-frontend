@@ -1,3 +1,4 @@
+import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { fetchDocumentCounter } from "@/lib/api/documents";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -14,6 +15,8 @@ const JagratamaIndex = async () => {
 
   return (
     <div>
+      <PageBreadcrumb pageTitle="Dashboard" />
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="border border-[#E5E7EB] rounded-2xl p-3 flex flex-row gap-3">
           <div className="rounded-[8px] bg-[#F7FDFD] border border-[#CEEFF1] p-[14px] flex items-center justify-center">
