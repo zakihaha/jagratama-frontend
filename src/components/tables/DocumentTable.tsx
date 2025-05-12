@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useActionState, useEffect } from "react";
 import {
@@ -19,10 +19,18 @@ import Link from "next/link";
 import { DocumentModel } from "@/types/document";
 import { formatDate } from "@/lib/utils/formatDate";
 import Badge from "../ui/badge/Badge";
+import { Copy, FileText, MoreVertical, Trash2, Type } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
 
 type Props = {
-  documents: DocumentModel[]
-}
+  documents: DocumentModel[];
+};
 
 export default function DocumentTable({ documents }: Props) {
   const warningModal = useModal();
@@ -32,67 +40,76 @@ export default function DocumentTable({ documents }: Props) {
     errors: {},
   };
 
-  const [state, action, isLoading] = useActionState(deleteUserAction, initialState);
+  const [state, action, isLoading] = useActionState(
+    deleteUserAction,
+    initialState
+  );
 
   useEffect(() => {
     if (state.success) {
       warningModal.closeModal();
-      toast.success(state.message)
+      toast.success(state.message);
     } else if (!state.success && state.message) {
       warningModal.closeModal();
-      toast.error(state.message)
+      toast.error(state.message);
     }
   }, [state]);
 
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+    <div className="overflow-hidden bg-white dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
         <div className="min-w-[1102px]">
           <Table>
             {/* Table Header */}
-            <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+            <TableHeader className="bg-[#F3F4F6] border-gray-100 dark:border-white/[0.05]">
               <TableRow>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-center text-theme-xs dark:text-gray-400"
+                >
+                  #
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
                 >
                   Judul
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
                 >
-                  Ditujukan
+                  Ditunjukan
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
                 >
                   Tanggal Dibuat
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
                 >
                   Tanggal Disetujui
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
                 >
                   Jenis Surat
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
                 >
                   Status
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
                 >
-                  Action
+                  {""}
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -100,43 +117,78 @@ export default function DocumentTable({ documents }: Props) {
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {documents.map((document, key) => (
-                <TableRow key={key}>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {document.title}
+                <TableRow className="hover:bg-[#E2F6F7]/30" key={key}>
+                  <TableCell className="px-4 py-3 text-[#404040] text-center text-theme-sm dark:text-gray-400">
+                    1
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  <TableCell className="px-4 py-3 text-[#404040] text-start text-theme-sm dark:text-gray-400">
+                    <div className="inline-flex items-center gap-2">
+                      <FileText className="text-[#20939C]" />
+                      {document.title}
+                    </div>
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-[#404040] text-start text-theme-sm dark:text-gray-400">
                     {document.addressed_user.name}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  <TableCell className="px-4 py-3 text-[#404040] text-start text-theme-sm dark:text-gray-400">
                     {formatDate(document.created_at)}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  <TableCell className="px-4 py-3 text-[#404040] text-start text-theme-sm dark:text-gray-400">
                     {formatDate(document.approved_at)}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  <TableCell className="px-4 py-3 text-[#404040] text-start text-theme-sm dark:text-gray-400">
                     {document.category.name}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  <TableCell className="px-4 py-3 text-[#404040] text-start text-theme-sm dark:text-gray-400">
                     {/* pending, approved, rejected */}
                     <Badge
+                      variant="outline"
                       size="sm"
                       color={
                         document.last_status === "approved"
                           ? "success"
                           : document.last_status === "pending"
-                            ? "warning"
-                            : "error"
+                          ? "warning"
+                          : "error"
                       }
                     >
                       {document.last_status === "approved"
                         ? "Disetujui"
                         : document.last_status === "pending"
-                          ? "Pending"
-                          : "Revisi"}
+                        ? "Pending"
+                        : "Revisi"}
                     </Badge>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400 space-x-4">
-                    <Link href={`/jagratama/documents/${document.slug}`}>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger className="outline-0">
+                          <MoreVertical className="w-6 h-6" />
+                      </DropdownMenuTrigger>
+
+                      <DropdownMenuContent className="bg-white py-2 rounded-2xl">
+                        <DropdownMenuItem className="hover:outline-0 px-4 py-[10px] hover:bg-[#E2F6F7]/30">
+                          <Link href={`/jagratama/documents/${document.slug}/edit`} className="inline-flex items-center gap-2">
+                            <Type className="w-4 h-4 mr-2" />
+                            Ganti Nama
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="hover:outline-0 px-4 py-[10px] hover:bg-[#E2F6F7]/30">
+                          <div className="inline-flex items-center gap-2">
+                            <Copy className="w-4 h-4 mr-2" />
+                            Buat Salinan
+                          </div>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem className="text-red-600 focus:text-red-700 border-t hover:outline-0 px-4 py-[10px] hover:bg-[#E2F6F7]/30">
+                          <div className="inline-flex items-center gap-2">
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            Sampah
+                          </div>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    {/* <Link href={`/jagratama/documents/${document.slug}`}>
                       <Button size="sm" variant="primary">
                         Detail
                       </Button>
@@ -145,11 +197,11 @@ export default function DocumentTable({ documents }: Props) {
                       <Button size="sm" variant="primary">
                         Edit
                       </Button>
-                    </Link>
+                    </Link> */}
+
                   </TableCell>
                 </TableRow>
-              ))
-              }
+              ))}
             </TableBody>
           </Table>
         </div>
@@ -200,8 +252,8 @@ export default function DocumentTable({ documents }: Props) {
               Warning Alert!
             </h4>
             <p className="text-sm leading-6 text-gray-500 dark:text-gray-400">
-              Lorem ipsum dolor sit amet consectetur. Feugiat ipsum libero tempor
-              felis risus nisi non. Quisque eu ut tempor curabitur.
+              Lorem ipsum dolor sit amet consectetur. Feugiat ipsum libero
+              tempor felis risus nisi non. Quisque eu ut tempor curabitur.
             </p>
 
             <div className="flex items-center justify-center w-full gap-3 mt-7">

@@ -18,9 +18,9 @@ export default async function UserIndex() {
 
   return (
     <div>
-      <PageBreadcrumb pageTitle="User Lists" />
+      <PageBreadcrumb pageTitle="Pengguna" />
       <div className="space-y-6">
-        <ComponentCard title="Hehhe">
+        <ComponentCard title="Daftar Pengguna">
           <div>
             <Link href={"/jagratama/users/create"}>
               <Button size="sm" variant="primary">
