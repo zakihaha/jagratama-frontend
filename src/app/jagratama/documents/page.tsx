@@ -3,6 +3,7 @@ import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import DocumentTable from "@/components/tables/DocumentTable";
 import Button from "@/components/ui/button/Button";
 import { fetchDocuments } from "@/lib/api/documents";
+import { CircleFadingArrowUp } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
@@ -18,16 +19,17 @@ export default async function DocumentsIndex() {
 
   return (
     <div>
-      <PageBreadcrumb pageTitle="Document Lists" />
+      <PageBreadcrumb pageTitle="Dokumen" />
       <div className="space-y-6">
-        <ComponentCard title="Hehhe">
-          <div>
+        <ComponentCard title="Semua Dokumen">
+          {/* <div>
             <Link href={"/jagratama/documents/create"}>
-              <Button size="sm" variant="primary">
-                Create
+              <Button size="sm" variant="primary" className="!bg-[#20939C]">
+                <CircleFadingArrowUp />
+                Upload File
               </Button>
             </Link>
-          </div>
+          </div> */}
 
           <DocumentTable documents={documents} />
         </ComponentCard>
