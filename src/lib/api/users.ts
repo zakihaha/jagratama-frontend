@@ -76,3 +76,16 @@ export async function updateUserProfile(data: UserProfileRequest): Promise<void>
 
   return
 }
+
+export async function fetchUsersApproverReviewer(): Promise<UserModel[]> {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/users/approver-reviewer`, {
+    next: { tags: ['users-approver-reviewer'] }, // Enables cache invalidation if needed
+    cache: 'no-store', // Or 'force-cache' if data is not updated often
+  })
+  if (!res.ok) {
+    throw new Error('Failed to fetch users')
+  }
+
+  const json = await res.json()
+  return json.data as UserModel[]
+}

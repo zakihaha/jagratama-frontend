@@ -2,7 +2,8 @@ import { auth } from "@/auth";
 
 export async function fetchWithAuth(
   url: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
+  withContentType: boolean = true
 ) {
   const session = await auth();
 
@@ -12,8 +13,14 @@ export async function fetchWithAuth(
 
   const authHeaders = {
     Authorization: `Bearer ${session.accessToken}`,
-    "Content-Type": "application/json",
   };
+
+  if (withContentType) {
+    options.headers = {
+      ...options.headers,
+      'Content-Type': 'application/json',
+    };
+  }
 
   const response = await fetch(url, {
     ...options,

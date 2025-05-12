@@ -7,7 +7,7 @@ import { CloudUpload } from "lucide-react";
 const MAX_FILE_SIZE_MB = 10;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
-export function UploadFile() {
+export function UploadFile({ name }: { name: string }) {
   const onDrop = useCallback((acceptedFiles: File[], fileRejections: any[]) => {
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0];
@@ -42,15 +42,17 @@ export function UploadFile() {
       </Label>
       <div
         {...getRootProps()}
-        className={`mt-2 border-2 border-dashed rounded-md p-6 text-center cursor-pointer ${
-          isDragActive ? "border-[#20939C] bg-[#20939C]/10" : "border-[#20939C]"
-        }`}
+        className={`mt-2 border-2 border-dashed rounded-md p-6 text-center cursor-pointer ${isDragActive ? "border-[#20939C] bg-[#20939C]/10" : "border-[#20939C]"
+          }`}
       >
-        <input {...getInputProps()} />
+        <input
+          {...getInputProps()}
+          name={name}
+        />
         {isDragActive ? (
-            <div className="flex flex-col items-center text-[#262626] px-6 py-10">
-                <p className="text-sm">Drop file PDF di sini...</p>
-            </div>
+          <div className="flex flex-col items-center text-[#262626] px-6 py-10">
+            <p className="text-sm">Drop file PDF di sini...</p>
+          </div>
         ) : (
           <div className="flex flex-col items-center text-[#262626] px-6 py-10">
             <CloudUpload className="w-7 h-7 mb-5" />
@@ -75,11 +77,6 @@ export function UploadFile() {
           </div>
         )}
       </div>
-      {/* {state.errors.title && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {state.errors.title}
-                  </p>
-                )} */}
     </div>
   );
 }

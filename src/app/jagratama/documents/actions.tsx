@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { DocumentCreateRequest } from '@/types/document';
 import { CreateDocumentSchema } from '@/lib/schemas/document';
 import { createDocument, deleteDocument, updateDocument } from '@/lib/api/documents';
+import { uploadFile } from '@/lib/api/files';
 
 export type Errors = {
   general?: string[];
@@ -24,8 +25,43 @@ export type FormState = {
 export async function createDocumentAction(prevState: FormState, formData: FormData) {
   const errors: Errors = {}
 
+  // upload file
+  const file = formData.get('file') as File
+
+  if (!file) {
+    errors.file_id = ['File is required']
+    return { success: false, message: "Failed to create document.", errors }
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    errors.file_id = ['File size exceeds 10MB']
+    return { success: false, message: "Failed to create document.", errors }
+  }
+  if (file.type !== 'application/pdf') {
+    errors.file_id = ['File type must be PDF']
+    return { success: false, message: "Failed to create document.", errors }
+  }
+
+  try {
+    const formDataFile = new FormData()
+    formDataFile.append('file', file)
+    
+    const res = await uploadFile(formDataFile)
+    const file_id = res.id
+    formData.set('file_id', file_id.toString())
+  } catch (error) {
+    if (error instanceof Error) {
+      errors.file_id = [error.message]
+    } else {
+      errors.file_id = ['Failed to upload file']
+    }
+    return { success: false, message: "Failed to create document.", errors }
+    throw new Error("Failed to create document")
+  }
+
+  // upload document
   let title = formData.get('title') as string
   let description = formData.get('description') as string
+  let file_id_str = formData.get('file_id') as string
   let category_id_str = formData.get('category_id')
   let approvers_str = formData.get('approvers') as string
 
@@ -44,7 +80,7 @@ export async function createDocumentAction(prevState: FormState, formData: FormD
   }
 
   const data: DocumentCreateRequest = {
-    file_id: 1,
+    file_id: parseInt(file_id_str),
     title,
     description,
     category_id,
