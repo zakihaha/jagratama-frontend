@@ -127,7 +127,14 @@ export default function DocumentTable({ documents }: Props) {
                       {document.title}
                     </div>
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-[#404040] text-start text-theme-sm dark:text-gray-400">
+                  <TableCell className="px-4 py-3 text-[#404040] flex flex-row gap-2 items-center text-start text-theme-sm dark:text-gray-400">
+                    <Image
+                      src="/images/user/owner.jpg"
+                      alt="User"
+                      width={24}
+                      height={24}
+                      className="rounded-full"
+                    />
                     {document.addressed_user.name}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-[#404040] text-start text-theme-sm dark:text-gray-400">
@@ -162,12 +169,15 @@ export default function DocumentTable({ documents }: Props) {
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400 space-x-4">
                     <DropdownMenu>
                       <DropdownMenuTrigger className="outline-0">
-                          <MoreVertical className="w-6 h-6" />
+                        <MoreVertical className="w-6 h-6" />
                       </DropdownMenuTrigger>
 
                       <DropdownMenuContent className="bg-white py-2 rounded-2xl">
                         <DropdownMenuItem className="hover:outline-0 px-4 py-[10px] hover:bg-[#E2F6F7]/30">
-                          <Link href={`/jagratama/documents/${document.slug}/edit`} className="inline-flex items-center gap-2">
+                          <Link
+                            href={`/jagratama/documents/${document.slug}/edit`}
+                            className="inline-flex items-center gap-2"
+                          >
                             <Type className="w-4 h-4 mr-2" />
                             Ganti Nama
                           </Link>
@@ -198,7 +208,6 @@ export default function DocumentTable({ documents }: Props) {
                         Edit
                       </Button>
                     </Link> */}
-
                   </TableCell>
                 </TableRow>
               ))}
