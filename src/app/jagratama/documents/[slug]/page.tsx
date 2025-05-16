@@ -1,17 +1,29 @@
+import { Metadata } from "next";
+import React from "react";
+import DetailPengajuan from "./DetailPengajuan";
+import PageBreadcrumb from "@/components/common/PageBreadCrumb";
+import { ArrowLeft } from "lucide-react";
 import { getDocument, getDocumentTracking } from "@/lib/api/documents";
-import DocumentDetailPage from "./Detail";
-import DocumentTracker from "@/components/documents/Tracker";
 
-const DocumentDetail = async ({ params }: { params: { slug: string } }) => {
+export const metadata: Metadata = {
+  title: "JAGRATAMA | Dashboard Pengajuan Dokumen",
+  description:
+    "JAGRATAMA adalah dashboard digital untuk pengajuan, pelacakan, dan pengelolaan dokumen secara mudah dan efisien",
+};
+
+const DetailPengajuanPage = async ({ params }: { params: { slug: string } }) => {
   const slug = (await params).slug;
-  const document = await getDocument(slug);
-  const trackingSteps = await getDocumentTracking(slug);
+    const document = await getDocument(slug);
+    const trackingSteps = await getDocumentTracking(slug);
 
   return (
     <>
-      <DocumentDetailPage document={document} trackingSteps={trackingSteps} />
+      <PageBreadcrumb pageTitle="Detail Pengajuan" icon={<ArrowLeft />} />
+
+      <DetailPengajuan document={document} trackingSteps={trackingSteps} />
+      
     </>
   );
 };
 
-export default DocumentDetail;
+export default DetailPengajuanPage;

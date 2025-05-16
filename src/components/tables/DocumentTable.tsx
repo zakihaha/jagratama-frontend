@@ -19,7 +19,7 @@ import Link from "next/link";
 import { DocumentModel } from "@/types/document";
 import { formatDate } from "@/lib/utils/formatDate";
 import Badge from "../ui/badge/Badge";
-import { Copy, FileText, MoreVertical, Trash2, Type } from "lucide-react";
+import { Copy, ExternalLink, FileText, MoreVertical, Trash2, Type } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -105,12 +105,12 @@ export default function DocumentTable({ documents }: Props) {
                 >
                   Status
                 </TableCell>
-                <TableCell
+                {/* <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
                 >
                   {""}
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             </TableHeader>
 
@@ -122,10 +122,11 @@ export default function DocumentTable({ documents }: Props) {
                     1
                   </TableCell>
                   <TableCell className="px-4 py-3 text-[#404040] text-start text-theme-sm dark:text-gray-400">
-                    <div className="inline-flex items-center gap-2">
+                    <Link href={`/jagratama/documents/${document.slug}`} className="inline-flex items-center gap-2">
                       <FileText className="text-[#20939C]" />
-                      {document.title}
-                    </div>
+                      <span className="hover:text-[#20939C]">{document.title}</span>
+                      <ExternalLink className="w-4 h-4 text-[#20939C]" />
+                    </Link>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-[#404040] flex flex-row gap-2 items-center text-start text-theme-sm dark:text-gray-400">
                     <Image
@@ -166,7 +167,7 @@ export default function DocumentTable({ documents }: Props) {
                         : "Revisi"}
                     </Badge>
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400 space-x-4">
+                  {/* <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400 space-x-4">
                     <DropdownMenu>
                       <DropdownMenuTrigger className="outline-0">
                         <MoreVertical className="w-6 h-6" />
@@ -197,18 +198,7 @@ export default function DocumentTable({ documents }: Props) {
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-
-                    {/* <Link href={`/jagratama/documents/${document.slug}`}>
-                      <Button size="sm" variant="primary">
-                        Detail
-                      </Button>
-                    </Link>
-                    <Link href={`/jagratama/documents/${document.slug}/edit`}>
-                      <Button size="sm" variant="primary">
-                        Edit
-                      </Button>
-                    </Link> */}
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               ))}
             </TableBody>
