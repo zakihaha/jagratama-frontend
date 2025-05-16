@@ -2,18 +2,22 @@ import Link from "next/link";
 import React from "react";
 
 interface BreadcrumbProps {
+  icon?: React.ReactNode;
   pageTitle: string;
 }
 
-const PageBreadcrumb: React.FC<BreadcrumbProps> = ({ pageTitle }) => {
+const PageBreadcrumb: React.FC<BreadcrumbProps> = ({ icon, pageTitle }) => {
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+      <div className="flex flex-row gap-[10px] items-center">
+        <div>{icon}</div>
       <h2
         className="text-xl font-medium text-[#262626] dark:text-white/90"
         x-text="pageName"
       >
         {pageTitle}
       </h2>
+      </div>
       <nav>
         <ol className="flex items-center gap-1.5">
           <li>
