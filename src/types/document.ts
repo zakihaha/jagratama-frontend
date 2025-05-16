@@ -41,6 +41,7 @@ export type DocumentTrackingModel = {
   note?: string
   status: string
   resolved_at?: string
+  file: string
   user: {
     id: number
     name: string
@@ -58,4 +59,11 @@ export type DocumentCounterModel = {
   total_rejected: number
   total_pending: number
   total_approved: number
+}
+
+export type DocumentReviewDetailModel = {
+  title: string
+  file: string
+  requires_signature: boolean
+  is_reviewer: boolean
 }

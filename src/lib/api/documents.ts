@@ -1,5 +1,5 @@
 import { API_V1_BASE_URL } from '@/lib/config';
-import { DocumentCounterModel, DocumentCreateRequest, DocumentModel, DocumentToReviewModel, DocumentTrackingModel } from '@/types/document';
+import { DocumentCounterModel, DocumentCreateRequest, DocumentModel, DocumentReviewDetailModel, DocumentToReviewModel, DocumentTrackingModel } from '@/types/document';
 import { fetchWithAuth } from '../fetchWithAuth';
 
 export async function fetchDocuments(): Promise<DocumentModel[]> {
@@ -101,7 +101,7 @@ export async function fetchDocumentReviewHistory(): Promise<DocumentToReviewMode
   return json.data as DocumentToReviewModel[]
 }
 
-export async function getDocumentReview(slug: string): Promise<{ title: string, file: string }> {
+export async function getDocumentReview(slug: string): Promise<DocumentReviewDetailModel> {
   const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents/to-review/${slug}`, {
     next: { tags: ['document-review'] }, // Enables cache invalidation if needed
     cache: 'no-store', // Or 'force-cache' if data is not updated often
@@ -111,7 +111,7 @@ export async function getDocumentReview(slug: string): Promise<{ title: string, 
   }
 
   const json = await res.json()
-  return json.data as { title: string,  file: string }
+  return json.data as DocumentReviewDetailModel
 }
 
 export async function fetchDocumentCounter(): Promise<DocumentCounterModel> {

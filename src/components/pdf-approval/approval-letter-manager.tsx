@@ -13,6 +13,7 @@ import { getSession, useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { PDFThumbnailNavigator } from "./pdf-thumbnail-navigator"
 import { formatDate } from "@/lib/utils/formatDate"
+import { DocumentReviewDetailModel } from "@/types/document"
 
 // Use relative positioning for QR code
 export type QRPosition = {
@@ -25,10 +26,7 @@ export type QRPosition = {
 
 interface Params {
   slug: string
-  documentData: {
-    title: string
-    file: string
-  },
+  documentData: DocumentReviewDetailModel
 }
 
 export const ApprovalLetterManager = ({ slug, documentData }: Params) => {
@@ -78,11 +76,13 @@ export const ApprovalLetterManager = ({ slug, documentData }: Params) => {
   }
 
   const handleAddSignature = () => {
-    setQrPosition((prev) => ({ ...prev, isPlaced: true }))
+    if (!documentData.requires_signature) return
+    setQrPosition((prev) => ({ ...prev, isPlaced: true, page: currentPage }))
     toast("Signature Added")
   }
 
   const handleRemoveSignature = () => {
+    if (!documentData.requires_signature) return
     setQrPosition((prev) => ({ ...prev, isPlaced: false }))
     toast("Signature Removed")
   }
@@ -142,6 +142,13 @@ export const ApprovalLetterManager = ({ slug, documentData }: Params) => {
   }
 
   const approveDocumentHandle = async ({ approved, note }: { approved: boolean, note?: string }) => {
+    if (!documentData.is_reviewer && (approved === false)) return
+
+    if (documentData.requires_signature && !qrPosition.isPlaced) {
+      toast.error("Please place the signature before approving")
+      return
+    }
+
     setIsLoading(true)
     const status = approved ? "approved" : "rejected"
 
@@ -150,42 +157,47 @@ export const ApprovalLetterManager = ({ slug, documentData }: Params) => {
         setTimeout(() => reject(new Error("PDF generation timed out")), 30000)
       })
 
-      const myFile = await fetch(documentData.file).then((res) => res.blob())
-      if (!myFile) {
-        throw new Error("File not found")
+      let fileId: number | null = null
+      if (documentData.requires_signature) {
+        const myFile = await fetch(documentData.file).then((res) => res.blob())
+        if (!myFile) {
+          throw new Error("File not found")
+        }
+
+        let pdfBlob: Blob
+
+        if (qrPosition.isPlaced && pdfViewerRef.current && typeof pdfViewerRef.current.generateSignedPDF === "function") {
+          pdfBlob = (await Promise.race([pdfViewerRef.current.generateSignedPDF(), timeoutPromise])) as Blob
+        } else {
+          // Otherwise just use the original file
+          pdfBlob = new Blob([await myFile.arrayBuffer()], { type: "application/pdf" })
+        }
+
+        if (!pdfBlob) {
+          throw new Error("Failed to generate signed PDF")
+        }
+
+        // Create a FormData object to send the PDF file
+        const formData = new FormData()
+        formData.append("file", pdfBlob, `${documentData.title}_signed.pdf`)
+
+        const resFile = await fetch(`${API_V1_BASE_URL}/upload?type=document`, {
+          method: 'POST',
+          cache: 'no-store', // Or 'force-cache' if data is not updated often
+          headers: {
+            'Authorization': `Bearer ${session.data?.accessToken}`,
+          },
+          body: formData,
+        })
+
+        if (!resFile.ok) {
+          throw new Error("Failed to upload signed PDF")
+        }
+        const fileData = await resFile.json()
+        fileId = fileData.data.id
       }
-
-      let pdfBlob: Blob
-
-      if (qrPosition.isPlaced && pdfViewerRef.current && typeof pdfViewerRef.current.generateSignedPDF === "function") {
-        pdfBlob = (await Promise.race([pdfViewerRef.current.generateSignedPDF(), timeoutPromise])) as Blob
-      } else {
-        // Otherwise just use the original file
-        pdfBlob = new Blob([await myFile.arrayBuffer()], { type: "application/pdf" })
-      }
-
-      if (!pdfBlob) {
-        throw new Error("Failed to generate signed PDF")
-      }
-
-      // Create a FormData object to send the PDF file
-      const formData = new FormData()
-      formData.append("file", pdfBlob, `${documentData.title}_signed.pdf`)
-
-      const resFile = await fetch(`${API_V1_BASE_URL}/upload?type=document`, {
-        method: 'POST',
-        cache: 'no-store', // Or 'force-cache' if data is not updated often
-        headers: {
-          'Authorization': `Bearer ${session.data?.accessToken}`,
-        },
-        body: formData,
-      })
-
-      if (!resFile.ok) {
-        throw new Error("Failed to upload signed PDF")
-      }
-      const fileData = await resFile.json()
-      const fileId = fileData.data.id
+      
+      console.log("File ID:", fileId);
 
       const res = await fetch(`${API_V1_BASE_URL}/documents/${slug}/approval`, {
         method: 'POST',
@@ -292,13 +304,15 @@ export const ApprovalLetterManager = ({ slug, documentData }: Params) => {
           onAddSignature={handleAddSignature}
           onRemoveSignature={handleRemoveSignature}
           isPlaced={qrPosition.isPlaced}
+          document={documentData}
         />
         <div className="mt-6">
           <ActionButtons
             qrPosition={qrPosition}
-            disabled={!documentData.file || !qrPosition.isPlaced}
+            disabled={!documentData.file || (!qrPosition.isPlaced && documentData.requires_signature)}
             isLoading={isLoading}
             approveHandle={approveDocumentHandle}
+            document={documentData}
           />
         </div>
       </Card>

@@ -292,7 +292,8 @@ export const PDFViewer = forwardRef<any, PDFViewerProps>(
           e.preventDefault()
           const dx = e.clientX - startPos.x
           const scaleFactor = 0.01
-          const newScale = Math.max(0.5, Math.min(2, startScale + dx * scaleFactor))
+          const newScale = Math.max(0.2, Math.min(2, startScale + dx * scaleFactor))
+          
           onPositionChange({ scale: newScale })
         }
       }

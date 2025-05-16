@@ -13,15 +13,17 @@ import {
 } from "@/components/ui/dialog"
 import { Textarea } from "@/components/ui/textarea"
 import { CheckIcon, XIcon, SendIcon, AlertTriangleIcon } from "lucide-react"
+import { DocumentReviewDetailModel } from "@/types/document"
 
 interface ActionButtonsProps {
   qrPosition: QRPosition
   disabled?: boolean
   isLoading: boolean
   approveHandle: ({ approved, note }: { approved: boolean, note?: string }) => void // Add the 'approve' property as an optional function
+  document: DocumentReviewDetailModel
 }
 
-export const ActionButtons = ({ qrPosition, disabled, isLoading, approveHandle }: ActionButtonsProps) => {
+export const ActionButtons = ({ qrPosition, disabled, isLoading, approveHandle, document }: ActionButtonsProps) => {
   const [isApproveDialogOpen, setIsApproveDialogOpen] = useState(false)
   const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false)
   const [rejectionReason, setRejectionReason] = useState("")
@@ -88,52 +90,59 @@ export const ActionButtons = ({ qrPosition, disabled, isLoading, approveHandle }
         </DialogContent>
       </Dialog>
 
-      {/* Reject Dialog */}
-      <Dialog open={isRejectDialogOpen} onOpenChange={setIsRejectDialogOpen}>
-        <Button
-          variant="outline"
-          className="w-full border-red-200 text-red-500 hover:bg-red-50 hover:text-red-600 dark:border-red-900 dark:hover:bg-red-950/30"
-          disabled={disabled}
-          onClick={() => openDialog({ approved: false })}
-        >
-          <XIcon className="mr-2 h-4 w-4" />
-          Reject Document
-        </Button>
-        <DialogContent>
-          <form onSubmit={submitApproval}>
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-2">
-                <AlertTriangleIcon className="h-5 w-5 text-red-500" />
+      {
+        document.is_reviewer && (
+          <>
+            {/* Reject Dialog */}
+            <Dialog open={isRejectDialogOpen} onOpenChange={setIsRejectDialogOpen}>
+              <Button
+                variant="outline"
+                className="w-full border-red-200 text-red-500 hover:bg-red-50 hover:text-red-600 dark:border-red-900 dark:hover:bg-red-950/30"
+                disabled={disabled}
+                onClick={() => openDialog({ approved: false })}
+              >
+                <XIcon className="mr-2 h-4 w-4" />
                 Reject Document
-              </DialogTitle>
-              <DialogDescription>Please provide a reason for rejecting this document.</DialogDescription>
-            </DialogHeader>
-            <div className="py-4">
-              <Textarea
-                placeholder="Enter rejection reason..."
-                value={rejectionReason}
-                onChange={(e) => setRejectionReason(e.target.value)}
-                className="min-h-[100px]"
-              />
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsRejectDialogOpen(false)}>
-                Cancel
               </Button>
-              <Button variant="destructive" disabled={isLoading} type="submit" onClick={() => approveHandle({ approved: false, note: rejectionReason })}>
-                {isLoading ? (
-                  <>Processing...</>
-                ) : (
-                  <>
-                    <SendIcon className="mr-2 h-4 w-4" />
-                    Confirm Rejection
-                  </>
-                )}
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+              <DialogContent>
+                <form onSubmit={submitApproval}>
+                  <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2">
+                      <AlertTriangleIcon className="h-5 w-5 text-red-500" />
+                      Reject Document
+                    </DialogTitle>
+                    <DialogDescription>Please provide a reason for rejecting this document.</DialogDescription>
+                  </DialogHeader>
+                  <div className="py-4">
+                    <Textarea
+                      placeholder="Enter rejection reason..."
+                      value={rejectionReason}
+                      onChange={(e) => setRejectionReason(e.target.value)}
+                      className="min-h-[100px]"
+                    />
+                  </div>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setIsRejectDialogOpen(false)}>
+                      Cancel
+                    </Button>
+                    <Button variant="destructive" disabled={isLoading} type="submit" onClick={() => approveHandle({ approved: false, note: rejectionReason })}>
+                      {isLoading ? (
+                        <>Processing...</>
+                      ) : (
+                        <>
+                          <SendIcon className="mr-2 h-4 w-4" />
+                          Confirm Rejection
+                        </>
+                      )}
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </>
+        )
+      }
+
     </div>
   )
 }
