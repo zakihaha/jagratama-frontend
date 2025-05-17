@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import {
-  ChevronDown,
   ChevronsUpDown,
   LogOut,
   User,
@@ -16,9 +15,10 @@ type UserDropdownProps = {
   isCollapsed?: boolean;
   name?: string;
   email?: string;
+  image?: string;
 };
 
-export function UserDropdown({ isCollapsed = false, name, email }: UserDropdownProps) {
+export function UserDropdown({ isCollapsed = false, name, email, image }: UserDropdownProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -33,14 +33,22 @@ export function UserDropdown({ isCollapsed = false, name, email }: UserDropdownP
       >
         <div className="flex items-center gap-3">
           <div className="relative">
-            <Image
-              src="/images/user/owner.jpg"
-              alt="User"
-              width={36}
-              height={36}
-              className="rounded-full"
-            />
-            <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full bg-green-500 ring-2 ring-white" />
+            {
+              image ? (
+                <>
+                  <Image
+                    src={image || "/images/user/owner.jpg"}
+                    alt="User"
+                    width={36}
+                    height={36}
+                    className="rounded-full"
+                  />
+                  <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full bg-green-500 ring-2 ring-white" />
+                </>
+              ) : (
+                <User className="w-9 h-9 text-muted-foreground" />
+              )
+            }
           </div>
           {!isCollapsed && (
             <div className="text-left">

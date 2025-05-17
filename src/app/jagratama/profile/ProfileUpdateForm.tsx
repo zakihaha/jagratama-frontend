@@ -61,7 +61,7 @@ const ProfileUpdateForm = ({ user }: { user: UserModel }) => {
       toast.success(state.message);
 
       setTimeout(() => {
-        redirect("/jagratama");
+        window.location.href = "/jagratama";
       }, 1000);
     } else if (!state.success && state.message) {
       toast.error(state.message);

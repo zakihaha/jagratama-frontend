@@ -6,34 +6,23 @@ import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import {
   BoxCubeIcon,
-  CalenderIcon,
   ChevronDownIcon,
-  GridIcon,
-  HorizontaLDots,
-  ListIcon,
-  PageIcon,
   PieChartIcon,
   PlugInIcon,
-  TableIcon,
-  UserCircleIcon,
 } from "../icons/index";
-import SidebarWidget from "./SidebarWidget";
-import Profile from "@/app/jagratama/profile/page";
 import Button from "@/components/ui/button/Button";
 import {
   CirclePlus,
   FileClockIcon,
   FileDownIcon,
-  FileLockIcon,
   FilesIcon,
-  LayoutDashboard,
-  LayoutDashboardIcon,
-  LayoutGrid,
   LayoutGridIcon,
   UsersIcon,
 } from "lucide-react";
 import { UserDropdown } from "@/components/dashboard/UserDropdown";
 import { getSession, useSession } from "next-auth/react";
+import { UserModel } from "@/types/user";
+import { API_V1_BASE_URL } from "@/lib/config";
 
 type NavItem = {
   name: string;
@@ -44,40 +33,6 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  // {
-  //   icon: <GridIcon />,
-  //   name: "Dashboard",
-  //   subItems: [{ name: "Ecommerce", path: "/", pro: false }],
-  // },
-  // {
-  //   icon: <CalenderIcon />,
-  //   name: "Calendar",
-  //   path: "/calendar",
-  // },
-  // {
-  //   icon: <UserCircleIcon />,
-  //   name: "User Profile",
-  //   path: "/profile",
-  // },
-
-  // {
-  //   name: "Forms",
-  //   icon: <ListIcon />,
-  //   subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
-  // },
-  // {
-  //   name: "Tables",
-  //   icon: <TableIcon />,
-  //   subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
-  // },
-  // {
-  //   name: "Pages",
-  //   icon: <PageIcon />,
-  //   subItems: [
-  //     { name: "Blank Page", path: "/blank", pro: false },
-  //     { name: "404 Error", path: "/error-404", pro: false },
-  //   ],
-  // },
   {
     icon: <LayoutGridIcon className="text-current" />,
     name: "Dashboard",
@@ -108,11 +63,6 @@ const navItems: NavItem[] = [
     path: "/jagratama/actions/documents-review-history",
     roles: ["reviewer", "approver"],
   },
-  // {
-  //   icon: <PageIcon />,
-  //   name: "Profile",
-  //   path: "/jagratama/profile",
-  // },
 ];
 
 const othersItems: NavItem[] = [
@@ -150,6 +100,28 @@ const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const pathname = usePathname();
   const session = useSession();
+
+  const [user, setUser] = useState<UserModel>();
+
+  const getUserData = async () => {
+    try {
+      const res = await fetch(`${API_V1_BASE_URL}/users/${session.data?.user.id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.data?.accessToken}`,
+        },
+      });
+      if (!res.ok) {
+        throw new Error("Failed to fetch user data");
+      }
+      const data = await res.json();
+
+      setUser(data.data);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  }
 
   const renderMenuItems = (
     navItems: NavItem[],
@@ -332,6 +304,10 @@ const AppSidebar: React.FC = () => {
     }
   }, [session.status])
 
+  useEffect(() => {
+      session.data?.user.id && getUserData();
+  }, [session.data?.user.id]);
+
   const handleSubmenuToggle = (index: number, menuType: "main" | "others") => {
     setOpenSubmenu((prevOpenSubmenu) => {
       if (
@@ -420,50 +396,19 @@ const AppSidebar: React.FC = () => {
               )
             }
             <div>
-              {/* <h2
-                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
-                  !isExpanded && !isHovered
-                    ? "lg:justify-center"
-                    : "justify-start"
-                }`}
-              >
-                {isExpanded || isHovered || isMobileOpen ? (
-                  ""
-                ) : (
-                  <HorizontaLDots />
-                )}
-              </h2> */}
               {session.data?.user.role && renderMenuItems(navItems, "main", session.data?.user.role)}
             </div>
 
             <div className="mt-auto pt-6 pb-10">
               <UserDropdown
                 isCollapsed={!isExpanded && !isHovered && !isMobileOpen}
-                name={session.data?.user.name}
-                email={session.data?.user.email}
+                name={user?.name}
+                email={user?.email}
+                image={user?.image}
               />
             </div>
-
-            {/* <div className="">
-              <h2
-                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
-                  !isExpanded && !isHovered
-                    ? "lg:justify-center"
-                    : "justify-start"
-                }`}
-              >
-                {isExpanded || isHovered || isMobileOpen ? (
-                  "Others"
-                ) : (
-                  <HorizontaLDots />
-                )}
-              </h2>
-              {renderMenuItems(othersItems, "others")}
-            </div> */}
           </div>
         </nav>
-
-        {/* {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null} */}
       </div>
     </aside>
   );
