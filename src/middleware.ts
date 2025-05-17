@@ -37,6 +37,10 @@ export default auth((req) => {
       }
     }
   }
+
+  if (pathname === "/") {
+    return Response.redirect(new URL(DEFAULT_REDIRECT, nextUrl));
+  }
 })
 
 // This tells which routes to protect
@@ -44,6 +48,7 @@ export const config = {
   matcher: [
     "/jagratama/:path*",
     "/signin",
+    "/",
   ],
 };
 
