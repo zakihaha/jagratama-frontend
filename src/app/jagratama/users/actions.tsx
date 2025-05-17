@@ -4,6 +4,7 @@ import { CreateUserSchema, UpdateUserProfileSchema } from '@/lib/schemas/user'
 import { createUser, deleteUser, updateUser, updateUserProfile } from '@/lib/api/users';
 import { revalidatePath } from 'next/cache';
 import { UserCreateRequest, UserProfileRequest } from '@/types/user';
+import { uploadFile } from '@/lib/api/files';
 
 export type Errors = {
   general?: string[];
@@ -12,6 +13,7 @@ export type Errors = {
   email?: string[];
   role_id?: string[];
   position_id?: string[];
+  image_id?: string[];
 };
 
 export type FormState = {
@@ -105,8 +107,8 @@ export async function deleteUserAction(prevState: FormState, formData: FormData)
   // const errors: Errors = {}
 
   try {
-  //   await deleteUser(id)
-  //   revalidatePath('/jagratama/users'); // refreshes the user list page
+    //   await deleteUser(id)
+    //   revalidatePath('/jagratama/users'); // refreshes the user list page
     // return { success: true, message: "User deleted successfully", errors: {} }
   } catch (error) {
     // errors.general = ['Failed to delete user']
@@ -115,17 +117,59 @@ export async function deleteUserAction(prevState: FormState, formData: FormData)
 }
 
 export async function updateProfileAction(prevState: FormState, formData: FormData) {
-  const name = formData.get('name') as string;
-
   const errors: Errors = {}
+
+  const file = formData.get('file') as File
+
+  if (file) {
+    if (file.size > 5 * 1024 * 1024) {
+      errors.image_id = ['File size exceeds 5MB']
+      return { success: false, message: "Failed to update profile.", errors }
+    }
+
+    const allowedTypes = ['image/jpeg', 'image/png']
+    if (!allowedTypes.includes(file.type)) {
+      errors.image_id = ['File type not allowed']
+      return { success: false, message: "Failed to update profile.", errors }
+    }
+
+    try {
+      const formDataFile = new FormData()
+      formDataFile.append('file', file)
+
+      const res = await uploadFile(formDataFile)
+      const file_id = res.id
+      console.log(res);
+      
+      formData.set('image_id', file_id.toString())
+    } catch (error) {
+      if (error instanceof Error) {
+        errors.general = [error.message]
+      } else {
+        errors.general = ['Failed to upload file']
+      }
+      
+      return { success: false, message: "Failed to create document.", errors }
+    }
+  }
+
+  const name = formData.get('name') as string;
+  const image_id_str = formData.get('image_id') as string;
+
   const data: UserProfileRequest = {
     name,
+  }
+
+  if (image_id_str) {
+    data.image_id = parseInt(image_id_str)
   }
 
   const parsed = UpdateUserProfileSchema.safeParse(data)
 
   if (!parsed.success) {
     parsed.error.flatten().fieldErrors.name && (errors.name = parsed.error.flatten().fieldErrors.name)
+    parsed.error.flatten().fieldErrors.image_id && (errors.image_id = parsed.error.flatten().fieldErrors.image_id)
+
     return { success: false, message: "Failed to update user.", errors }
   }
 

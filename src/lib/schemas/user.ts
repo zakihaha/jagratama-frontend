@@ -9,6 +9,7 @@ export const CreateUserSchema = z.object({
 export type CreateUserInput = z.infer<typeof CreateUserSchema>
 
 export const UpdateUserProfileSchema = z.object({
-  name: z.string().min(1, 'Name is required')
+  name: z.string().min(1, 'Name is required'),
+  image_id: z.number().optional(),
 })
 export type UpdateUserProfileInput = z.infer<typeof UpdateUserProfileSchema>

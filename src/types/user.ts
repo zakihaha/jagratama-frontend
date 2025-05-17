@@ -23,5 +23,6 @@ export type UserCreateRequest = {
 }
 
 export type UserProfileRequest = {
+  image_id?: number | null;
   name: string;
 }

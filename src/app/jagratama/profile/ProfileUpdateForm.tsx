@@ -5,7 +5,7 @@ import Button from "@/components/ui/button/Button";
 import { Input } from "@/components/ui/input";
 import { UserModel } from "@/types/user";
 import { Label } from "@radix-ui/react-label";
-import React, { useActionState, useEffect } from "react";
+import React, { useActionState, useEffect, useRef, useState } from "react";
 import { FormState, updateProfileAction } from "../users/actions";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
@@ -24,13 +24,45 @@ const ProfileUpdateForm = ({ user }: { user: UserModel }) => {
     initialState
   );
 
+  const [image, setImage] = useState<string | null>(null)
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      console.log("set file");
+      setImageFile(file)
+      
+      const reader = new FileReader()
+      reader.onload = () => {
+        setImage(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+
+    }
+  }
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleSubmit = async (formData: FormData) => {
+    // Append imageFile
+    if (imageFile) {
+      formData.append("file", imageFile)
+    }
+
+    formAction(formData); // Call the action
+  };
+
   useEffect(() => {
     if (state.success) {
       toast.success(state.message);
 
       setTimeout(() => {
-        redirect("/jagratama/users");
-      }, 1500);
+        redirect("/jagratama");
+      }, 1000);
     } else if (!state.success && state.message) {
       toast.error(state.message);
     }
@@ -41,8 +73,7 @@ const ProfileUpdateForm = ({ user }: { user: UserModel }) => {
       <div className="w-full xl:w-2/3 flex flex-col items-center lg:items-start">
         <div className="flex flex-row items-center mb-[30px]">
           <Image
-            // src={user?.avatar || '/images/placeholder.png'}
-            src="https://i.pinimg.com/736x/6c/44/7f/6c447f6216b583880cd1c22a7f1848e5.jpg"
+            src={image || user?.image || "/images/profile.png"}
             alt="Profile Picture"
             width={100}
             height={100}
@@ -50,14 +81,18 @@ const ProfileUpdateForm = ({ user }: { user: UserModel }) => {
           />
           <div className="text-[#262626]">
             <div className="text-base font-medium mb-2">Update Foto Profil</div>
-            <div className="flex flex-row gap-[10px] items-center justify-center text-sm px-[6px] py-[10px] border border-[#E5E7EB] rounded-[8px]">
+            <button
+              onClick={handleUploadClick}
+              className="flex flex-row gap-[10px] items-center justify-center text-sm px-[6px] py-[10px] border border-[#E5E7EB] rounded-[8px] hover:bg-gray-50 transition-colors"
+            >
               Upload
               <CircleArrowUp className="w-4 h-4" />
-            </div>
+            </button>
+            <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*" className="hidden" />
           </div>
         </div>
 
-        <form action={formAction}>
+        <form action={handleSubmit}>
           <div className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 text-[#262626]">
               <div className="flex flex-col gap-2">
@@ -65,7 +100,7 @@ const ProfileUpdateForm = ({ user }: { user: UserModel }) => {
                   className="flex flex-row items-center gap-2 text-sm"
                   htmlFor="name"
                 >
-                  <CircleUser className="text-[#A1A1A1] w-4 h-4" /> Full Name
+                  <CircleUser className="text-[#A1A1A1] w-4 h-4" /> Nama Lengkap
                 </Label>
                 <Input
                   className="!rounded-2xl md:h-12 md:w-[320px] md:py-3 md:px-4 placeholder:!text-[#A1A1A1]"
@@ -95,18 +130,6 @@ const ProfileUpdateForm = ({ user }: { user: UserModel }) => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <Label className="flex flex-row items-center gap-2 text-sm" htmlFor="position_id"><Users className="text-[#A1A1A1] w-4 h-4" /> Position</Label>
-                <Input
-                  className="!rounded-2xl md:h-12 md:w-[320px] md:py-3 md:px-4 placeholder:!text-[#A1A1A1]"
-                  type="email"
-                  id="email"
-                  placeholder="jussa@mail.com"
-                  defaultValue={user?.position?.name}
-                  disabled
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
                 <Label className="flex flex-row items-center gap-2 text-sm" htmlFor="position_id"><BriefcaseBusiness className="text-[#A1A1A1] w-4 h-4" /> Jabatan</Label>
                 <Input
                   className="!rounded-2xl md:h-12 md:w-[320px] md:py-3 md:px-4 placeholder:!text-[#A1A1A1]"
@@ -120,7 +143,7 @@ const ProfileUpdateForm = ({ user }: { user: UserModel }) => {
             </div>
 
             <Button
-            className="!bg-[#20939C] !text-sm !rounded-[8px] !py-[14px] !px-4"
+              className="!bg-[#20939C] !text-sm !rounded-[8px] !py-[14px] !px-4"
               size="md"
               variant="primary"
               type="submit"
