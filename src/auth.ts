@@ -6,43 +6,50 @@ import { jwtDecode } from "jwt-decode";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
-      name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "email", placeholder: "Input your email" },
-        password: { label: "Password", type: "password", placeholder: "Input your password" },
+        email: {},
+        password: {},
       },
       async authorize(credentials) {
         if (!credentials) {
           throw new Error("No credentials provided");
         }
 
-        const res = await fetch(`${API_V1_BASE_URL}/auth/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: credentials.email,
-            password: credentials.password,
-          }),
-        });
-        const user = await res.json();
+        try {
+          const res = await fetch(`${API_V1_BASE_URL}/auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: credentials.email,
+              password: credentials.password,
+            }),
+          });
 
-        if (!res.ok) {
-          throw new Error(user.message || "Login failed");
+          const user = await res.json();
+
+          if (!res.ok) {
+            return null;
+          }
+
+          return {
+            id: user.data.id,
+            name: user.data.name,
+            email: user.data.email,
+            token: user.data.token,
+            refreshToken: user.data.refresh_token,
+            position: user.data.position,
+            role: user.data.role,
+            image: user.image
+          };
+        } catch (error) {
+          return null;
         }
-
-        return {
-          id: user.data.id,
-          name: user.data.name,
-          email: user.data.email,
-          token: user.data.token,
-          refreshToken: user.data.refresh_token,
-          position: user.data.position,
-          role: user.data.role,
-          image: user.image
-        };
       }
     }),
   ],
+  pages: {
+    signIn: "/signin",
+  },
   session: {
     strategy: "jwt",
   },
