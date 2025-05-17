@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, use } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -99,13 +99,13 @@ const navItems: NavItem[] = [
   {
     icon: <FileDownIcon />,
     name: "Permintaan Pengajuan",
-    path: "/jagratama/documents-to-review",
+    path: "/jagratama/actions/documents-to-review",
     roles: ["reviewer", "approver"],
   },
   {
     icon: <FilesIcon />,
     name: "Riwayat Approval",
-    path: "/jagratama/documents-review-history",
+    path: "/jagratama/actions/documents-review-history",
     roles: ["reviewer", "approver"],
   },
   // {

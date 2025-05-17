@@ -9,8 +9,7 @@ const ROLE_ROUTE_ACCESS: Record<string, string[]> = {
   "/jagratama": ["admin", "requester", "approver", "reviewer"],
   "/jagratama/users": ["admin"],
   "/jagratama/documents": ["requester"],
-  "/jagratama/documents-to-review": ["approver", "reviewer"],
-  "/jagratama/documents-review-history": ["approver", "reviewer"],
+  "/jagratama/actions": ["approver", "reviewer"],
 };
 
 // Protect routes
@@ -34,7 +33,7 @@ export default auth((req) => {
     if (pathname.startsWith(routePrefix)) {
       const allowedRoles = ROLE_ROUTE_ACCESS[routePrefix];
       if (!allowedRoles.includes(userRole)) {
-        return Response.redirect(new URL("/jagratama", nextUrl));
+        return Response.redirect(new URL(DEFAULT_REDIRECT, nextUrl));
       }
     }
   }
