@@ -125,21 +125,21 @@ const AppHeader: React.FC = () => {
             </form>
           </div> */}
         </div>
-        <div
+        {/* <div
           className={`${
             isApplicationMenuOpen ? "flex" : "hidden"
           } items-center justify-between w-full gap-4 px-5 py-4 lg:flex shadow-theme-md lg:justify-end lg:px-0 lg:shadow-none`}
         >
           <div className="flex items-center gap-2 2xsm:gap-3">
-            {/* <!-- Dark Mode Toggler --> */}
-            {/* <ThemeToggleButton /> */}
-            {/* <!-- Dark Mode Toggler --> */}
+            <!-- Dark Mode Toggler -->
+            <ThemeToggleButton />
+            <!-- Dark Mode Toggler -->
 
-            {/* <NotificationDropdown />  */}
-            {/* <!-- Notification Menu Area --> */}
+            <NotificationDropdown /> 
+            <!-- Notification Menu Area -->
           </div>
-          {/* <!-- User Area --> */}
-          {/* <UserDropdown />  */}
+          <!-- User Area -->
+          <UserDropdown /> 
 
           <div className="flex items-center text-gray-700 dark:text-gray-400 dropdown-toggle">
             <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
@@ -155,7 +155,7 @@ const AppHeader: React.FC = () => {
             </span>
           </div>
 
-        </div>
+        </div> */}
       </div>
     </header>
   );

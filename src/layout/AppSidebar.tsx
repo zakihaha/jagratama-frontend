@@ -439,6 +439,8 @@ const AppSidebar: React.FC = () => {
             <div className="mt-auto pt-6 pb-10">
               <UserDropdown
                 isCollapsed={!isExpanded && !isHovered && !isMobileOpen}
+                name={session.data?.user.name}
+                email={session.data?.user.email}
               />
             </div>
 

@@ -14,22 +14,22 @@ import { signOut } from "next-auth/react";
 
 type UserDropdownProps = {
   isCollapsed?: boolean;
+  name?: string;
+  email?: string;
 };
 
-export function UserDropdown({ isCollapsed = false }: UserDropdownProps) {
+export function UserDropdown({ isCollapsed = false, name, email }: UserDropdownProps) {
   const [open, setOpen] = useState(false);
 
   return (
     <div
-      className={`relative ${
-        isCollapsed ? "w-auto" : "w-full"
-      } rounded-xl border bg-white shadow-sm overflow-hidden transition-all duration-300`}
+      className={`relative ${isCollapsed ? "w-auto" : "w-full"
+        } rounded-xl border bg-white shadow-sm overflow-hidden transition-all duration-300`}
     >
       <button
         onClick={() => setOpen(!open)}
-        className={`w-full flex items-center ${
-          isCollapsed ? "justify-center p-2" : "justify-between px-4 py-3"
-        }`}
+        className={`w-full flex items-center ${isCollapsed ? "justify-center p-2" : "justify-between px-4 py-3"
+          }`}
       >
         <div className="flex items-center gap-3">
           <div className="relative">
@@ -44,9 +44,9 @@ export function UserDropdown({ isCollapsed = false }: UserDropdownProps) {
           </div>
           {!isCollapsed && (
             <div className="text-left">
-              <p className="text-sm font-semibold text-foreground">Snow</p>
+              <p className="text-sm font-semibold text-foreground">{name}</p>
               <p className="text-xs text-muted-foreground">
-                snow@osorateam.com
+                {email}
               </p>
             </div>
           )}
@@ -58,9 +58,8 @@ export function UserDropdown({ isCollapsed = false }: UserDropdownProps) {
 
       {!isCollapsed && (
         <div
-          className={`transition-all duration-300 ease-in-out overflow-hidden ${
-            open ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-          }`}
+          className={`transition-all duration-300 ease-in-out overflow-hidden ${open ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+            }`}
         >
           <hr className="border-t" />
           <Link
