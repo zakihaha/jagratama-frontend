@@ -79,7 +79,7 @@ const JagratamaIndex = async () => {
           </div>
         </div>
       </div>
-      <div className="mt-[30px] p-3 border border-[#E5E7EB] rounded-2xl h-screen">
+      {/* <div className="mt-[30px] p-3 border border-[#E5E7EB] rounded-2xl h-screen">
         <p className="font-medium">File Terbaru</p>
         <div className="flex flex-col items-center justify-center h-screen">
         <Image
@@ -92,7 +92,7 @@ const JagratamaIndex = async () => {
             <p className="text-base text-[#262626] font-medium">Belum Ada File</p>
             <p className="text-sm text-[#737373]">Ayo masukan dokumen kamu untuk diajukan hari ini</p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
