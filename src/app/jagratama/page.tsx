@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { fetchDocumentCounter } from "@/lib/api/documents";
 import { Metadata } from "next";
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
 };
 
 const JagratamaIndex = async () => {
+  const session = await auth();
   const documentCounter = await fetchDocumentCounter();
   const { total_document, total_rejected, total_pending, total_approved } = documentCounter;
 
@@ -18,6 +20,27 @@ const JagratamaIndex = async () => {
       <PageBreadcrumb pageTitle="Dashboard" />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+        {
+          session?.user.role === "admin" && (
+            <div className="border border-[#E5E7EB] rounded-2xl p-3 flex flex-row gap-3">
+              <div className="rounded-[8px] bg-[#F7FDFD] border border-[#CEEFF1] p-[14px] flex items-center justify-center">
+                <Image
+                  className=""
+                  src="/images/icons/total-users.svg"
+                  alt="document"
+                  width={36}
+                  height={36}
+                />
+              </div>
+              <div>
+                <p className="text-3xl text-[#262626] font-medium">{total_pending}</p>
+                <p className="text-sm text-[#737373]">Total User</p>
+              </div>
+            </div>
+          )
+        }
+
         <div className="border border-[#E5E7EB] rounded-2xl p-3 flex flex-row gap-3">
           <div className="rounded-[8px] bg-[#F7FDFD] border border-[#CEEFF1] p-[14px] flex items-center justify-center">
             <Image
@@ -48,21 +71,27 @@ const JagratamaIndex = async () => {
             <p className="text-sm text-[#737373]">Berhasil Disetujui</p>
           </div>
         </div>
-        <div className="border border-[#E5E7EB] rounded-2xl p-3 flex flex-row gap-3">
-          <div className="rounded-[8px] bg-[#FDF2E8] border border-[#F0AE75] p-[14px] flex items-center justify-center">
-            <Image
-              className=""
-              src="/images/icons/file-pending.svg"
-              alt="document"
-              width={36}
-              height={36}
-            />
-          </div>
-          <div>
-            <p className="text-3xl text-[#262626] font-medium">{total_pending}</p>
-            <p className="text-sm text-[#737373]">Pending Disetujui</p>
-          </div>
-        </div>
+
+        {
+          session?.user.role !== "admin" && (
+            <div className="border border-[#E5E7EB] rounded-2xl p-3 flex flex-row gap-3">
+              <div className="rounded-[8px] bg-[#FDF2E8] border border-[#F0AE75] p-[14px] flex items-center justify-center">
+                <Image
+                  className=""
+                  src="/images/icons/file-pending.svg"
+                  alt="document"
+                  width={36}
+                  height={36}
+                />
+              </div>
+              <div>
+                <p className="text-3xl text-[#262626] font-medium">{total_pending}</p>
+                <p className="text-sm text-[#737373]">Pending Disetujui</p>
+              </div>
+            </div>
+          )
+        }
+
         <div className="border border-[#E5E7EB] rounded-2xl p-3 flex flex-row gap-3">
           <div className="rounded-[8px] bg-[#FBEBE9] border border-[#E8847D] p-[14px] flex items-center justify-center">
             <Image
@@ -75,7 +104,7 @@ const JagratamaIndex = async () => {
           </div>
           <div>
             <p className="text-3xl text-[#262626] font-medium">{total_rejected}</p>
-            <p className="text-sm text-[#737373]">Belum Disetujui</p>
+            <p className="text-sm text-[#737373]">Tidak Disetujui</p>
           </div>
         </div>
       </div>
