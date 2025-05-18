@@ -19,7 +19,7 @@ const JagratamaIndex = async () => {
     <div>
       <PageBreadcrumb pageTitle="Dashboard" />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
         {
           session?.user.role === "admin" && (
