@@ -8,7 +8,7 @@ interface BreadcrumbProps {
 
 const PageBreadcrumb: React.FC<BreadcrumbProps> = ({ icon, pageTitle }) => {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+    <div className="flex flex-wrap items-center justify-between gap-3">
       <div className="flex flex-row gap-[10px] items-center">
         <div>{icon}</div>
       <h2

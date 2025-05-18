@@ -20,7 +20,7 @@ export default async function DocumentsIndex() {
   return (
     <div>
       <PageBreadcrumb pageTitle="Dokumen" />
-      <div className="space-y-6">
+      <div className="mt-6 space-y-6">
         <ComponentCard title="Semua Dokumen">
           {/* <div>
             <Link href={"/jagratama/documents/create"}>
