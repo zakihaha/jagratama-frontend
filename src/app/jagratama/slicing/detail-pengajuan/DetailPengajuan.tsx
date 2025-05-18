@@ -18,7 +18,7 @@ const DetailPengajuan = () => {
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-row items-center gap-2">
             <FileText className="text-[#20939C]" />
-            <p className="text-lg">Nama File Pengajuan</p>
+            <p className="text-lg font-normal">Nama File Pengajuan</p>
           </div>
           <Badge variant="outline" size="sm" color="warning">
             Pending

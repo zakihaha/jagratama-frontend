@@ -17,7 +17,7 @@ export default async function DocumentsReviewHistoryIndex() {
   return (
     <div>
       <PageBreadcrumb pageTitle="Document Review History" />
-      <div className="space-y-6">
+      <div className="mt-6 space-y-6">
         <ComponentCard title="Hehhe">
           <DocumentReviewHistoryTable documents={documents} />
         </ComponentCard>
