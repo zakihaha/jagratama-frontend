@@ -2,6 +2,7 @@ import { ApprovalLetterManager } from "@/components/pdf-approval/approval-letter
 import { getDocumentReview } from "@/lib/api/documents";
 import { ArrowLeft } from "lucide-react";
 import { Metadata } from "next";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "JAGRATAMA | Dashboard Pengajuan Dokumen",
@@ -33,6 +34,8 @@ export default async function Home({ params }: Props) {
       </div>
 
       <ApprovalLetterManager slug={slug} documentData={document} />
+
+      <Toaster />
     </main>
   )
 }
