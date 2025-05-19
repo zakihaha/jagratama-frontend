@@ -7,8 +7,7 @@ import { useState } from "react";
 import { Input } from "../ui/input";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
-import { EyeIcon } from "lucide-react";
-import { EyeCloseIcon } from "@/icons";
+import { EyeClosedIcon, EyeIcon, EyeOff } from "lucide-react";
 
 export default function SignInForm() {
   const [email, setEmail] = useState("");
@@ -86,9 +85,9 @@ export default function SignInForm() {
                       className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
                     >
                       {showPassword ? (
-                        <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
+                        <EyeIcon className="w-4" />
                       ) : (
-                        <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
+                        <EyeOff className="w-4" />
                       )}
                     </span>
 
