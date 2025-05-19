@@ -1,8 +1,6 @@
 import Image from "next/image";
-import { CircleArrowDown, CircleArrowUp, TriangleAlert } from "lucide-react";
+import { TriangleAlert } from "lucide-react";
 import Badge from "@/components/ui/badge/Badge";
-import { Button } from "@/components/ui/button";
-import { error } from "console";
 
 const data = [
   {

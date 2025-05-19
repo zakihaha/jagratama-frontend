@@ -2,7 +2,6 @@ import Image from "next/image";
 import { CircleArrowDown, CircleArrowUp, TriangleAlert } from "lucide-react";
 import Badge from "@/components/ui/badge/Badge";
 import { Button } from "@/components/ui/button";
-import { error } from "console";
 import { DocumentTrackingModel } from "@/types/document";
 import { formatDate } from "@/lib/utils/formatDate";
 import { cn } from "@/lib/utils";

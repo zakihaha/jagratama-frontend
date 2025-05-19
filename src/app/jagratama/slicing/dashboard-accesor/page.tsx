@@ -1,5 +1,4 @@
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
-import DocumentTable from "@/components/tables/DocumentTable";
 import { fetchDocumentCounter } from "@/lib/api/documents";
 import { Metadata } from "next";
 import Image from "next/image";

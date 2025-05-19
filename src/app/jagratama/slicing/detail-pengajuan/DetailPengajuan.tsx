@@ -1,14 +1,6 @@
 import ApprovalTable from "@/components/dashboard/ApprovalTable";
 import Badge from "@/components/ui/badge/Badge";
-import Button from "@/components/ui/button/Button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Box, Calendar, CircleArrowDown, FileText } from "lucide-react";
+import { Box, Calendar, FileText } from "lucide-react";
 import Image from "next/image";
 
 const DetailPengajuan = () => {
@@ -68,7 +60,7 @@ const DetailPengajuan = () => {
       <div className="mt-5 rounded-2xl border border-[#E5E7EB] p-3">
         <p className="text-base font-medium">Proses Pengajuan</p>
 
-        <ApprovalTable />
+        {/* <ApprovalTable /> */}
       </div>
     </div>
   );

@@ -7,13 +7,11 @@ import { EyeCloseIcon, EyeIcon } from "@/icons";
 interface InputFieldPasswordProps {
   id?: string;
   name: string;
-  defaultValue?: string;
 }
 
 const InputFieldPasword: React.FC<InputFieldPasswordProps> = ({
   id,
   name,
-  defaultValue,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState('');

@@ -7,7 +7,7 @@ import { useState } from "react";
 import { Input } from "../ui/input";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
-import { EyeClosedIcon, EyeIcon, EyeOff } from "lucide-react";
+import { EyeIcon, EyeOff } from "lucide-react";
 
 export default function SignInForm() {
   const [email, setEmail] = useState("");

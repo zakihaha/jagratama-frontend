@@ -1,16 +1,8 @@
 import ApprovalTable from "@/components/dashboard/ApprovalTable";
 import Badge from "@/components/ui/badge/Badge";
-import Button from "@/components/ui/button/Button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { formatDate } from "@/lib/utils/formatDate";
 import { DocumentModel, DocumentTrackingModel } from "@/types/document";
-import { Box, Calendar, CircleArrowDown, FileText } from "lucide-react";
+import { Box, Calendar, FileText } from "lucide-react";
 import Image from "next/image";
 
 const DetailPengajuan = ({ document, trackingSteps }: { document: DocumentModel, trackingSteps: DocumentTrackingModel[] }) => {

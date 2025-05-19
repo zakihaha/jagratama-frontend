@@ -1,7 +1,6 @@
 "use client";
 
 import { ArrowLeft, Box, SendHorizonal } from "lucide-react";
-import dynamic from "next/dynamic";
 import PdfViewerWithThumbnails from "./PdfViewerWithThumbnails";
 import Button from "@/components/ui/button/Button";
 import Image from "next/image";

@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/table";
 
 import Image from "next/image";
-import Button from "@/components/ui/button/Button";
 import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal";
 import { deleteUserAction, FormState } from "@/app/jagratama/users/actions";
@@ -19,7 +18,7 @@ import Link from "next/link";
 import { DocumentModel } from "@/types/document";
 import { formatDate } from "@/lib/utils/formatDate";
 import Badge from "../ui/badge/Badge";
-import { Copy, FileText, MoreVertical, Trash2, Type } from "lucide-react";
+import { Copy, MoreVertical, Trash2, Type } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,

@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { DocumentCreateRequest } from '@/types/document';
 import { CreateDocumentSchema } from '@/lib/schemas/document';
-import { createDocument, deleteDocument, updateDocument } from '@/lib/api/documents';
+import { createDocument, deleteDocument } from '@/lib/api/documents';
 import { uploadFile } from '@/lib/api/files';
 
 export type Errors = {
@@ -59,11 +59,11 @@ export async function createDocumentAction(prevState: FormState, formData: FormD
   }
 
   // upload document
-  let title = formData.get('title') as string
-  let description = formData.get('description') as string
-  let file_id_str = formData.get('file_id') as string
-  let category_id_str = formData.get('category_id')
-  let approvers_str = formData.get('approvers') as string
+  const title = formData.get('title') as string
+  const description = formData.get('description') as string
+  const file_id_str = formData.get('file_id') as string
+  const category_id_str = formData.get('category_id')
+  const approvers_str = formData.get('approvers') as string
 
   let category_id = 0
 
@@ -121,7 +121,11 @@ export async function deleteDocumentAction(prevState: FormState, formData: FormD
     revalidatePath('/jagratama/documents'); // refreshes the document list page
     return { success: true, message: "Document deleted successfully", errors: {} }
   } catch (error) {
-    errors.general = ['Failed to delete document']
+    if (error instanceof Error) {
+      errors.general = [error.message]
+    } else {
+      errors.general = ['Failed to delete document']
+    }
     return { success: false, message: "Failed to delete document", errors: errors }
   }
 }

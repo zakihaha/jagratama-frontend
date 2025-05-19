@@ -1,15 +1,7 @@
 import ApprovalAccessorTable from "@/components/dashboard/ApprovalAccessorTable";
-import ApprovalTable from "@/components/dashboard/ApprovalTable";
 import Badge from "@/components/ui/badge/Badge";
 import Button from "@/components/ui/button/Button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Box, Calendar, CircleArrowDown, Eye, FileText } from "lucide-react";
+import { Box, Calendar, Eye, FileText } from "lucide-react";
 import Image from "next/image";
 
 const DetailPengajuan = () => {

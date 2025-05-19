@@ -17,7 +17,6 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { DocumentToReviewModel } from "@/types/document";
 import { formatDate } from "@/lib/utils/formatDate";
-import { string } from "zod";
 import Badge from "../ui/badge/Badge";
 import Image from "next/image";
 

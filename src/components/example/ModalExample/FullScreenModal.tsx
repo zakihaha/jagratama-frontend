@@ -18,7 +18,7 @@ export default function FullScreenModal() {
   };
   return (
     <ComponentCard title="Full Screen Modal">
-      <Button size="sm" onClick={openFullscreenModal}>
+      <Button size="sm" onClick={() => openFullscreenModal(1)}>
         Open Modal
       </Button>
       <Modal

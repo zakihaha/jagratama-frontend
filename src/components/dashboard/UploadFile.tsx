@@ -1,5 +1,4 @@
 import { Label } from "@radix-ui/react-label";
-import { Input } from "../ui/input";
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { CloudUpload } from "lucide-react";

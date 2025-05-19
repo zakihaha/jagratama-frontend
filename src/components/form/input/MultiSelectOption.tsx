@@ -53,13 +53,6 @@ export function MultiSelectOption({
     onChange([])
   }, [onChange])
 
-  const selectedLabels = React.useMemo(() => {
-    return selected.map((value) => {
-      const option = options.find((option) => option.value === value)
-      return option ? option.label : value
-    })
-  }, [selected, options])
-
   const displaySelectedItems = React.useMemo(() => {
     if (selected.length === 0) return null
 

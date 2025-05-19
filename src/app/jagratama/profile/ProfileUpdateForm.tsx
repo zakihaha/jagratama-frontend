@@ -8,7 +8,6 @@ import { Label } from "@radix-ui/react-label";
 import React, { useActionState, useEffect, useRef, useState } from "react";
 import { FormState, updateProfileAction } from "../users/actions";
 import { toast } from "sonner";
-import { redirect } from "next/navigation";
 import Image from "next/image";
 import { BriefcaseBusiness, CircleArrowUp, CircleUser, Mail, Users } from "lucide-react";
 

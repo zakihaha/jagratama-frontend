@@ -16,7 +16,7 @@ export default function FormInModal() {
   };
   return (
     <ComponentCard title="Form In Modal">
-      <Button size="sm" onClick={openModal}>
+      <Button size="sm" onClick={() => openModal(1)}>
         Open Modal
       </Button>
       <Modal

@@ -1,7 +1,7 @@
 'use server'
 
 import { CreateUserSchema, UpdateUserProfileSchema } from '@/lib/schemas/user'
-import { createUser, deleteUser, updateUser, updateUserProfile } from '@/lib/api/users';
+import { createUser, updateUser, updateUserProfile } from '@/lib/api/users';
 import { revalidatePath } from 'next/cache';
 import { UserCreateRequest, UserProfileRequest } from '@/types/user';
 import { uploadFile } from '@/lib/api/files';
@@ -25,10 +25,10 @@ export type FormState = {
 export async function createUserAction(prevState: FormState, formData: FormData) {
   const errors: Errors = {}
 
-  let name = formData.get('name')
-  let email = formData.get('email')
-  let role_id_str = formData.get('role_id')
-  let position_id_str = formData.get('position_id')
+  const name = formData.get('name')
+  const email = formData.get('email')
+  const role_id_str = formData.get('role_id')
+  const position_id_str = formData.get('position_id')
 
   let role_id = 0
   let position_id = 0
@@ -96,7 +96,11 @@ export async function updateUserAction(prevState: FormState, formData: FormData)
     revalidatePath('/jagratama/users');
     return { success: true, message: "User updated successfully", errors: {} };
   } catch (err) {
-    errors.general = ['Failed to update user']
+    if (err instanceof Error) {
+      errors.general = [err.message]
+    } else {
+      errors.general = ['Failed to update user']
+    }
     return { success: false, message: "Failed to update user", errors };
   }
 }

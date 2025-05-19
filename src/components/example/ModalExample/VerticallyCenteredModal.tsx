@@ -14,7 +14,7 @@ export default function VerticallyCenteredModal() {
   };
   return (
     <ComponentCard title="Vertically Centered Modal">
-      <Button size="sm" onClick={openModal}>
+      <Button size="sm" onClick={() => openModal(1)}>
         Open Modal
       </Button>
       <Modal

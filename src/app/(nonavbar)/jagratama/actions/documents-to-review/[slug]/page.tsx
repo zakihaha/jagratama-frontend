@@ -10,13 +10,9 @@ export const metadata: Metadata = {
     "JAGRATAMA adalah dashboard digital untuk pengajuan, pelacakan, dan pengelolaan dokumen secara mudah dan efisien",
 };
 
-interface Props {
-  params: {
-    slug: string
-  }
-}
+type Params = Promise<{ slug: string }>
 
-export default async function Home({ params }: Props) {
+export default async function PDFReviewPage({ params }: { params: Params }) {
   const { slug } = await params
   const document = await getDocumentReview(slug)
 

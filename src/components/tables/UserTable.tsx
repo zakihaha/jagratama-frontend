@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useActionState, useEffect } from "react";
+import React, { useActionState } from "react";
 import {
   Table,
   TableBody,
@@ -15,7 +15,6 @@ import { UserModel } from "@/types/user";
 import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal";
 import { deleteUserAction, FormState } from "@/app/jagratama/users/actions";
-import { toast } from "sonner";
 import Link from "next/link";
 
 type Props = {

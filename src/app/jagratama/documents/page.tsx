@@ -1,11 +1,8 @@
 import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import DocumentTable from "@/components/tables/DocumentTable";
-import Button from "@/components/ui/button/Button";
 import { fetchDocuments } from "@/lib/api/documents";
-import { CircleFadingArrowUp } from "lucide-react";
 import { Metadata } from "next";
-import Link from "next/link";
 import React from "react";
 
 export const metadata: Metadata = {

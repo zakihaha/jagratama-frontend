@@ -1,6 +1,7 @@
-import { CircleFadingArrowUp, Funnel, Link, Search } from "lucide-react";
+import { CircleFadingArrowUp, Funnel, Search } from "lucide-react";
 import React from "react";
 import Button from "@/components/ui/button/Button";
+import Link from "next/link";
 
 interface ComponentCardProps {
   title: string;
@@ -44,12 +45,12 @@ const ComponentCard: React.FC<ComponentCardProps> = ({
             />
             <Search className="absolute top-3 left-4 text-[#A1A1A1]" />
           </div>
-          <a href="/jagratama/documents/create">
+          <Link href="/jagratama/documents/create">
           <Button size="sm" variant="primary" className="!bg-[#20939C]">
             <CircleFadingArrowUp />
             Upload File
           </Button>
-          </a>
+          </Link>
         </div>
       </div>
 

@@ -9,13 +9,11 @@ export const metadata: Metadata = {
     "JAGRATAMA adalah dashboard digital untuk pengajuan, pelacakan, dan pengelolaan dokumen secara mudah dan efisien",
 };
 
-interface Props {
-  params: {
-    id: string
-  }
-}
-const UserEdit = async ({ params }: Props) => {
-  const user = await getUser(params.id);
+type Params = Promise<{ id: string }>
+
+const UserEdit = async ({ params }: { params: Params }) => {
+  const { id } = await params;
+  const user = await getUser(id);
 
   const userCreateRequest: UserCreateRequest = {
     name: user.name,

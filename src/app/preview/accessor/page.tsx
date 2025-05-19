@@ -53,6 +53,7 @@ export default function PreviewPage() {
           </Button>
         </div>
       </div>
+
       <div className="grid grid-cols-1 md:grid-cols-12 h-[calc(100%-4rem)]">
         <div className="col-span-9">
           <PdfViewerWithThumbnails url="/pdf/CV_Meisha Afifah Putri.pdf" />
@@ -64,24 +65,24 @@ export default function PreviewPage() {
               Status Pengajuann
             </h2>
             <div className="text-sm text-gray-700 space-y-4">
-      <div className="space-y-2">
-        <p className="text-sm">Pilih Status</p>
-        <div className="relative">
-          <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value as StatusType)}
-            className={`w-full appearance-none pl-10 pr-10 py-3 rounded-2xl border bg-white border-[#CFD6DD] focus:outline-none ${statusTextColor[status]}`}
-          >
-            <option value="approve">Setujui</option>
-            <option value="revisi">Revisi</option>
-            <option value="tolak">Tolak</option>
-          </select>
+              <div className="space-y-2">
+                <p className="text-sm">Pilih Status</p>
+                <div className="relative">
+                  <select
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value as StatusType)}
+                    className={`w-full appearance-none pl-10 pr-10 py-3 rounded-2xl border bg-white border-[#CFD6DD] focus:outline-none ${statusTextColor[status]}`}
+                  >
+                    <option value="approve">Setujui</option>
+                    <option value="revisi">Revisi</option>
+                    <option value="tolak">Tolak</option>
+                  </select>
 
-          {statusIcon[status]}
-          <ChevronDown className="w-4 h-4 text-gray-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-        </div>
-      </div>
-    </div>
+                  {statusIcon[status]}
+                  <ChevronDown className="w-4 h-4 text-gray-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
+              </div>
+            </div>
           </div>
           <div className="space-y-2">
             <p className="text-sm">Catatan</p>

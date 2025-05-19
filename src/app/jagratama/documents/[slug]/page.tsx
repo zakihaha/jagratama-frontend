@@ -11,7 +11,9 @@ export const metadata: Metadata = {
     "JAGRATAMA adalah dashboard digital untuk pengajuan, pelacakan, dan pengelolaan dokumen secara mudah dan efisien",
 };
 
-const DetailPengajuanPage = async ({ params }: { params: { slug: string } }) => {
+type Params = Promise<{ slug: string }>
+
+const DetailPengajuanPage = async ({ params }: { params: Params }) => {
   const slug = (await params).slug;
     const document = await getDocument(slug);
     const trackingSteps = await getDocumentTracking(slug);
