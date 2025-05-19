@@ -323,7 +323,7 @@ export const PDFViewer = forwardRef<any, PDFViewerProps>(
 
     return (
       <div
-        className="pdf-container relative border rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-900"
+        className="pdf-container relative rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-900"
         ref={containerRef}
       >
         {loading && (

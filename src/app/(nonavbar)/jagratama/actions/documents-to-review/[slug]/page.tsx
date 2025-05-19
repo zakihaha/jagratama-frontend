@@ -1,5 +1,6 @@
 import { ApprovalLetterManager } from "@/components/pdf-approval/approval-letter-manager";
 import { getDocumentReview } from "@/lib/api/documents";
+import { ArrowLeft } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -23,10 +24,15 @@ export default async function Home({ params }: Props) {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
-      <div className="container mx-auto py-8">
-        <ApprovalLetterManager slug={slug} documentData={document} />
+    <main className="p-6 h-screen w-full bg-gray-50">
+      <div className="p-6 w-full bg-white border border-[#E5E7EB] rounded-t-3xl gap-4 justify-between items-center">
+        <div className="flex flex-row items-center gap-2">
+          <ArrowLeft />
+          <h1 className="text-xl font-medium">Konfirmasi Dokumen</h1>
+        </div>
       </div>
+
+      <ApprovalLetterManager slug={slug} documentData={document} />
     </main>
   )
 }

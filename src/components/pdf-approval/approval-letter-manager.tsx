@@ -3,10 +3,9 @@
 import { useState, useRef, useEffect } from "react"
 import { PDFViewer } from "./pdf-viewer"
 import { QRCodePanel } from "./qr-code-panel"
-import { ActionButtons } from "./action-buttons"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Download } from "lucide-react"
+import { ArrowRightCircle } from "lucide-react"
 import { toast } from "sonner"
 import { API_V1_BASE_URL } from "@/lib/config"
 import { getSession, useSession } from "next-auth/react"
@@ -48,8 +47,18 @@ export const ApprovalLetterManager = ({ slug, documentData }: Params) => {
   const [qrData, setQrData] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
+  const [formInput, setFormInput] = useState({
+    approved: "approved",
+    note: "",
+  })
+
   const pdfContainerRef = useRef<HTMLDivElement>(null)
   const pdfViewerRef = useRef<any>(null)
+
+
+  const handleFormInputChange = (field: keyof FormData, value: string) => {
+    setFormInput(prev => ({ ...prev, [field]: value }));
+  };
 
   // Generate QR data once when file changes
   useEffect(() => {
@@ -141,11 +150,21 @@ export const ApprovalLetterManager = ({ slug, documentData }: Params) => {
     }
   }
 
-  const approveDocumentHandle = async ({ approved, note }: { approved: boolean, note?: string }) => {
+  const approveDocumentHandle = async () => {
+    const approved = formInput.approved === "approved"
+    const note = formInput.note
+
+    console.log("Approval Data:", { approved, note });
+
+    if (!approved && !note) {
+      toast.error("Masukkan catatan untuk menolak dokumen")
+      return
+    }
+    
     if (!documentData.is_reviewer && (approved === false)) return
 
     if (documentData.requires_signature && !qrPosition.isPlaced) {
-      toast.error("Please place the signature before approving")
+      toast.error("Berikan tanda tangan pada dokumen sebelum menyetujui")
       return
     }
 
@@ -196,8 +215,6 @@ export const ApprovalLetterManager = ({ slug, documentData }: Params) => {
         const fileData = await resFile.json()
         fileId = fileData.data.id
       }
-      
-      console.log("File ID:", fileId);
 
       const res = await fetch(`${API_V1_BASE_URL}/documents/${slug}/approval`, {
         method: 'POST',
@@ -233,7 +250,7 @@ export const ApprovalLetterManager = ({ slug, documentData }: Params) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
       {/* Thumbnail Navigator - only show when file is loaded */}
-      <Card className="max-h-[900px] overflow-scroll lg:col-span-2 p-4 shadow-md rounded-xl bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hidden lg:block scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-600 scrollbar-track-transparent">
+      <Card className="max-h-[900px] overflow-scroll lg:col-span-2 p-4 shadow-md rounded-none bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hidden lg:block scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-600 scrollbar-track-transparent">
         <PDFThumbnailNavigator
           filePath={documentData.file}
           currentPage={currentPage}
@@ -245,13 +262,11 @@ export const ApprovalLetterManager = ({ slug, documentData }: Params) => {
       {/* Main PDF Viewer */}
       <Card
         className={`${documentData.file ? "lg:col-span-7" : "lg:col-span-7"
-          } p-4 shadow-md rounded-xl bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700`}
+          } p-4 shadow-md rounded-none lg:mt-8 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700`}
       >
-        {/* {file ? ( */}
         <div ref={pdfContainerRef} className="relative">
           <PDFViewer
             ref={pdfViewerRef}
-            // file={file}
             filePath={documentData.file}
             currentPage={currentPage}
             onDocumentLoadSuccess={handleDocumentLoadSuccess}
@@ -281,39 +296,36 @@ export const ApprovalLetterManager = ({ slug, documentData }: Params) => {
               Next Page
             </Button>
           </div>
-
-          {/* Download Button */}
-          <div className="mt-4 flex justify-end">
-            <Button onClick={handleDownload} className="bg-emerald-500 hover:bg-emerald-600" disabled={isDownloading}>
-              <Download className="mr-2 h-4 w-4" />
-              {isDownloading ? "Processing..." : "Download Document"}
-            </Button>
-          </div>
         </div>
-        {/* ) : (
-          <FileUpload onFileUpload={handleFileUpload} />
-        )} */}
       </Card>
 
       {/* QR Code Panel */}
-      <Card className="lg:col-span-3 p-4 shadow-md rounded-xl bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700">
+      <Card className="lg:col-span-3 p-4 shadow-md rounded-none bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700">
         <QRCodePanel
           currentPage={currentPage}
           onPositionChange={handleQRPositionChange}
           qrPosition={qrPosition}
           onAddSignature={handleAddSignature}
           onRemoveSignature={handleRemoveSignature}
+          onFormInputChange={handleFormInputChange}
+          formInputValue={formInput}
           isPlaced={qrPosition.isPlaced}
           document={documentData}
         />
         <div className="mt-6">
-          <ActionButtons
-            qrPosition={qrPosition}
-            disabled={!documentData.file || (!qrPosition.isPlaced && documentData.requires_signature)}
-            isLoading={isLoading}
-            approveHandle={approveDocumentHandle}
-            document={documentData}
-          />
+          <Button
+            className="!bg-[#20939C] !text-xs lg:!text-sm !font-normal !rounded-[8px] !py-2 lg:!py-6 w-full"
+            type="submit"
+            disabled={
+              !documentData.file 
+              || (!qrPosition.isPlaced && documentData.requires_signature && (formInput.approved === "approved")) 
+              || (formInput.approved === "rejected" && formInput.note === "")
+              || isLoading}
+            onClick={approveDocumentHandle}
+          >
+            Setujui
+            <ArrowRightCircle />
+          </Button>
         </div>
       </Card>
     </div>
