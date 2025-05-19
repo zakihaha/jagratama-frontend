@@ -37,7 +37,7 @@ const navItems: NavItem[] = [
     icon: <LayoutGridIcon className="text-current" />,
     name: "Dashboard",
     path: "/jagratama",
-    roles: ["admin", "approver", "requester"],
+    roles: ["admin", "approver", "reviewer", "requester"],
   },
   {
     icon: <UsersIcon />,
