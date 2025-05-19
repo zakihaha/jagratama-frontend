@@ -160,7 +160,7 @@ export const ApprovalLetterManager = ({ slug, documentData }: Params) => {
       toast.error("Masukkan catatan untuk menolak dokumen")
       return
     }
-    
+
     if (!documentData.is_reviewer && (approved === false)) return
 
     if (documentData.requires_signature && !qrPosition.isPlaced) {
@@ -232,7 +232,7 @@ export const ApprovalLetterManager = ({ slug, documentData }: Params) => {
 
       toast.success(`Document ${status} successfully`)
       setIsLoading(false)
-      router.push('/jagratama/documents-to-review')
+      router.push('/jagratama/actions/documents-to-review')
     } catch (error) {
       console.error("Error approving document:", error)
       toast.error(`Approval ${status} failed`)
@@ -317,13 +317,13 @@ export const ApprovalLetterManager = ({ slug, documentData }: Params) => {
             className="!bg-[#20939C] !text-xs lg:!text-sm !font-normal !rounded-[8px] !py-2 lg:!py-6 w-full"
             type="submit"
             disabled={
-              !documentData.file 
-              || (!qrPosition.isPlaced && documentData.requires_signature && (formInput.approved === "approved")) 
+              !documentData.file
+              || (!qrPosition.isPlaced && documentData.requires_signature && (formInput.approved === "approved"))
               || (formInput.approved === "rejected" && formInput.note === "")
               || isLoading}
             onClick={approveDocumentHandle}
           >
-            Setujui
+            Kirim
             <ArrowRightCircle />
           </Button>
         </div>
