@@ -16,6 +16,7 @@ import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal";
 import { deleteUserAction, FormState } from "@/app/jagratama/users/actions";
 import Link from "next/link";
+import { PenLine } from "lucide-react";
 
 type Props = {
   users: UserModel[]
@@ -42,36 +43,48 @@ export default function UserTable({ users }: Props) {
   // }, [state]);
 
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+    <div className="overflow-hidden bg-white dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
         <div className="min-w-[1102px]">
           <Table>
             {/* Table Header */}
-            <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+            <TableHeader className="bg-[#F3F4F6] border-gray-100 dark:border-white/[0.05]">
               <TableRow>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
                 >
                   User
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                >
+                  Email
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
                 >
                   Role
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
                 >
-                  Position
+                  Jabatan
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
                 >
-                  Action
+                  Organisasi
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                >
+                  {""}
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -82,23 +95,24 @@ export default function UserTable({ users }: Props) {
                 <TableRow key={key}>
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 overflow-hidden rounded-full">
+                      <div className="w-10 h-10 relative rounded-full overflow-hidden shrink-0">
                         <Image
                           width={40}
                           height={40}
                           src="/images/user/user-21.jpg"
                           alt={user.name}
+                          className="absolute inset-0 w-full h-full object-cover"
                         />
                       </div>
                       <div>
                         <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
                           {user.name}
                         </span>
-                        <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {user.email}
-                        </span>
                       </div>
                     </div>
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {user.email}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {user.role.name}
@@ -106,9 +120,13 @@ export default function UserTable({ users }: Props) {
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {user.position.name}
                   </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {user.position.name}
+                  </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400 space-x-4">
                     <Link href={`/jagratama/users/${user.id}/edit`}>
-                      <Button size="sm" variant="primary">
+                      <Button size="sm" variant="outline" className="!text-[#20939C]">
+                        <PenLine className="w-4 h-4" />
                         Edit
                       </Button>
                     </Link>
