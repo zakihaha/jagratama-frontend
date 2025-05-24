@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useActionState, useEffect } from "react";
+import React, { useActionState, useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -18,7 +18,7 @@ import Link from "next/link";
 import { DocumentModel } from "@/types/document";
 import { formatDate } from "@/lib/utils/formatDate";
 import Badge from "../ui/badge/Badge";
-import { Copy, MoreVertical, Trash2, Type } from "lucide-react";
+import { ChevronLeft, ChevronRight, Copy, MoreVertical, Trash2, Type } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -53,6 +53,17 @@ export default function DocumentAccesorTable({ documents }: Props) {
       toast.error(state.message);
     }
   }, [state]);
+
+const [currentPage, setCurrentPage] = useState(1);
+const [itemsPerPage, setItemsPerPage] = useState(12);
+
+const totalDocuments = documents.length;
+const totalPages = Math.ceil(totalDocuments / itemsPerPage);
+
+const paginatedDocuments = documents.slice(
+  (currentPage - 1) * itemsPerPage,
+  currentPage * itemsPerPage
+);
 
   return (
     <div className="overflow-hidden bg-white dark:bg-white/[0.03]">
@@ -121,7 +132,7 @@ export default function DocumentAccesorTable({ documents }: Props) {
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {documents.map((document, key) => (
+              {paginatedDocuments.map((document, key) => (
                 <TableRow className="hover:bg-[#E2F6F7]/30" key={key}>
                   <TableCell className="px-4 py-3 text-[#404040] text-center text-theme-sm dark:text-gray-400">
                     1
@@ -218,9 +229,68 @@ export default function DocumentAccesorTable({ documents }: Props) {
               ))}
             </TableBody>
           </Table>
+
+          <div className="flex flex-col md:flex-row justify-between items-center mt-4 px-4 gap-2">
+
+  <div className="flex items-center gap-4 text-sm text-[#262626]">
+    <select
+      className="border-none outline-none text-sm"
+      value={itemsPerPage}
+      onChange={(e) => {
+        setItemsPerPage(Number(e.target.value));
+        setCurrentPage(1);
+      }}
+    >
+      {[12, 24, 36, 48].map((num) => (
+        <option key={num} value={num}>
+          {num} Hasil
+        </option>
+      ))}
+    </select>
+  <p className="text-sm text-[#A1A1A1]">
+    Menampilkan{" "}
+    {(currentPage - 1) * itemsPerPage + 1} -{" "}
+    {Math.min(currentPage * itemsPerPage, totalDocuments)} dari{" "}
+    {totalDocuments} data
+  </p>
+  </div>
+
+  <div className="flex flex-wrap items-center gap-1">
+    <button
+      className="p-[10px] text-sm border border-[#E5E7EB] rounded-md text-[#262626] disabled:opacity-50"
+      onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+      disabled={currentPage === 1}
+    >
+     <ChevronLeft className="w-4 h-4" />
+    </button>
+
+    {Array.from({ length: Math.max(totalPages, 1) }, (_, i) => i + 1).map((pageNum) => (
+      <button
+        key={pageNum}
+        className={`px-[13px] py-[6px] text-sm rounded-md ${
+          currentPage === pageNum
+            ? "bg-[#E2F6F7] text-[#20939C]"
+            : "text-[#1D293D] hover:bg-gray-200"
+        }`}
+        onClick={() => setCurrentPage(pageNum)}
+      >
+        {pageNum}
+      </button>
+    ))}
+
+    <button
+      className="p-[10px] text-sm border border-[#E5E7EB] rounded-md text-[#262626] disabled:opacity-50"
+      onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+      disabled={currentPage === totalPages}
+    >
+     <ChevronRight className="w-4 h-4" />
+    </button>
+  </div>
+</div>
+
+
         </div>
 
-        {/* Warning Modal */}
         <Modal
           isOpen={warningModal.isOpen}
           onClose={warningModal.closeModal}
