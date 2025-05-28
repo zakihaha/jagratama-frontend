@@ -75,7 +75,7 @@ const DetailPengajuan = ({ document, trackingSteps }: { document: DocumentModel,
       <div className="mt-5 rounded-2xl border border-[#E5E7EB] p-3">
         <p className="text-base font-medium">Proses Pengajuan</p>
 
-        <ApprovalTable steps={trackingSteps} />
+        <ApprovalTable steps={trackingSteps} slug={document.slug} />
       </div>
     </div>
   );

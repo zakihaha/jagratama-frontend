@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { DocumentCreateRequest, DocumentModel } from '@/types/document';
 import { CreateDocumentSchema } from '@/lib/schemas/document';
-import { createDocument, deleteDocument } from '@/lib/api/documents';
+import { createDocument, deleteDocument, reuploadDocumentFile } from '@/lib/api/documents';
 import { uploadFile } from '@/lib/api/files';
 
 export type Errors = {
@@ -129,5 +129,45 @@ export async function deleteDocumentAction(prevState: FormState, formData: FormD
       errors.general = ['Failed to delete document']
     }
     return { success: false, message: "Failed to delete document", errors: errors }
+  }
+}
+
+export async function reuploadDocumentAction(prevState: FormState, formData: FormData) {
+  const slug = formData.get('slug') as string;
+  const file = formData.get('file') as File;
+  const errors: Errors = {};
+  
+  if (!file) {
+    errors.file_id = ['File is required'];
+    return { success: false, message: "Failed to reupload document.", errors };
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    errors.file_id = ['File size exceeds 10MB'];
+    return { success: false, message: "Failed to reupload document.", errors };
+  }
+  if (file.type !== 'application/pdf') {
+    errors.file_id = ['File type must be PDF'];
+    return { success: false, message: "Failed to reupload document.", errors };
+  }
+
+  try {
+    const formDataFile = new FormData();
+    formDataFile.append('file', file);
+    
+    const res = await uploadFile(formDataFile);
+    const file_id = res.id;
+
+    // Call API to reupload the document file
+    await reuploadDocumentFile(slug, file_id);
+
+    revalidatePath(`/jagratama/documents/${slug}`);
+    return { success: true, message: "Document reuploaded successfully", errors: {} };
+  } catch (error) {
+    if (error instanceof Error) {
+      errors.file_id = [error.message];
+    } else {
+      errors.file_id = ['Failed to reupload document'];
+    }
+    return { success: false, message: "Failed to reupload document", errors };
   }
 }

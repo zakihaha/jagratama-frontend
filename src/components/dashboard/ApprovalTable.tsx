@@ -1,14 +1,63 @@
+"use client";
+
 import Image from "next/image";
-import { CircleArrowDown, CircleArrowUp, TriangleAlert } from "lucide-react";
+import { CircleArrowDown, CircleArrowUp, FileX, TriangleAlert, Upload } from "lucide-react";
 import Badge from "@/components/ui/badge/Badge";
 import { Button } from "@/components/ui/button";
 import { DocumentTrackingModel } from "@/types/document";
 import { formatDate } from "@/lib/utils/formatDate";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useActionState, useEffect, useState } from "react";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { toast } from "sonner";
+import { FormState, reuploadDocumentAction } from "@/app/jagratama/documents/actions";
 
-export default function ApprovalTable({ steps }: { steps: DocumentTrackingModel[] }) {
-  console.log(steps);
+export default function ApprovalTable({ steps, slug }: { steps: DocumentTrackingModel[]; slug: string }) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const initialState: FormState = {
+    success: false,
+    message: "",
+    errors: {},
+    data: undefined
+  };
+
+  const [state, formAction, isPending] = useActionState(
+    reuploadDocumentAction,
+    initialState
+  );
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] || null;
+    setSelectedFile(file);
+  };
+
+  const handleCancel = () => {
+    setIsDialogOpen(false);
+    setSelectedFile(null);
+  };
+
+  const handleReuploadSubmit = async (formData: FormData) => {
+    if (selectedFile) {
+      formData.append("slug", slug);
+      
+      formAction(formData); // Call the action
+    }
+  };
+
+  useEffect(() => {
+    if (state.success) {
+      toast.success(state.message);
+    } else if (!state.success && state.message) {
+      toast.error(state.message);
+    }
+    setIsDialogOpen(false);
+    setSelectedFile(null);
+  }, [state]);
 
   return (
     <div className="relative pl-6 mt-3">
@@ -127,14 +176,14 @@ export default function ApprovalTable({ steps }: { steps: DocumentTrackingModel[
                   <td className="py-4 text-end space-x-2">
                     {step.status === "approved" && (
                       <Link href={step.file} target="_blank">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="!text-sm !font-normal !ring-[#20939C] !text-[#20939C] !rounded-[8px]"
-                      >
-                        Download
-                        <CircleArrowDown size={16} className="ml-1" />
-                      </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="!text-sm !font-normal !ring-[#20939C] !text-[#20939C] !rounded-[8px]"
+                        >
+                          Download
+                          <CircleArrowDown size={16} className="ml-1" />
+                        </Button>
                       </Link>
                     )}
 
@@ -143,6 +192,7 @@ export default function ApprovalTable({ steps }: { steps: DocumentTrackingModel[
                         size="sm"
                         variant="outline"
                         className="!text-sm !font-normal !rounded-[8px]"
+                        onClick={() => setIsDialogOpen(true)}
                       >
                         Upload Ulang
                         <CircleArrowUp size={16} className="ml-1" />
@@ -157,6 +207,52 @@ export default function ApprovalTable({ steps }: { steps: DocumentTrackingModel[
 
         </tbody>
       </table>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="font-medium">Upload Ulang Dokumen</DialogTitle>
+          </DialogHeader>
+          <form action={handleReuploadSubmit}>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="file" className="font-normal">
+                  Pilih File
+                </Label>
+                <div className="flex items-center gap-2">
+                  <Input
+                    id="file"
+                    type="file"
+                    onChange={handleFileChange}
+                    name="file"
+                  />
+                  {selectedFile && (
+                    <div className="flex items-center text-sm text-green-600">
+                      <FileX className="w-4 h-4 mr-1" />
+                      {selectedFile.name}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            <DialogFooter className="gap-2">
+              <Button
+                variant="outline"
+                onClick={handleCancel}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={!selectedFile || isPending}
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Reupload
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

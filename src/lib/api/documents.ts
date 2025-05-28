@@ -131,3 +131,16 @@ export async function fetchDocumentCounter(): Promise<DocumentCounterModel> {
   const json = await res.json()
   return json.data as DocumentCounterModel
 }
+
+export async function reuploadDocumentFile(slug: string, file_id: number): Promise<void> {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents/${slug}/reupload`, {
+    method: 'POST',
+    body: JSON.stringify({ file_id }),
+  })
+
+  if (!res.ok) {
+    throw new Error('Failed to reupload document file')
+  }
+
+  return
+}
