@@ -1,4 +1,4 @@
-import ComponentCard from "@/components/common/ComponentCard";
+import ComponentCardAdmin from "@/components/common/ComponentCardAdmin";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import UserTable from "@/components/tables/UserTable";
 import Button from "@/components/ui/button/Button";
@@ -20,17 +20,9 @@ export default async function UserIndex() {
     <div>
       <PageBreadcrumb pageTitle="Pengguna" />
       <div className="mt-6 space-y-6">
-        <ComponentCard title="Daftar Pengguna">
-          <div>
-            <Link href={"/jagratama/users/create"}>
-              <Button size="sm" variant="primary">
-                Create
-              </Button>
-            </Link>
-          </div>
-
+        <ComponentCardAdmin title="Daftar Pengguna">
           <UserTable users={users} />
-        </ComponentCard>
+        </ComponentCardAdmin>
       </div>
     </div>
   );

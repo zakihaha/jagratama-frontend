@@ -17,9 +17,10 @@ import { PositionModel } from '@/types/position';
 interface Params {
   roles: RoleModel[]
   positions: PositionModel[]
+  onClose?: () => void;
 }
 
-const UserCreateForm = ({ roles, positions }: Params) => {
+const UserCreateForm = ({ roles = [], positions = [] }: Params) => {
   const initialState: FormState = {
     success: false,
     message: "",
@@ -43,6 +44,7 @@ const UserCreateForm = ({ roles, positions }: Params) => {
       toast.success(state.message)
 
       setTimeout(() => {
+        onClose?.();
         redirect('/jagratama/users')
       }, 1500)
     } else if (!state.success && state.message) {
@@ -51,12 +53,11 @@ const UserCreateForm = ({ roles, positions }: Params) => {
   }, [state]);
 
   return (
-    <ComponentCard title="Create user">
       <form action={formAction}>
-        <div className="space-y-6">
+        <div className="space-y-6 grid grid-cols-2 gap-x-4">
           <div>
-            <Label htmlFor='name'>Full Name</Label>
-            <Input type="text" id='name' name='name' placeholder="Justin Hubner" />
+            <Label className='text-[#262626] text-sm font-normal' htmlFor='name'>Nama</Label>
+            <Input className='border !border-[#E5E5E5] !rounded-2xl placeholder:!text-[#A1A1A1] !text-sm' type="text" id='name' name='name' placeholder="Masukan Nama" />
             {state.errors.name && (
               <p className="text-red-500 text-sm mt-1">
                 {state.errors.name}
@@ -64,24 +65,33 @@ const UserCreateForm = ({ roles, positions }: Params) => {
             )}
           </div>
           <div>
-            <Label htmlFor='email'>Email</Label>
-            <Input type="email" id='email' name='email' placeholder="jussa@mail.com" />
+            <Label className='text-[#262626] text-sm font-normal' htmlFor='email'>Email</Label>
+            <Input className='border !border-[#E5E5E5] !rounded-2xl placeholder:!text-[#A1A1A1] !text-sm' type="email" id='email' name='email' placeholder="Masukan Email" />
             {state.errors.email && (
               <p className="text-red-500 text-sm mt-1">
                 {state.errors.email}
               </p>
             )}
           </div>
+          <div>
+            <Label className='text-[#262626] text-sm font-normal' htmlFor='organization'>Organisasi</Label>
+            <Input className='border !border-[#E5E5E5] !rounded-2xl placeholder:!text-[#A1A1A1] !text-sm' type="text" id='organization' name='organization' placeholder="Masukan Organisasi" />
+            {/* {state.errors.email && (
+              <p className="text-red-500 text-sm mt-1">
+                {state.errors.email}
+              </p>
+            )} */}
+          </div>
 
           <div>
-            <Label htmlFor='role_id'>Role</Label>
+            <Label className='text-[#262626] text-sm font-normal' htmlFor='role_id'>Role</Label>
             <div className="relative">
               <Select
                 options={roleOptions}
-                placeholder="Select an option"
+                placeholder="Pilih Role"
                 name='role_id'
                 id='role_id'
-                className="dark:bg-dark-900"
+                className="border !border-[#E5E5E5] !rounded-2xl placeholder:!text-[#A1A1A1] !text-sm"
               />
               <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
                 <ChevronDownIcon />
@@ -94,15 +104,15 @@ const UserCreateForm = ({ roles, positions }: Params) => {
             )}
           </div>
 
-          <div>
-            <Label htmlFor='position_id'>Position</Label>
+          <div className='col-span-2'>
+            <Label className='text-[#262626] text-sm font-normal' htmlFor='position_id'>Jabatan</Label>
             <div className="relative">
               <Select
                 options={positionOptions}
-                placeholder="Select an option"
+                placeholder="Pilih Jabatan"
                 name='position_id'
                 id='position_id'
-                className="dark:bg-dark-900"
+                className="border !border-[#E5E5E5] !rounded-2xl placeholder:!text-[#A1A1A1] !text-sm"
               />
               <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
                 <ChevronDownIcon />
@@ -115,12 +125,11 @@ const UserCreateForm = ({ roles, positions }: Params) => {
             )}
           </div>
 
-          <Button size="md" variant="primary" type='submit' disabled={isPending || state.success} >
-            {isPending || state.success ? 'Loading...' : 'Create User'}
+          <Button size="md" variant="primary" type='submit' className="!bg-[#20939C] w-fit text-sm font-normal" disabled={isPending || state.success} >
+            {isPending || state.success ? 'Loading...' : 'Simpan'}
           </Button>
         </div>
       </form>
-    </ComponentCard>
   );
 };
 

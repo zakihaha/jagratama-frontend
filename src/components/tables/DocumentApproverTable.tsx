@@ -31,7 +31,7 @@ type Props = {
   documents: DocumentModel[];
 };
 
-export default function DocumentAccesorTable({ documents }: Props) {
+export default function DocumentApproverTable({ documents }: Props) {
   const warningModal = useModal();
   const initialState: FormState = {
     success: false,
