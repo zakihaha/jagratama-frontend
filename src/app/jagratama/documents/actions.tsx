@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache';
-import { DocumentCreateRequest } from '@/types/document';
+import { DocumentCreateRequest, DocumentModel } from '@/types/document';
 import { CreateDocumentSchema } from '@/lib/schemas/document';
 import { createDocument, deleteDocument } from '@/lib/api/documents';
 import { uploadFile } from '@/lib/api/files';
@@ -20,6 +20,7 @@ export type FormState = {
   success: boolean;
   message: string;
   errors: Errors;
+  data?: DocumentModel;
 };
 
 export async function createDocumentAction(prevState: FormState, formData: FormData) {
@@ -99,9 +100,10 @@ export async function createDocumentAction(prevState: FormState, formData: FormD
   }
 
   try {
-    await createDocument(parsed.data)
+    const result = await createDocument(parsed.data)
+    
     revalidatePath('/jagratama/documents');
-    return { success: true, message: "Document created successfully", errors: {} }
+    return { success: true, message: "Document created successfully", errors: {}, data: result }
   } catch (error) {
     if (error instanceof Error) {
       errors.general = [error.message]

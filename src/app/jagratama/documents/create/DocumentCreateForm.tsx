@@ -27,6 +27,7 @@ const DocumentCreateForm = ({ categories, users }: { categories: CategoryModel[]
     success: false,
     message: "",
     errors: {},
+    data: undefined
   };
 
   const [state, formAction, isPending] = useActionState(
@@ -58,7 +59,7 @@ const DocumentCreateForm = ({ categories, users }: { categories: CategoryModel[]
       toast.success(state.message);
 
       setTimeout(() => {
-        redirect("/jagratama/documents");
+        redirect(`/jagratama/documents/${state.data?.slug}/confirmation`);
       }, 1500);
     } else if (!state.success && state.message) {
       toast.error(state.message);

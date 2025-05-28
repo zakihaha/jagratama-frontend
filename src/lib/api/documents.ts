@@ -15,7 +15,7 @@ export async function fetchDocuments(): Promise<DocumentModel[]> {
   return json.data as DocumentModel[]
 }
 
-export async function createDocument(data: DocumentCreateRequest): Promise<void> {
+export async function createDocument(data: DocumentCreateRequest): Promise<DocumentModel> {
   const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents`, {
     method: 'POST',
     cache: 'no-store', // Or 'force-cache' if data is not updated often
@@ -25,7 +25,8 @@ export async function createDocument(data: DocumentCreateRequest): Promise<void>
     throw new Error('Failed to create document')
   }
 
-  return
+  const json = await res.json()
+  return json.data as DocumentModel
 }
 
 export async function getDocument(slug: string): Promise<DocumentModel> {
@@ -89,6 +90,8 @@ export async function fetchDocumentToReview(): Promise<DocumentToReviewModel[]> 
 }
 
 export async function fetchDocumentReviewHistory(): Promise<DocumentToReviewModel[]> {
+  console.log(`${API_V1_BASE_URL}/documents/to-review/history`);
+  
   const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents/to-review/history`, {
     next: { tags: ['document-review-history'] }, // Enables cache invalidation if needed
     cache: 'no-store', // Or 'force-cache' if data is not updated often
