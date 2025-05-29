@@ -2,9 +2,6 @@
 import { Funnel, Search, Upload, UserPlus } from "lucide-react";
 import React, { useState } from "react";
 import Button from "@/components/ui/button/Button";
-import Link from "next/link";
-import { useModal } from "@/hooks/useModal";
-import { Modal } from "@/components/ui/modal";
 import UserCreateForm from "@/app/jagratama/users/create/UserCreateForm";
 import { RoleModel } from "@/types/role";
 import { PositionModel } from "@/types/position";
@@ -82,7 +79,7 @@ const ComponentCardAdmin: React.FC<ComponentCardAdminProps> = ({
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+        <div className="fixed inset-0 z-10 flex items-center justify-center bg-black/30">
           <div className="bg-white rounded-lg p-6 max-w-[600px] w-full shadow-xl relative backdrop-blur-sm">
             <div className="flex flex-col gap-1">
             <p className="text-[#262626] text-base font-medium">Tambah User</p>
