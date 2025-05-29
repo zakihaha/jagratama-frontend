@@ -14,15 +14,17 @@ import {
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
 import TextArea from "@/components/form/input/TextArea";
-import {
-  MultiSelectOption,
-} from "@/components/form/input/MultiSelectOption";
 import { CircleArrowRight } from "lucide-react";
 import { UploadFile } from "@/components/dashboard/UploadFile";
 import { CategoryModel } from '@/types/category'
 import { UserModel } from "@/types/user";
+import { PositionModel } from "@/types/position";
+import { API_V1_BASE_URL } from "@/lib/config";
+import { useSession } from "next-auth/react";
+import { SearchableSelect } from "@/components/form/input/SearchableSelect"
 
 const DocumentCreateForm = ({ categories, users }: { categories: CategoryModel[], users: UserModel[] }) => {
+  const session = useSession();
   const initialState: FormState = {
     success: false,
     message: "",
@@ -35,7 +37,8 @@ const DocumentCreateForm = ({ categories, users }: { categories: CategoryModel[]
     initialState
   );
   const [message, setMessage] = useState<string>("");
-  const [selectedApprovers, setSelectedApprovers] = useState<string[]>([]);
+  const [positions, setPositions] = useState<PositionModel[]>([]);
+  const [selectedApprovers, setSelectedApprovers] = useState<Record<string, string>>({});
 
   const categoryOptions = categories.map((category) => ({
     value: category.id,
@@ -47,9 +50,40 @@ const DocumentCreateForm = ({ categories, users }: { categories: CategoryModel[]
     label: user.name
   }));
 
+  const handleSelectCategory = async (value: string) => {
+    if (value) {
+      const valueId = parseInt(value, 10);
+
+      const res = await fetch(`${API_V1_BASE_URL}/positions/rules-by-category/${valueId}`, {
+        cache: 'no-store', // Or 'force-cache' if data is not updated often
+        headers: {
+          'Authorization': `Bearer ${session.data?.accessToken}`,
+        },
+      })
+      const json = await res.json();
+      const positions: PositionModel[] = json.data;
+      setPositions(positions);
+    }
+  }
+
+  const getUserOptionsByPosition = (positionId: number) => {
+    return userOptions.filter((user) => {
+      // Assuming users have a position_id field to filter by
+      return users.find((u) => u.email === user.value && u.position_id === positionId);
+    });
+  };
+
+  const handleLectureTargetChange = (positionId: number, value: string) => {
+    const positionIdString = positionId.toString();
+    setSelectedApprovers((prev) => ({
+      ...prev,
+      [positionIdString]: value
+    }));
+  };
+
   const handleSubmit = async (formData: FormData) => {
-    // Append selectedApprovers as JSON string
-    formData.append("approvers", JSON.stringify(selectedApprovers));
+    const selectedApproversArray = Object.values(selectedApprovers);
+    formData.append("approvers", JSON.stringify(selectedApproversArray));
 
     formAction(formData); // Call the action
   };
@@ -113,6 +147,7 @@ const DocumentCreateForm = ({ categories, users }: { categories: CategoryModel[]
                     name="category_id"
                     id="category_id"
                     className="dark:bg-dark-900 !rounded-2xl placeholder:!text-[#A1A1A1]"
+                    onChange={handleSelectCategory}
                   />
                   <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
                     <ChevronDownIcon />
@@ -121,30 +156,6 @@ const DocumentCreateForm = ({ categories, users }: { categories: CategoryModel[]
                 {state.errors.category_id && (
                   <p className="text-red-500 text-sm mt-1">
                     {state.errors.category_id}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <div>
-                  <Label
-                    className="text-[#262626] mb-2 text-sm"
-                    htmlFor="approvers"
-                  >
-                    Ditunjukan Kepada
-                  </Label>
-                  <MultiSelectOption
-                    className="!rounded-2xl placeholder:!text-[#A1A1A1]"
-                    options={userOptions}
-                    selected={selectedApprovers}
-                    onChange={setSelectedApprovers}
-                    placeholder="Pilih Pengajuan"
-                    searchPlaceholder="Pengajuan Kepada"
-                  />
-                </div>
-                {state.errors.approvers && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {state.errors.approvers}
                   </p>
                 )}
               </div>
@@ -172,6 +183,37 @@ const DocumentCreateForm = ({ categories, users }: { categories: CategoryModel[]
                 )}
               </div>
             </div>
+            {
+              positions && positions.length > 0 && (
+                <>
+                  <hr className="my-6" />
+                  <div className="space-y-6">
+                    <Label>Ditunjukan Kepada:</Label>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                      {positions.map((position) => (
+                        <div key={position.id}>
+                          <Label
+                            className="text-[#262626] mb-2 text-sm"
+                            htmlFor={`approvers-${position.id}`}
+                          >
+                            {position.name}
+                          </Label>
+                          <SearchableSelect
+                            className="!rounded-2xl placeholder:!text-[#A1A1A1]"
+                            options={getUserOptionsByPosition(position.id)}
+                            value={selectedApprovers[position.id] || ""}
+                            onChange={(value) => handleLectureTargetChange(position.id, value)}
+                            placeholder={`Select User`}
+                            searchPlaceholder={`Search User...`}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )
+            }
           </div>
           <Button
             className="!bg-[#20939C] rounded-[8px] text-sm mt-6"

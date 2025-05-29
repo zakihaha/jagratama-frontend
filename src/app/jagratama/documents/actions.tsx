@@ -103,7 +103,7 @@ export async function createDocumentAction(prevState: FormState, formData: FormD
     const result = await createDocument(parsed.data)
     
     revalidatePath('/jagratama/documents');
-    return { success: true, message: "Document created successfully", errors: {}, data: result }
+    return { success: true, message: "Document created successfully", errors: {} as Errors, data: result }
   } catch (error) {
     if (error instanceof Error) {
       errors.general = [error.message]
