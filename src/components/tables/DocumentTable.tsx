@@ -122,7 +122,7 @@ export default function DocumentTable({ documents }: Props) {
                   </TableCell>
                   <TableCell className="px-4 py-3 text-[#404040] flex flex-row gap-2 items-center text-start text-theme-sm dark:text-gray-400">
                     <Image
-                      src="/images/user/owner.jpg"
+                      src={document.addressed_user.image}
                       alt="User"
                       width={24}
                       height={24}

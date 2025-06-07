@@ -132,7 +132,7 @@ export default function ApprovalTable({ steps, slug }: { steps: DocumentTracking
                     />
                     <div className="flex gap-3 items-start">
                       <Image
-                        src={"/images/user/owner.jpg"}
+                        src={step.user.image}
                         alt="User"
                         width={30}
                         height={30}

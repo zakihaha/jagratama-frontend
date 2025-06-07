@@ -53,7 +53,7 @@ const DetailPengajuan = ({ document, trackingSteps }: { document: DocumentModel,
             <p className="text-[#404040] text-sm">Ditujukan Kepada</p>
             <div className="flex flex-row items-center gap-2 text-[#A1A1A1] text-sm">
               <Image
-                src="/images/user/owner.jpg"
+                src={document.addressed_user.image}
                 alt="User"
                 width={24}
                 height={24}
