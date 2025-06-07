@@ -75,12 +75,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // // check jwt backend expiration
       const isExpired = (token as any).accessTokenExp < Math.floor(Date.now() / 1000);
       if (isExpired) {
-        token = await refreshAccessToken(token);
-
-        // update the token expiration time
-        if (token.accessToken) {
-          const decoded = jwtDecode((token as any).accessToken);
-          token.accessTokenExp = decoded.exp; // Store expiration time
+        try {
+          token = await refreshAccessToken(token);
+  
+          // update the token expiration time
+          if (token.accessToken) {
+            const decoded = jwtDecode((token as any).accessToken);
+            token.accessTokenExp = decoded.exp; // Store expiration time
+          }
+        } catch (error) {
+          return null; // If refresh fails, return null to trigger signOut          
         }
       }
 
@@ -147,10 +151,6 @@ async function refreshAccessToken(token: any) {
       accessToken: refreshed.data.token,
     };
   } catch (err) {
-    console.error("Failed to refresh token", err);
-    return {
-      ...token,
-      error: "RefreshAccessTokenError",
-    };
+    throw new Error("Failed to refresh access token");
   }
 }
