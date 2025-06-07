@@ -61,7 +61,7 @@ export default function SearchInput({ showStatusFilter = true }: { showStatusFil
               placeholder="Pilih Status"
               name="category_id"
               id="category_id"
-              className="dark:bg-dark-900 pl-12 rounded-[8px] border border-[#E5E7EB] text-[#262626] placeholder:!text-[#A1A1A1] !text-sm font-normal"
+              className="dark:bg-dark-900 pl-12 rounded-[8px] text-[#262626] placeholder:!text-[#A1A1A1] !text-sm font-normal"
               defaultValue={status}
               onChange={handleStatus}
             />
@@ -71,7 +71,7 @@ export default function SearchInput({ showStatusFilter = true }: { showStatusFil
       }
       <div className="relative flex gap-4">
         <input
-          className="rounded-[8px] border border-[#E5E7EB] text-[#262626] py-[10px] pl-12 pr-4 placeholder:text-[#A1A1A1] text-sm font-normal"
+          className="rounded-[8px] border border-gray-300 focus-visible:border-brand-300 focus-visible:outline-hidden focus-visible:ring-3 focus-visible:ring-brand-500/10 text-[#262626] py-[10px] pl-12 pr-4 placeholder:text-[#A1A1A1] text-sm font-normal"
           placeholder="Cari Dokumen"
           onChange={(e) => setSearchTerm(e.target.value)}
           type="text"
