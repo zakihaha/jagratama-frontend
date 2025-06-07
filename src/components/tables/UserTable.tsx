@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import React, { useActionState } from "react";
+import React, { useActionState, useState } from "react";
 import {
   Table,
   TableBody,
@@ -17,10 +17,11 @@ import { Modal } from "@/components/ui/modal";
 import { deleteUserAction, FormState } from "@/app/jagratama/users/actions";
 import Link from "next/link";
 import { PenLine } from "lucide-react";
+import UserUpdateForm from "@/app/jagratama/users/[id]/edit/UserUpdateForm";
 
 type Props = {
-  users: UserModel[]
-}
+  users: UserModel[];
+};
 
 export default function UserTable({ users }: Props) {
   const warningModal = useModal();
@@ -30,7 +31,16 @@ export default function UserTable({ users }: Props) {
     errors: {},
   };
 
-  const [state, action, isLoading] = useActionState(deleteUserAction, initialState);
+  const [state, action, isLoading] = useActionState(
+    deleteUserAction,
+    initialState
+  );
+
+  const [selectedUser, setSelectedUser] = useState<UserModel | null>(null);
+
+  const [isModalEditOpen, setModalEditOpen] = useState(false);
+  const openModal = () => setModalEditOpen(true);
+  const closeModal = () => setModalEditOpen(false);
 
   // useEffect(() => {
   //   if (state.success) {
@@ -124,18 +134,58 @@ export default function UserTable({ users }: Props) {
                     {user.position.name}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400 space-x-4">
-                    <Link href={`/jagratama/users/${user.id}/edit`}>
-                      <Button size="sm" variant="outline" className="!text-[#20939C]">
-                        <PenLine className="w-4 h-4" />
-                        Edit
-                      </Button>
-                    </Link>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="!text-[#20939C]"
+                      onClick={() => {
+                        setSelectedUser(user);
+                        openModal();
+                      }}
+                    >
+                      <PenLine className="w-4 h-4" />
+                      Edit
+                    </Button>
+                    <Link href={`/jagratama/users/${user.id}/edit`}></Link>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </div>
+
+        {/* edit modal */}
+        {isModalEditOpen && selectedUser && (
+          <div className="fixed inset-0 z-10 flex items-center justify-center bg-black/30">
+            <div className="bg-white rounded-lg p-6 max-w-[600px] w-full shadow-xl relative backdrop-blur-sm">
+              <div className="flex flex-col gap-1">
+                <p className="text-[#262626] text-base font-medium">
+                  Edit User
+                </p>
+                <p className="text-[#737373] text-sm">
+                  Masukan data pengguna Jagratama
+                </p>
+              </div>
+              <hr className="my-[30px]" />
+              <button
+                className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+                onClick={closeModal}
+                aria-label="Close modal"
+              >
+                ✕
+              </button>
+
+              <UserUpdateForm
+                id={selectedUser.id}
+                user={selectedUser}
+                onClose={() => {
+                  setSelectedUser(null);
+                  closeModal();
+                }}
+              />
+            </div>
+          </div>
+        )}
 
         {/* Warning Modal */}
         <Modal
@@ -183,8 +233,8 @@ export default function UserTable({ users }: Props) {
               Warning Alert!
             </h4>
             <p className="text-sm leading-6 text-gray-500 dark:text-gray-400">
-              Lorem ipsum dolor sit amet consectetur. Feugiat ipsum libero tempor
-              felis risus nisi non. Quisque eu ut tempor curabitur.
+              Lorem ipsum dolor sit amet consectetur. Feugiat ipsum libero
+              tempor felis risus nisi non. Quisque eu ut tempor curabitur.
             </p>
 
             <div className="flex items-center justify-center w-full gap-3 mt-7">
