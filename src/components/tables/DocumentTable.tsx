@@ -187,7 +187,7 @@ export default function DocumentTable({ documents, totalPage, currentPage, }: Pr
               {documents.map((document, key) => (
                 <TableRow className="hover:bg-[#E2F6F7]/30" key={key}>
                   <TableCell className="px-4 py-3 text-[#404040] text-center text-theme-sm dark:text-gray-400">
-                    1
+                    {key + 1 + (currentPage - 1) * 10}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-[#404040] text-start text-theme-sm dark:text-gray-400">
                     <Link href={`/jagratama/documents/${document.slug}`} className="inline-flex items-center gap-2">

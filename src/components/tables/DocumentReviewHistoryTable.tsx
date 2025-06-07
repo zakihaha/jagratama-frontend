@@ -54,6 +54,12 @@ export default function DocumentReviewHistoryTable({ documents }: Props) {
               <TableRow>
                 <TableCell
                   isHeader
+                  className="px-5 py-3 font-medium text-[#262626] text-center text-theme-xs dark:text-gray-400"
+                >
+                  #
+                </TableCell>
+                <TableCell
+                  isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
                   Judul
@@ -89,6 +95,9 @@ export default function DocumentReviewHistoryTable({ documents }: Props) {
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {documents.length > 0 && documents.map((document, key) => (
                 <TableRow key={key} className="hover:bg-[#E2F6F7]/30">
+                  <TableCell className="px-4 py-3 text-[#404040] text-center text-theme-sm dark:text-gray-400">
+                    {key + 1}
+                  </TableCell>
                   <TableCell className="px-4 py-3 text-[#404040] text-start text-theme-sm dark:text-gray-400">
                     {document.title}
                   </TableCell>
