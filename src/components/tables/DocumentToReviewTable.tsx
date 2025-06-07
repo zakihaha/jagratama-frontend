@@ -45,46 +45,46 @@ export default function DocumentToReviewTable({ documents }: Props) {
   }, [state]);
 
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+    <div className="overflow-hidden bg-white dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
         <div className="min-w-[1102px]">
           <Table>
             {/* Table Header */}
-            <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+            <TableHeader className="bg-[#F3F4F6] border-gray-100 dark:border-white/[0.05]">
               <TableRow>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
                 >
                   Judul
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
                 >
                   Pengaju
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
                 >
                   Jenis Surat
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
                 >
                   Tanggal Diajukan
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
                 >
                   Status
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
                 >
                   Action
                 </TableCell>
@@ -143,7 +143,7 @@ export default function DocumentToReviewTable({ documents }: Props) {
                     {
                       document.status === "pending" ? (
                         <Link href={`/jagratama/actions/documents-to-review/${document.slug}`}>
-                          <Button size="sm" variant="primary">
+                          <Button size="sm" variant="primary" className="!bg-[#20939C] w-fit text-sm font-normal">
                             Review
                           </Button>
                         </Link>
