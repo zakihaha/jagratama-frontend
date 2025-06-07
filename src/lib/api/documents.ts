@@ -2,8 +2,8 @@ import { API_V1_BASE_URL } from '@/lib/config';
 import { DocumentCounterModel, DocumentCreateRequest, DocumentModel, DocumentReviewDetailModel, DocumentToReviewModel, DocumentTrackingModel } from '@/types/document';
 import { fetchWithAuth } from '../fetchWithAuth';
 
-export async function fetchDocuments(): Promise<DocumentModel[]> {
-  const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents`, {
+export async function fetchDocuments(status?: string, title?: string): Promise<DocumentModel[]> {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents?${status ? `status=${status}&` : ''}${title ? `title=${title}` : ''}`, {
     next: { tags: ['document'] }, // Enables cache invalidation if needed
     cache: 'no-store', // Or 'force-cache' if data is not updated often
   })
