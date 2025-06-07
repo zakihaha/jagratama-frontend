@@ -76,8 +76,8 @@ export async function getDocumentTracking(slug: string): Promise<DocumentTrackin
   return json.data as DocumentTrackingModel[]
 }
 
-export async function fetchDocumentToReview(): Promise<DocumentToReviewModel[]> {
-  const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents/to-review`, {
+export async function fetchDocumentToReview(title?: string): Promise<DocumentToReviewModel[]> {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents/to-review?${title ? `title=${title}` : ''}`, {
     next: { tags: ['document-to-review'] }, // Enables cache invalidation if needed
     cache: 'no-store', // Or 'force-cache' if data is not updated often
   })
@@ -89,10 +89,8 @@ export async function fetchDocumentToReview(): Promise<DocumentToReviewModel[]> 
   return json.data as DocumentToReviewModel[]
 }
 
-export async function fetchDocumentReviewHistory(): Promise<DocumentToReviewModel[]> {
-  console.log(`${API_V1_BASE_URL}/documents/to-review/history`);
-  
-  const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents/to-review/history`, {
+export async function fetchDocumentReviewHistory(title?: string, status?: string): Promise<DocumentToReviewModel[]> {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents/to-review/history?${title ? `title=${title}&` : ''}${status ? `status=${status}` : ''}`, {
     next: { tags: ['document-review-history'] }, // Enables cache invalidation if needed
     cache: 'no-store', // Or 'force-cache' if data is not updated often
   })

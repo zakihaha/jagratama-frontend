@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import Button from '../ui/button/Button';
 import Select from '../form/Select';
 
-export default function SearchInput() {
+export default function SearchInput({ showStatusFilter = true }: { showStatusFilter?: boolean }) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -53,18 +53,22 @@ export default function SearchInput() {
 
   return (
     <form onSubmit={handleSearch} className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-      <div className="relative">
-        <Select
-          options={statusOptions}
-          placeholder="Pilih Status"
-          name="category_id"
-          id="category_id"
-          className="dark:bg-dark-900 pl-12 rounded-[8px] border border-[#E5E7EB] text-[#262626] placeholder:!text-[#A1A1A1] !text-sm font-normal"
-          defaultValue={status}
-          onChange={handleStatus}
-        />
-        <Funnel className="absolute top-3 left-4 text-[#A1A1A1]" />
-      </div>
+      {
+        showStatusFilter && (
+          <div className="relative">
+            <Select
+              options={statusOptions}
+              placeholder="Pilih Status"
+              name="category_id"
+              id="category_id"
+              className="dark:bg-dark-900 pl-12 rounded-[8px] border border-[#E5E7EB] text-[#262626] placeholder:!text-[#A1A1A1] !text-sm font-normal"
+              defaultValue={status}
+              onChange={handleStatus}
+            />
+            <Funnel className="absolute top-3 left-4 text-[#A1A1A1]" />
+          </div>
+        )
+      }
       <div className="relative flex gap-4">
         <input
           className="rounded-[8px] border border-[#E5E7EB] text-[#262626] py-[10px] pl-12 pr-4 placeholder:text-[#A1A1A1] text-sm font-normal"

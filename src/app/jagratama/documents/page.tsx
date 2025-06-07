@@ -19,8 +19,6 @@ export default async function DocumentsIndex({
   searchParams: Promise<{ title: string; status: string;  }>
 }) {
   const query = await searchParams;
-  console.log("Query Parameters:", query);
-  
   const documents = await fetchDocuments(query.status, query.title);
 
   return (
@@ -30,8 +28,6 @@ export default async function DocumentsIndex({
         <ComponentCard title="Semua Dokumen">
           <>
             <div className="flex flex-row justify-end items-center mb-6">
-              {/* <p className="font-medium mb-6">Pengajuan Terbaru</p> */}
-              <div></div>
               <SearchInput />
             </div>
             <DocumentTable documents={documents} />

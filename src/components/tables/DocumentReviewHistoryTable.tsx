@@ -45,12 +45,12 @@ export default function DocumentReviewHistoryTable({ documents }: Props) {
   }, [state]);
 
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+    <div className="overflow-hidden bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
         <div className="min-w-[1102px]">
           <Table>
             {/* Table Header */}
-            <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+            <TableHeader className="bg-[#F3F4F6] border-gray-100 dark:border-white/[0.05]">
               <TableRow>
                 <TableCell
                   isHeader
@@ -82,23 +82,17 @@ export default function DocumentReviewHistoryTable({ documents }: Props) {
                 >
                   Status
                 </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >
-                  Action
-                </TableCell>
               </TableRow>
             </TableHeader>
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {documents.length > 0 && documents.map((document, key) => (
-                <TableRow key={key}>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                <TableRow key={key} className="hover:bg-[#E2F6F7]/30">
+                  <TableCell className="px-4 py-3 text-[#404040] text-start text-theme-sm dark:text-gray-400">
                     {document.title}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  <TableCell className="px-4 py-3 text-[#404040] text-start text-theme-sm dark:text-gray-400">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 overflow-hidden rounded-full">
                         <Image
@@ -115,14 +109,15 @@ export default function DocumentReviewHistoryTable({ documents }: Props) {
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  <TableCell className="px-4 py-3 text-[#404040] text-start text-theme-sm dark:text-gray-400">
                     {document.category.name}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  <TableCell className="px-4 py-3 text-[#404040] text-start text-theme-sm dark:text-gray-400">
                     {formatDate(document.created_at)}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  <TableCell className="px-4 py-3 text-[#404040] text-start text-theme-sm dark:text-gray-400">
                     <Badge
+                      variant="outline"
                       size="sm"
                       color={
                         document.status === "approved"
@@ -138,17 +133,6 @@ export default function DocumentReviewHistoryTable({ documents }: Props) {
                           ? "Pending"
                           : "Revisi"}
                     </Badge>
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400 space-x-4">
-                    {
-                      document.status === "pending" ? (
-                        <Link href={`/jagratama/documents-to-review/${document.slug}`}>
-                          <Button size="sm" variant="primary">
-                            Review
-                          </Button>
-                        </Link>
-                      ) : "-"
-                    }
                   </TableCell>
                 </TableRow>
               ))}
