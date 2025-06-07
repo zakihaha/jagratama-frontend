@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { API_V1_BASE_URL } from "./lib/config";
 import { jwtDecode } from "jwt-decode";
+import type { JWT } from "next-auth/jwt" // Menggunakan JWT type dari next-auth/jwt
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -97,6 +98,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return session;
     },
+  },
+  events: {
+    async signOut(params: { token?: JWT | null; session?: any | null }) {
+      // console.log('============== async signOut ==============');
+      // console.log("SignOut Event:", params);
+      if (params.token?.accessToken) {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_V1_BASE_URL}/auth/logout`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${params.token.accessToken}`,
+            },
+          });
+
+          if (!response.ok) {
+            // console.error("SignOut: Gagal memanggil endpoint logout Golang:", response.status);
+          } else {
+            // console.log("SignOut: Sukses memanggil endpoint logout Golang.");
+          }
+        } catch (error) {
+          // console.error("SignOut: Exception saat memanggil endpoint logout Golang:", error);
+        }
+      }
+    }
   },
 })
 
