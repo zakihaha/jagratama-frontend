@@ -28,6 +28,14 @@ export type DocumentModel = {
   }
 }
 
+export type DocumentModelWithPagination = {
+  data: DocumentModel[]
+  total_data: number
+  limit: number
+  page: number
+  total_page: number
+}
+
 export type DocumentCreateRequest = {
   title: string
   file_id: number

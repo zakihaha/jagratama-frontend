@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useActionState, useEffect } from "react";
+import React, { useActionState, useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -8,7 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import Image from "next/image";
 import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal";
@@ -18,13 +17,16 @@ import Link from "next/link";
 import { DocumentModel } from "@/types/document";
 import { formatDate } from "@/lib/utils/formatDate";
 import Badge from "../ui/badge/Badge";
-import { ExternalLink, FileText } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink, FileText } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
   documents: DocumentModel[];
+  totalPage: number
+  currentPage: number
 };
 
-export default function DocumentTable({ documents }: Props) {
+export default function DocumentTable({ documents, totalPage, currentPage, }: Props) {
   const warningModal = useModal();
   const initialState: FormState = {
     success: false,
@@ -46,6 +48,80 @@ export default function DocumentTable({ documents }: Props) {
       toast.error(state.message);
     }
   }, [state]);
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const initialPage = searchParams.get("page") || 1; // Default to page 1 if not specified
+  const [pageTerm, setPageTerm] = useState(initialPage);
+
+  useEffect(() => {
+    setPageTerm(Number(initialPage));
+  }, [initialPage]);
+
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    setPageTerm(page);
+
+    if (page < 1 || page > totalPage) return // Prevent invalid page numbers
+    if (page === currentPage) return // Prevent unnecessary state updates
+
+    const currentParams = new URLSearchParams(searchParams.toString());
+
+    // Handle search term filtering
+    currentParams.set('page', String(page));
+    router.push(`${pathname}?${currentParams.toString()}`);
+  }
+
+  // Generate page numbers for pagination
+  const getPageNumbers = () => {
+    const pages = []
+    const maxPagesToShow = 5 // Show at most 5 page numbers
+
+    if (totalPage <= maxPagesToShow) {
+      // If we have fewer pages than maxPagesToShow, show all pages
+      for (let i = 1; i <= totalPage; i++) {
+        pages.push(i)
+      }
+    } else {
+      // Always show first page
+      pages.push(1)
+
+      // Calculate start and end of middle pages
+      let startPage = Math.max(2, currentPage - 1)
+      let endPage = Math.min(totalPage - 1, currentPage + 1)
+
+      // Adjust if we're near the beginning
+      if (currentPage <= 3) {
+        endPage = 4
+      }
+
+      // Adjust if we're near the end
+      if (currentPage >= totalPage - 2) {
+        startPage = totalPage - 3
+      }
+
+      // Add ellipsis after first page if needed
+      if (startPage > 2) {
+        pages.push("ellipsis1")
+      }
+
+      // Add middle pages
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i)
+      }
+
+      // Add ellipsis before last page if needed
+      if (endPage < totalPage - 1) {
+        pages.push("ellipsis2")
+      }
+
+      // Always show last page
+      pages.push(totalPage)
+    }
+
+    return pages
+  }
 
   return (
     <div className="overflow-hidden bg-white dark:bg-white/[0.03]">
@@ -148,15 +224,15 @@ export default function DocumentTable({ documents }: Props) {
                         document.last_status === "approved"
                           ? "success"
                           : document.last_status === "pending"
-                          ? "warning"
-                          : "error"
+                            ? "warning"
+                            : "error"
                       }
                     >
                       {document.last_status === "approved"
                         ? "Disetujui"
                         : document.last_status === "pending"
-                        ? "Pending"
-                        : "Revisi"}
+                          ? "Pending"
+                          : "Revisi"}
                     </Badge>
                   </TableCell>
                   {/* <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400 space-x-4">
@@ -195,6 +271,46 @@ export default function DocumentTable({ documents }: Props) {
               ))}
             </TableBody>
           </Table>
+
+          {/* Pagination */}
+          {totalPage > 1 && (
+            <div className="flex flex-wrap items-center gap-1 justify-center mt-10">
+              <button
+                className="p-[10px] text-sm border border-[#E5E7EB] rounded-md text-[#262626] disabled:opacity-50"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+
+              {getPageNumbers().map((page, i) =>
+                page === "ellipsis1" || page === "ellipsis2" ? (
+                  <div key={`ellipsis-${i}`} className="px-3 py-2 text-gray-500">
+                    <span className="text-sm">...</span>
+                  </div>
+                ) : (
+                  <button
+                    key={i}
+                    className={`px-[13px] py-[6px] text-sm rounded-md ${currentPage === page
+                      ? "bg-[#E2F6F7] text-[#20939C]"
+                      : "text-[#1D293D] hover:bg-gray-200"
+                      }`}
+                    onClick={() => handlePageChange(page as number)}
+                  >
+                    {page}
+                  </button>
+                ),
+              )}
+
+              <button
+                className="p-[10px] text-sm border border-[#E5E7EB] rounded-md text-[#262626] disabled:opacity-50"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPage}
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Warning Modal */}

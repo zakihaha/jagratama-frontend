@@ -1,9 +1,9 @@
 import { API_V1_BASE_URL } from '@/lib/config';
-import { DocumentCounterModel, DocumentCreateRequest, DocumentModel, DocumentReviewDetailModel, DocumentToReviewModel, DocumentTrackingModel } from '@/types/document';
+import { DocumentCounterModel, DocumentCreateRequest, DocumentModel, DocumentModelWithPagination, DocumentReviewDetailModel, DocumentToReviewModel, DocumentTrackingModel } from '@/types/document';
 import { fetchWithAuth } from '../fetchWithAuth';
 
-export async function fetchDocuments(status?: string, title?: string): Promise<DocumentModel[]> {
-  const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents?${status ? `status=${status}&` : ''}${title ? `title=${title}` : ''}`, {
+export async function fetchDocuments(status?: string, title?: string, page: string = '1', limit: string = '10'): Promise<DocumentModelWithPagination> {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/documents?${status ? `status=${status}&` : ''}${title ? `title=${title}&` : ''}page=${page}&limit=${limit}`, {
     next: { tags: ['document'] }, // Enables cache invalidation if needed
     cache: 'no-store', // Or 'force-cache' if data is not updated often
   })
@@ -12,7 +12,7 @@ export async function fetchDocuments(status?: string, title?: string): Promise<D
   }
 
   const json = await res.json()
-  return json.data as DocumentModel[]
+  return json.data as DocumentModelWithPagination
 }
 
 export async function createDocument(data: DocumentCreateRequest): Promise<DocumentModel> {

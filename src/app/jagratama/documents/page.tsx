@@ -3,7 +3,7 @@ import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import SearchInput from "@/components/documents/Search";
 import DocumentTable from "@/components/tables/DocumentTable";
 import { fetchDocuments } from "@/lib/api/documents";
-import { Funnel, Search } from "lucide-react";
+import { DocumentModelWithPagination } from "@/types/document";
 import { Metadata } from "next";
 import React from "react";
 
@@ -16,10 +16,10 @@ export const metadata: Metadata = {
 export default async function DocumentsIndex({
   searchParams,
 }: {
-  searchParams: Promise<{ title: string; status: string;  }>
+  searchParams: Promise<{ title: string; status: string; page: string }>;
 }) {
   const query = await searchParams;
-  const documents = await fetchDocuments(query.status, query.title);
+  const documents: DocumentModelWithPagination = await fetchDocuments(query.status, query.title, query.page);
 
   return (
     <div>
@@ -30,7 +30,7 @@ export default async function DocumentsIndex({
             <div className="flex flex-row justify-end items-center mb-6">
               <SearchInput />
             </div>
-            <DocumentTable documents={documents} />
+            <DocumentTable documents={documents.data} currentPage={documents.page} totalPage={documents.total_page} />
           </>
         </ComponentCard>
       </div>
