@@ -37,7 +37,7 @@ const DaftarPengajuanPage = async () => {
           </div>
         </div>
         </div>
-        <DocumentAccesorTable documents={documents} />
+        <DocumentAccesorTable documents={documents.data} />
       </div>
     </div>
   );

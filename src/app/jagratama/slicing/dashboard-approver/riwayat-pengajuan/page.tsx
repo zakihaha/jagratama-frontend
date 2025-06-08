@@ -37,7 +37,7 @@ const RiwayatPengajuanApproverPage = async () => {
           </div>
         </div>
         </div>
-        <DocumentApproverTable documents={documents} />
+        <DocumentApproverTable documents={documents.data} />
       </div>
     </div>
   );

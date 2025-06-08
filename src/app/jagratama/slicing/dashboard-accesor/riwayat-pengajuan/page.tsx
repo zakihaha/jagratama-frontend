@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const RiwayatPengajuanPage = async () => {
   const documents = await fetchDocuments();
 
-  return <TabRiwayatPengajuan documents={documents} />;
+  return <TabRiwayatPengajuan documents={documents.data} />;
 };
 
 export default RiwayatPengajuanPage;

@@ -101,7 +101,7 @@ const DashboardApproverPage = async () => {
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
-        <DocumentApproverTable documents={documents} />
+        <DocumentApproverTable documents={documents.data} />
       </div>
     </div>
   );

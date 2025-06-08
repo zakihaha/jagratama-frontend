@@ -101,7 +101,7 @@ const DashboardAccesorPage = async () => {
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
-        <DocumentAccesorTable documents={documents} />
+        <DocumentAccesorTable documents={documents.data} />
       </div>
     </div>
   );

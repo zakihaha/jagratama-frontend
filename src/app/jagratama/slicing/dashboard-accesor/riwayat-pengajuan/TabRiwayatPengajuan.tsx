@@ -3,7 +3,7 @@ import { Funnel, Search } from "lucide-react";
 import { useState } from "react";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import DocumentAccesorTable from "@/components/tables/DocumentAccesorTable";
-import type { DocumentModel } from "@/types";
+import type { DocumentModel } from "@/types/document";
 
 type Props = {
   documents: DocumentModel[];
@@ -15,8 +15,8 @@ const TabRiwayatPengajuan = ({ documents }: Props) => {
   const dataSemua = documents;
   const dataDitolak = documents.filter(
     (doc) =>
-      doc.status?.toLowerCase().includes("ditolak") ||
-      doc.status?.toLowerCase().includes("revisi")
+      doc.last_status?.toLowerCase().includes("ditolak") ||
+      doc.last_status?.toLowerCase().includes("revisi")
   );
 
   return (
