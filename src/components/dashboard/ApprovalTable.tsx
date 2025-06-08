@@ -44,7 +44,7 @@ export default function ApprovalTable({ steps, slug }: { steps: DocumentTracking
   const handleReuploadSubmit = async (formData: FormData) => {
     if (selectedFile) {
       formData.append("slug", slug);
-      
+
       formAction(formData); // Call the action
     }
   };
@@ -130,7 +130,7 @@ export default function ApprovalTable({ steps, slug }: { steps: DocumentTracking
                         isRejected && "bg-[#D33126]",
                       )}
                     />
-                    <div className="flex gap-3 items-start">
+                    <div className="flex gap-3 items-center">
                       <Image
                         src={step.user.image}
                         alt="User"
@@ -140,7 +140,7 @@ export default function ApprovalTable({ steps, slug }: { steps: DocumentTracking
                       />
                       <div>
                         <p>{step.user?.name}</p>
-                        <p className="text-xs text-[#A1A1A1]">{step?.resolved_at && formatDate(step?.resolved_at)}</p>
+                        {isCompleted && <p className="text-xs text-[#A1A1A1]">{formatDate(step?.resolved_at)}</p>}
                         {isRejected && (
                           <div className="text-red-600 flex items-center gap-1">
                             <TriangleAlert className="w-4 h-4" /> Mohon upload ulang surat
