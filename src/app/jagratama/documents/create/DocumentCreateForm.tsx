@@ -188,9 +188,9 @@ const DocumentCreateForm = ({ categories, users }: { categories: CategoryModel[]
                 <>
                   <hr className="my-6" />
                   <div className="space-y-6">
-                    <Label>Ditunjukan Kepada:</Label>
+                    <Label className="text-[#262626] mb-2 text-sm">Ditujukan Kepada:</Label>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                       {positions.map((position) => (
                         <div key={position.id}>
                           <Label

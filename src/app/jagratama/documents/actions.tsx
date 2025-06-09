@@ -5,6 +5,7 @@ import { DocumentCreateRequest, DocumentModel } from '@/types/document';
 import { CreateDocumentSchema } from '@/lib/schemas/document';
 import { createDocument, deleteDocument, reuploadDocumentFile } from '@/lib/api/documents';
 import { uploadFile } from '@/lib/api/files';
+import { fetchPositionCategoryRulesByCategoryId } from '@/lib/api/positions';
 
 export type Errors = {
   general?: string[];
@@ -45,7 +46,7 @@ export async function createDocumentAction(prevState: FormState, formData: FormD
   try {
     const formDataFile = new FormData()
     formDataFile.append('file', file)
-    
+
     const res = await uploadFile(formDataFile)
     const file_id = res.id
     formData.set('file_id', file_id.toString())
@@ -78,6 +79,18 @@ export async function createDocumentAction(prevState: FormState, formData: FormD
 
   if (approvers_str && approvers_str.length > 0) {
     approvers = JSON.parse(approvers_str) as string[]
+
+    // Validate approvers against position category rules count
+    try {
+      const positionDatas = await fetchPositionCategoryRulesByCategoryId(category_id)
+      if (approvers.length != positionDatas.length) {
+        return { success: false, message: "Anda belum memilih semua data approval user", errors }
+      }
+    } catch (error) {
+      return { success: false, message: "Failed to create document.", errors }
+    }
+  } else {
+    return { success: false, message: "Approvers must be filled in", errors }
   }
 
   const data: DocumentCreateRequest = {
@@ -101,7 +114,7 @@ export async function createDocumentAction(prevState: FormState, formData: FormD
 
   try {
     const result = await createDocument(parsed.data)
-    
+
     revalidatePath('/jagratama/documents');
     return { success: true, message: "Document created successfully", errors: {} as Errors, data: result }
   } catch (error) {
@@ -110,7 +123,7 @@ export async function createDocumentAction(prevState: FormState, formData: FormD
     } else {
       errors.general = ['Failed to create document']
     }
-    return { success: false, message: "Failed to create document", errors: errors }
+    return { success: false, message: "Failed to create document", errors: errors, data: undefined }
   }
 }
 
@@ -136,7 +149,7 @@ export async function reuploadDocumentAction(prevState: FormState, formData: For
   const slug = formData.get('slug') as string;
   const file = formData.get('file') as File;
   const errors: Errors = {};
-  
+
   if (!file) {
     errors.file_id = ['File is required'];
     return { success: false, message: "Failed to reupload document.", errors };
@@ -153,7 +166,7 @@ export async function reuploadDocumentAction(prevState: FormState, formData: For
   try {
     const formDataFile = new FormData();
     formDataFile.append('file', file);
-    
+
     const res = await uploadFile(formDataFile);
     const file_id = res.id;
 
