@@ -16,14 +16,21 @@ import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal";
 import { deleteUserAction, FormState } from "@/app/jagratama/users/actions";
 import Link from "next/link";
-import { PenLine } from "lucide-react";
+import { ChevronLeft, ChevronRight, PenLine } from "lucide-react";
 import UserUpdateForm from "@/app/jagratama/users/[id]/edit/UserUpdateForm";
+import { RoleModel } from "@/types/role";
+import { PositionModel } from "@/types/position";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 
 type Props = {
   users: UserModel[];
+  roles: RoleModel[];
+  positions: PositionModel[];
+  totalPage: number;
+  currentPage: number;
 };
 
-export default function UserTable({ users }: Props) {
+export default function UserTable({ users, roles, positions, totalPage, currentPage }: Props) {
   const warningModal = useModal();
   const initialState: FormState = {
     success: false,
@@ -42,15 +49,76 @@ export default function UserTable({ users }: Props) {
   const openModal = () => setModalEditOpen(true);
   const closeModal = () => setModalEditOpen(false);
 
-  // useEffect(() => {
-  //   if (state.success) {
-  //     warningModal.closeModal();
-  //     toast.success(state.message)
-  //   } else if (!state.success && state.message) {
-  //     warningModal.closeModal();
-  //     toast.error(state.message)
-  //   }
-  // }, [state]);
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const initialPage = searchParams.get("page") || 1; // Default to page 1 if not specified
+  const [pageTerm, setPageTerm] = useState(initialPage);
+
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    setPageTerm(page);
+
+    if (page < 1 || page > totalPage) return // Prevent invalid page numbers
+    if (page === currentPage) return // Prevent unnecessary state updates
+
+    const currentParams = new URLSearchParams(searchParams.toString());
+
+    // Handle search term filtering
+    currentParams.set('page', String(page));
+    router.push(`${pathname}?${currentParams.toString()}`);
+  }
+
+  // Generate page numbers for pagination
+  const getPageNumbers = () => {
+    const pages = []
+    const maxPagesToShow = 5 // Show at most 5 page numbers
+
+    if (totalPage <= maxPagesToShow) {
+      // If we have fewer pages than maxPagesToShow, show all pages
+      for (let i = 1; i <= totalPage; i++) {
+        pages.push(i)
+      }
+    } else {
+      // Always show first page
+      pages.push(1)
+
+      // Calculate start and end of middle pages
+      let startPage = Math.max(2, currentPage - 1)
+      let endPage = Math.min(totalPage - 1, currentPage + 1)
+
+      // Adjust if we're near the beginning
+      if (currentPage <= 3) {
+        endPage = 4
+      }
+
+      // Adjust if we're near the end
+      if (currentPage >= totalPage - 2) {
+        startPage = totalPage - 3
+      }
+
+      // Add ellipsis after first page if needed
+      if (startPage > 2) {
+        pages.push("ellipsis1")
+      }
+
+      // Add middle pages
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i)
+      }
+
+      // Add ellipsis before last page if needed
+      if (endPage < totalPage - 1) {
+        pages.push("ellipsis2")
+      }
+
+      // Always show last page
+      pages.push(totalPage)
+    }
+
+    return pages
+  }
 
   return (
     <div className="overflow-hidden bg-white dark:bg-white/[0.03]">
@@ -60,6 +128,12 @@ export default function UserTable({ users }: Props) {
             {/* Table Header */}
             <TableHeader className="bg-[#F3F4F6] border-gray-100 dark:border-white/[0.05]">
               <TableRow>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                >
+                  #
+                </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
@@ -103,6 +177,9 @@ export default function UserTable({ users }: Props) {
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {users.map((user, key) => (
                 <TableRow key={key}>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {key + 1 + (currentPage - 1) * 20}
+                  </TableCell>
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 relative rounded-full overflow-hidden shrink-0">
@@ -131,7 +208,7 @@ export default function UserTable({ users }: Props) {
                     {user.position.name}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {user.position.name}
+                    {user.organization || "-"}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400 space-x-4">
                     <Button
@@ -146,17 +223,56 @@ export default function UserTable({ users }: Props) {
                       <PenLine className="w-4 h-4" />
                       Edit
                     </Button>
-                    <Link href={`/jagratama/users/${user.id}/edit`}></Link>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
+
+          {/* Pagination */}
+          {totalPage > 1 && (
+            <div className="flex flex-wrap items-center gap-1 justify-center mt-10">
+              <button
+                className="p-[10px] text-sm border border-[#E5E7EB] rounded-md text-[#262626] disabled:opacity-50"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+
+              {getPageNumbers().map((page, i) =>
+                page === "ellipsis1" || page === "ellipsis2" ? (
+                  <div key={`ellipsis-${i}`} className="px-3 py-2 text-gray-500">
+                    <span className="text-sm">...</span>
+                  </div>
+                ) : (
+                  <button
+                    key={i}
+                    className={`px-[13px] py-[6px] text-sm rounded-md ${currentPage === page
+                      ? "bg-[#E2F6F7] text-[#20939C]"
+                      : "text-[#1D293D] hover:bg-gray-200"
+                      }`}
+                    onClick={() => handlePageChange(page as number)}
+                  >
+                    {page}
+                  </button>
+                ),
+              )}
+
+              <button
+                className="p-[10px] text-sm border border-[#E5E7EB] rounded-md text-[#262626] disabled:opacity-50"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPage}
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          )}
         </div>
 
         {/* edit modal */}
         {isModalEditOpen && selectedUser && (
-          <div className="fixed inset-0 z-10 flex items-center justify-center bg-black/30">
+          <div className="fixed inset-0 z-99999 flex items-center justify-center bg-black/30">
             <div className="bg-white rounded-lg p-6 max-w-[600px] w-full shadow-xl relative backdrop-blur-sm">
               <div className="flex flex-col gap-1">
                 <p className="text-[#262626] text-base font-medium">
@@ -182,6 +298,8 @@ export default function UserTable({ users }: Props) {
                   setSelectedUser(null);
                   closeModal();
                 }}
+                positions={positions}
+                roles={roles}
               />
             </div>
           </div>
@@ -252,6 +370,6 @@ export default function UserTable({ users }: Props) {
           </div>
         </Modal>
       </div>
-    </div>
+    </div >
   );
 }

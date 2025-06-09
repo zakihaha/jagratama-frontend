@@ -11,14 +11,20 @@ import { FormState, updateUserAction } from "@/app/jagratama/users/actions";
 import { UserCreateRequest } from "@/types/user";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
+import { PositionModel } from "@/types/position";
+import { RoleModel } from "@/types/role";
 
 export default function UserUpdateForm({
   id,
   user,
+  roles,
+  positions,
   onClose,
 }: {
   id: number;
   user: UserCreateRequest;
+  roles: RoleModel[];
+  positions: PositionModel[];
   onClose?: () => void;
 }) {
   const initialState: FormState = {
@@ -32,20 +38,21 @@ export default function UserUpdateForm({
     initialState
   );
 
-  const options = [
-    { value: 1, label: "Requester" },
-    { value: 1, label: "Reviewer" },
-    { value: 1, label: "Approver" },
-  ];
+  const roleOptions = roles.map((role) => ({
+    value: role.id,
+    label: role.name,
+  }));
+
+  const positionOptions = positions.map((position) => ({
+    value: position.id,
+    label: position.name,
+  }));
 
   useEffect(() => {
     if (state.success) {
       toast.success(state.message);
 
-      setTimeout(() => {
-        onClose?.();
-        redirect("/jagratama/users");
-      }, 1500);
+      onClose?.();
     } else if (!state.success && state.message) {
       toast.error(state.message);
     }
@@ -97,7 +104,7 @@ export default function UserUpdateForm({
           </Label>
           <div className="relative">
             <Select
-              options={options}
+              options={roleOptions}
               defaultValue={String(user?.role_id)}
               placeholder="Select an option"
               name="role_id"
@@ -122,7 +129,7 @@ export default function UserUpdateForm({
           </Label>
           <div className="relative">
             <Select
-              options={options}
+              options={positionOptions}
               defaultValue={String(user?.position_id)}
               placeholder="Select an option"
               name="position_id"
@@ -139,6 +146,25 @@ export default function UserUpdateForm({
             </p>
           )}
         </div>
+
+        <div>
+          <Label
+            className="text-[#262626] text-sm font-normal"
+            htmlFor="organization"
+          >
+            Organisasi
+          </Label>
+          <Input
+            className="border !border-[#E5E5E5] !rounded-2xl placeholder:!text-[#A1A1A1] !text-sm"
+            type="text"
+            id="organization"
+            name="organization"
+            placeholder="Masukan Organisasi"
+          />
+        </div>
+        
+        <div></div>
+
         <div className="flex flex-row gap-4">
           <Button
             className="!bg-[#20939C] w-fit text-sm font-normal"
@@ -149,9 +175,9 @@ export default function UserUpdateForm({
           >
             {isPending || state.success ? "Loading..." : "Update Data"}
           </Button>
-          <button onClick={onClose} className="text-sm text-[#D33126]">
+          <Button onClick={onClose} className="text-sm" variant="outline">
             Batal
-          </button>
+          </Button>
         </div>
       </div>
     </form>

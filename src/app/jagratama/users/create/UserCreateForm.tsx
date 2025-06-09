@@ -46,10 +46,7 @@ const UserCreateForm = ({ roles = [], positions = [], onClose }: Params) => {
     if (state.success) {
       toast.success(state.message);
 
-      setTimeout(() => {
-        onClose?.();
-        redirect("/jagratama/users");
-      }, 1500);
+      onClose?.();
     } else if (!state.success && state.message) {
       toast.error(state.message);
     }
@@ -102,11 +99,11 @@ const UserCreateForm = ({ roles = [], positions = [], onClose }: Params) => {
             name="organization"
             placeholder="Masukan Organisasi"
           />
-          {/* {state.errors.email && (
+          {state.errors.organization && (
               <p className="text-red-500 text-sm mt-1">
-                {state.errors.email}
+                {state.errors.organization}
               </p>
-            )} */}
+            )}
         </div>
 
         <div>

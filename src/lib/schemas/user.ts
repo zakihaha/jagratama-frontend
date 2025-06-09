@@ -5,6 +5,7 @@ export const CreateUserSchema = z.object({
   email: z.string().email('Invalid email'),
   role_id: z.number().min(1, 'Role is required'),
   position_id: z.number().min(1, 'Position is required'),
+  organization: z.string().optional(),
 })
 export type CreateUserInput = z.infer<typeof CreateUserSchema>
 

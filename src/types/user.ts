@@ -5,6 +5,7 @@ export type UserModel = {
   image: string
   role_id: number
   position_id: number
+  organization?: string
   role: {
     id: number
     name: string
@@ -15,11 +16,20 @@ export type UserModel = {
   }
 }
 
+export type UserModelWithPagination = {
+  data: UserModel[]
+  total_data: number
+  limit: number
+  page: number
+  total_page: number
+}
+
 export type UserCreateRequest = {
   email: string;
   name: string;
   role_id: number;
   position_id: number;
+  organization?: string;
 }
 
 export type UserProfileRequest = {

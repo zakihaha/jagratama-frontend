@@ -19,6 +19,7 @@ import { DocumentToReviewModel } from "@/types/document";
 import { formatDate } from "@/lib/utils/formatDate";
 import Badge from "../ui/badge/Badge";
 import Image from "next/image";
+import { Signature } from "lucide-react";
 
 type Props = {
   documents: DocumentToReviewModel[]
@@ -155,6 +156,7 @@ export default function DocumentToReviewTable({ documents }: Props) {
                         <Link href={`/jagratama/actions/documents-to-review/${document.slug}`}>
                           <Button size="sm" variant="primary" className="!bg-[#20939C] w-fit text-sm font-normal">
                             Review
+                            <Signature className="w-4 h-4" />
                           </Button>
                         </Link>
                       ) : "-"

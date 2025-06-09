@@ -11,6 +11,7 @@ export type Errors = {
 
   name?: string[];
   email?: string[];
+  organization?: string[];
   role_id?: string[];
   position_id?: string[];
   image_id?: string[];
@@ -29,6 +30,7 @@ export async function createUserAction(prevState: FormState, formData: FormData)
   const email = formData.get('email')
   const role_id_str = formData.get('role_id')
   const position_id_str = formData.get('position_id')
+  const organization = formData.get('organization')
 
   let role_id = 0
   let position_id = 0
@@ -50,6 +52,7 @@ export async function createUserAction(prevState: FormState, formData: FormData)
     email: email as string,
     role_id,
     position_id,
+    organization: organization ? (organization as string) : undefined,
   }
 
   const parsed = CreateUserSchema.safeParse(data)
@@ -59,6 +62,7 @@ export async function createUserAction(prevState: FormState, formData: FormData)
     parsed.error.flatten().fieldErrors.email && (errors.email = parsed.error.flatten().fieldErrors.email)
     parsed.error.flatten().fieldErrors.role_id && (errors.role_id = parsed.error.flatten().fieldErrors.role_id)
     parsed.error.flatten().fieldErrors.position_id && (errors.position_id = parsed.error.flatten().fieldErrors.position_id)
+    parsed.error.flatten().fieldErrors.organization && (errors.organization = parsed.error.flatten().fieldErrors.organization)
     return { success: false, message: "Failed to create user.", errors }
   }
 
@@ -82,6 +86,7 @@ export async function updateUserAction(prevState: FormState, formData: FormData)
   const email = formData.get('email') as string;
   const role_id = formData.get('role_id') as string;
   const position_id = formData.get('position_id') as string;
+  const organization = formData.get('organization') as string;
 
   const errors: Errors = {}
   const data: UserCreateRequest = {
@@ -89,6 +94,7 @@ export async function updateUserAction(prevState: FormState, formData: FormData)
     email,
     role_id: parseInt(role_id),
     position_id: parseInt(position_id),
+    organization: organization ? organization : undefined,
   }
 
   try {

@@ -1,9 +1,9 @@
-import { UserCreateRequest, UserModel, UserProfileRequest } from '@/types/user'
+import { UserCreateRequest, UserModel, UserModelWithPagination, UserProfileRequest } from '@/types/user'
 import { API_V1_BASE_URL } from '@/lib/config';
 import { fetchWithAuth } from '../fetchWithAuth';
 
-export async function fetchUsers(): Promise<UserModel[]> {
-  const res = await fetchWithAuth(`${API_V1_BASE_URL}/users`, {
+export async function fetchUsers(name?: string, position?: number, page: number = 1, limit: number = 20): Promise<UserModelWithPagination> {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/users?page=${page}&limit=${limit}${name ? `&name=${name}` : ''}${position ? `&position_id=${position}` : ''}`, {
     next: { tags: ['users'] }, // Enables cache invalidation if needed
     cache: 'no-store', // Or 'force-cache' if data is not updated often
   })
@@ -13,7 +13,7 @@ export async function fetchUsers(): Promise<UserModel[]> {
   }
 
   const json = await res.json()
-  return json.data as UserModel[]
+  return json.data as UserModelWithPagination
 }
 
 export async function createUser(data: UserCreateRequest): Promise<void> {
