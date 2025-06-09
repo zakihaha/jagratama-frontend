@@ -22,7 +22,7 @@ export default async function DocumentsToReviewIndex({
 
   return (
     <div>
-      <PageBreadcrumb pageTitle="Document To Review Lists" />
+      <PageBreadcrumb pageTitle="Daftar Pengajuan" />
       <div className="mt-4 space-y-6">
         <ComponentCard title="Hehhe">
           <>

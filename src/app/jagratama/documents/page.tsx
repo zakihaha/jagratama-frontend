@@ -23,7 +23,7 @@ export default async function DocumentsIndex({
 
   return (
     <div>
-      <PageBreadcrumb pageTitle="Dokumen" />
+      <PageBreadcrumb pageTitle="Semua Pengajuan" />
       <div className="space-y-6">
         <ComponentCard title="Semua Dokumen">
           <>

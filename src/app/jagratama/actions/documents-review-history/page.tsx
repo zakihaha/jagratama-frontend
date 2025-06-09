@@ -22,7 +22,7 @@ export default async function DocumentsReviewHistoryIndex({
 
   return (
     <div>
-      <PageBreadcrumb pageTitle="Document Review History" />
+      <PageBreadcrumb pageTitle="Riwayat Approval Pengajuan" />
       <div className="mt-4 space-y-6">
         <ComponentCard title="Hehhe">
           <>

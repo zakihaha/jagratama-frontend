@@ -20,7 +20,7 @@ const DetailPengajuanPage = async ({ params }: { params: Params }) => {
 
   return (
     <>
-      <PageBreadcrumb pageTitle="Detail Pengajuan" icon={<ArrowLeft />} />
+      <PageBreadcrumb pageTitle="Detail Pengajuan" icon={<ArrowLeft />} url={"/jagratama/documents"} />
 
       <DetailPengajuan document={document} trackingSteps={trackingSteps} />
       
