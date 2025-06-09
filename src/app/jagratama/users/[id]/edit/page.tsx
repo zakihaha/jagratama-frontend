@@ -22,7 +22,7 @@ const UserEdit = async ({ params }: { params: Params }) => {
     role_id: user.role_id,
   };
 
-  return <UserUpdateForm id={user.id} user={userCreateRequest} />;
+  return <></>;
 };
 
 export default UserEdit;
