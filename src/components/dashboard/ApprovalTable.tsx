@@ -18,6 +18,7 @@ import { FormState, reuploadDocumentAction } from "@/app/jagratama/documents/act
 export default function ApprovalTable({ steps, slug }: { steps: DocumentTrackingModel[]; slug: string }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedApprovalId, setSelectedApprovalId] = useState<number | null>(null);
 
   const initialState: FormState = {
     success: false,
@@ -41,9 +42,16 @@ export default function ApprovalTable({ steps, slug }: { steps: DocumentTracking
     setSelectedFile(null);
   };
 
+  const handleReuploadButtonClick = (approval_id: number) => {
+    setIsDialogOpen(true);
+    setSelectedFile(null); // Reset selected file when opening dialog
+    setSelectedApprovalId(approval_id);
+  };
+
   const handleReuploadSubmit = async (formData: FormData) => {
-    if (selectedFile) {
+    if (selectedFile && selectedApprovalId) {
       formData.append("slug", slug);
+      formData.append("approval_id", selectedApprovalId?.toString());
 
       formAction(formData); // Call the action
     }
@@ -192,7 +200,7 @@ export default function ApprovalTable({ steps, slug }: { steps: DocumentTracking
                         size="sm"
                         variant="outline"
                         className="!text-sm !font-normal !rounded-[8px]"
-                        onClick={() => setIsDialogOpen(true)}
+                        onClick={() => handleReuploadButtonClick(step.id)}
                       >
                         Upload Ulang
                         <CircleArrowUp size={16} className="ml-1" />

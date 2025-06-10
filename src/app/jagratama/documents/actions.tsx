@@ -147,6 +147,7 @@ export async function deleteDocumentAction(prevState: FormState, formData: FormD
 
 export async function reuploadDocumentAction(prevState: FormState, formData: FormData) {
   const slug = formData.get('slug') as string;
+  const approval_id = formData.get('approval_id') as string;
   const file = formData.get('file') as File;
   const errors: Errors = {};
 
@@ -171,7 +172,7 @@ export async function reuploadDocumentAction(prevState: FormState, formData: For
     const file_id = res.id;
 
     // Call API to reupload the document file
-    await reuploadDocumentFile(slug, file_id);
+    await reuploadDocumentFile(slug, approval_id, file_id);
 
     revalidatePath(`/jagratama/documents/${slug}`);
     return { success: true, message: "Document reuploaded successfully", errors: {} };
