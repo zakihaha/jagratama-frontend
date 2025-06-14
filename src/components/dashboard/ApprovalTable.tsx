@@ -68,7 +68,7 @@ export default function ApprovalTable({ steps, slug }: { steps: DocumentTracking
   }, [state]);
 
   return (
-    <div className="relative pl-6 mt-3">
+    <div className="relative min-w-[900px] pl-6 mt-3">
       {/* Vertical Line */}
       <div className="absolute left-2 top-10 bottom-8 w-[2px] bg-[#E5E7EB] z-0" />
 
