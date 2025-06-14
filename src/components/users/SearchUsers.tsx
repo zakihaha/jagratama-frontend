@@ -100,7 +100,7 @@ export default function SearchInputUsers({ showStatusFilter = true, positions, r
             value={searchTerm}
           />
           <Search className="absolute top-3 left-4 text-[#A1A1A1]" />
-          <Button type='submit'>
+          <Button type='submit' className="!bg-[#20939C]">
             Search
             <Search />
           </Button>
