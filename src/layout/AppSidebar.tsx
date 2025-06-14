@@ -306,7 +306,7 @@ const AppSidebar: React.FC = () => {
   }, [session.status])
 
   useEffect(() => {
-      session.data?.user.id && getUserData();
+    session.data?.user.id && getUserData();
   }, [session.data?.user.id]);
 
   const handleSubmenuToggle = (index: number, menuType: "main" | "others") => {
@@ -337,27 +337,17 @@ const AppSidebar: React.FC = () => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div
-        className={`py-8 flex  ${!isExpanded && !isHovered ? "lg:justify-center" : "justify-center"
+        className={`py-8 flex  ${!isExpanded && !isHovered ? "justify-center" : "justify-center"
           }`}
       >
         <Link href="/">
           {isExpanded || isHovered || isMobileOpen ? (
-            <>
-              <Image
-                className="dark:hidden"
-                src="/images/logo/logo.svg"
-                alt="Logo"
-                width={190}
-                height={80}
-              />
-              <Image
-                className="hidden dark:block"
-                src="/images/logo/logo.svg"
-                alt="Logo"
-                width={190}
-                height={80}
-              />
-            </>
+            <Image
+              src="/images/logo/logo.svg"
+              alt="Logo"
+              width={190}
+              height={80}
+            />
           ) : (
             <Image
               src="/images/logo/logo-icon.svg"
