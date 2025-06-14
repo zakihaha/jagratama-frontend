@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const JagratamaIndex = async () => {
   const session = await auth();
   const documentCounter = await fetchDocumentCounter();
-  const { total_document, total_rejected, total_pending, total_approved } = documentCounter;
+  const { total_document, total_rejected, total_pending, total_approved, total_users } = documentCounter;
 
   return (
     <div>
@@ -34,7 +34,7 @@ const JagratamaIndex = async () => {
                 />
               </div>
               <div>
-                <p className="text-3xl text-[#262626] font-medium">{total_pending}</p>
+                <p className="text-3xl text-[#262626] font-medium">{total_users}</p>
                 <p className="text-sm text-[#737373]">Total User</p>
               </div>
             </div>

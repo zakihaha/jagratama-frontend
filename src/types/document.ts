@@ -67,6 +67,7 @@ export type DocumentCounterModel = {
   total_rejected: number
   total_pending: number
   total_approved: number
+  total_users: number
 }
 
 export type DocumentReviewDetailModel = {
