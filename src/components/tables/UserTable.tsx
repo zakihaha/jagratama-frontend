@@ -186,7 +186,7 @@ export default function UserTable({ users, roles, positions, totalPage, currentP
                         <Image
                           width={40}
                           height={40}
-                          src="/images/user/user-21.jpg"
+                          src={user.image}
                           alt={user.name}
                           className="absolute inset-0 w-full h-full object-cover"
                         />
