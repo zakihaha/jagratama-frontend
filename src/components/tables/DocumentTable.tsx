@@ -11,14 +11,16 @@ import {
 import Image from "next/image";
 import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal";
-import { deleteUserAction, FormState } from "@/app/jagratama/users/actions";
+import { FormState } from "@/app/jagratama/users/actions";
 import { toast } from "sonner";
 import Link from "next/link";
 import { DocumentModel } from "@/types/document";
 import { formatDate } from "@/lib/utils/formatDate";
 import Badge from "../ui/badge/Badge";
-import { ChevronLeft, ChevronRight, ExternalLink, FileText } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink, File, FileText, MoreVertical, Trash2 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+import { deleteDocumentAction } from "@/app/jagratama/documents/actions";
 
 type Props = {
   documents: DocumentModel[];
@@ -35,7 +37,7 @@ export default function DocumentTable({ documents, totalPage, currentPage, }: Pr
   };
 
   const [state, action, isLoading] = useActionState(
-    deleteUserAction,
+    deleteDocumentAction,
     initialState
   );
 
@@ -54,6 +56,12 @@ export default function DocumentTable({ documents, totalPage, currentPage, }: Pr
   const searchParams = useSearchParams();
   const initialPage = searchParams.get("page") || 1; // Default to page 1 if not specified
   const [pageTerm, setPageTerm] = useState(initialPage);
+  const [selectedDocumentSlug, setSelectedDocumentSlug] = useState("");
+
+  const handleDeleteModal = (id: number, slug: string) => {
+    warningModal.openModal(id);
+    setSelectedDocumentSlug(slug);
+  };
 
   useEffect(() => {
     setPageTerm(Number(initialPage));
@@ -173,12 +181,12 @@ export default function DocumentTable({ documents, totalPage, currentPage, }: Pr
                 >
                   Status
                 </TableCell>
-                {/* <TableCell
+                <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
                 >
                   {""}
-                </TableCell> */}
+                </TableCell>
               </TableRow>
             </TableHeader>
 
@@ -235,7 +243,7 @@ export default function DocumentTable({ documents, totalPage, currentPage, }: Pr
                           : "Revisi"}
                     </Badge>
                   </TableCell>
-                  {/* <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400 space-x-4">
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400 space-x-4">
                     <DropdownMenu>
                       <DropdownMenuTrigger className="outline-0">
                         <MoreVertical className="w-6 h-6" />
@@ -247,26 +255,19 @@ export default function DocumentTable({ documents, totalPage, currentPage, }: Pr
                             href={`/jagratama/documents/${document.slug}/edit`}
                             className="inline-flex items-center gap-2"
                           >
-                            <Type className="w-4 h-4 mr-2" />
-                            Ganti Nama
+                            <File className="w-4 h-4 mr-2" />
+                            Detail
                           </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="hover:outline-0 px-4 py-[10px] hover:bg-[#E2F6F7]/30">
-                          <div className="inline-flex items-center gap-2">
-                            <Copy className="w-4 h-4 mr-2" />
-                            Buat Salinan
-                          </div>
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-red-600 focus:text-red-700 border-t hover:outline-0 px-4 py-[10px] hover:bg-[#E2F6F7]/30">
-                          <div className="inline-flex items-center gap-2">
+                        <DropdownMenuItem className="text-red-600 focus:text-red-700 border-t hover:outline-0 px-4 py-[10px] hover:bg-[#E2F6F7]/30 cursor-pointer">
+                          <div className="inline-flex items-center gap-2" onClick={() => handleDeleteModal(document.id, document.slug)}>
                             <Trash2 className="w-4 h-4 mr-2" />
-                            Sampah
+                            Hapus
                           </div>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-                  </TableCell> */}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -322,7 +323,7 @@ export default function DocumentTable({ documents, totalPage, currentPage, }: Pr
           <div className="text-center">
             <div className="relative flex items-center justify-center z-1 mb-7">
               <svg
-                className="fill-warning-50 dark:fill-warning-500/15"
+                className="fill-red-600 dark:fill-warning-500/15"
                 width="90"
                 height="90"
                 viewBox="0 0 90 90"
@@ -338,7 +339,7 @@ export default function DocumentTable({ documents, totalPage, currentPage, }: Pr
 
               <span className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2">
                 <svg
-                  className="fill-warning-600 dark:fill-orange-400"
+                  className="fill-white dark:fill-orange-400"
                   width="38"
                   height="38"
                   viewBox="0 0 38 38"
@@ -356,22 +357,21 @@ export default function DocumentTable({ documents, totalPage, currentPage, }: Pr
             </div>
 
             <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90 sm:text-title-sm">
-              Warning Alert!
+              Yakin ingin menghapus dokumen ini?
             </h4>
             <p className="text-sm leading-6 text-gray-500 dark:text-gray-400">
-              Lorem ipsum dolor sit amet consectetur. Feugiat ipsum libero
-              tempor felis risus nisi non. Quisque eu ut tempor curabitur.
+              Dokumen yang dihapus tidak dapat dikembalikan. Pastikan Anda telah memeriksa kembali sebelum menghapus dokumen ini.
             </p>
 
             <div className="flex items-center justify-center w-full gap-3 mt-7">
               <form action={action}>
-                <input type="hidden" name="id" value={warningModal.id} />
+                <input type="hidden" name="slug" value={selectedDocumentSlug} />
                 <button
                   type="submit"
-                  className="flex justify-center w-full px-4 py-3 text-sm font-medium text-white rounded-lg bg-warning-500 shadow-theme-xs hover:bg-warning-600 sm:w-auto"
+                  className="flex justify-center w-full px-4 py-3 text-sm font-medium text-white rounded-lg bg-red-600 shadow-theme-xs hover:bg-red-700 sm:w-auto"
                   disabled={isLoading}
                 >
-                  {isLoading ? "Deleting..." : "Okay, Got It"}
+                  {isLoading ? "Menghapus..." : "Hapus"}
                 </button>
               </form>
             </div>
