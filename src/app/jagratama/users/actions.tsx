@@ -1,9 +1,9 @@
 'use server'
 
-import { CreateUserSchema, UpdateUserProfileSchema } from '@/lib/schemas/user'
-import { createUser, updateUser, updateUserProfile } from '@/lib/api/users';
+import { CreateUserSchema, UpdateUserPasswordSchema, UpdateUserProfileSchema } from '@/lib/schemas/user'
+import { createUser, updateUser, updateUserPassword, updateUserProfile } from '@/lib/api/users';
 import { revalidatePath } from 'next/cache';
-import { UserCreateRequest, UserProfileRequest } from '@/types/user';
+import { UserCreateRequest, UserPasswordRequest, UserProfileRequest } from '@/types/user';
 import { uploadFile } from '@/lib/api/files';
 
 export type Errors = {
@@ -15,6 +15,7 @@ export type Errors = {
   role_id?: string[];
   position_id?: string[];
   image_id?: string[];
+  [key: string]: string[] | undefined; // for any other fields that might have errors
 };
 
 export type FormState = {
@@ -149,8 +150,7 @@ export async function updateProfileAction(prevState: FormState, formData: FormDa
 
       const res = await uploadFile(formDataFile)
       const file_id = res.id
-      console.log(res);
-      
+
       formData.set('image_id', file_id.toString())
     } catch (error) {
       if (error instanceof Error) {
@@ -158,7 +158,7 @@ export async function updateProfileAction(prevState: FormState, formData: FormDa
       } else {
         errors.general = ['Failed to upload file']
       }
-      
+
       return { success: false, message: "Failed to create document.", errors }
     }
   }
@@ -189,5 +189,47 @@ export async function updateProfileAction(prevState: FormState, formData: FormDa
   } catch (err) {
     errors.general = ['Failed to update user']
     return { success: false, message: "Failed to update profile", errors };
+  }
+}
+
+export async function updatePasswordAction(prevState: FormState, formData: FormData) {
+  const errors: Errors = {}
+
+  const oldPassword = formData.get('old_password') as string;
+  const newPassword = formData.get('new_password') as string;
+
+  if (!oldPassword || !newPassword) {
+    errors.general = ['Password lama dan password baru harus diisi']
+    return { success: false, message: "Failed to update password.", errors }
+  }
+
+  const data: UserPasswordRequest = {
+    old_password: oldPassword,
+    new_password: newPassword,
+  }
+
+  const parsed = UpdateUserPasswordSchema.safeParse(data)
+
+  if (!parsed.success) {
+    parsed.error.flatten().fieldErrors.old_password && (errors.old_password = parsed.error.flatten().fieldErrors.old_password)
+    parsed.error.flatten().fieldErrors.new_password && (errors.new_password = parsed.error.flatten().fieldErrors.new_password)
+    return { success: false, message: "Gagal update password.", errors }
+  }
+
+
+  try {
+    await updateUserPassword(oldPassword, newPassword);
+
+    return { success: true, message: "Password updated successfully", errors: {} };
+  } catch (error) {
+    console.log('Error updating password:', error);
+    
+    if (error instanceof Error) {
+      errors.general = [error.message]
+    } else {
+      errors.general = ['Failed to update password']
+    }
+
+    return { success: false, message: "Failed to update password", errors }
   }
 }

@@ -36,3 +36,8 @@ export type UserProfileRequest = {
   image_id?: number | null;
   name: string;
 }
+
+export type UserPasswordRequest = {
+  old_password: string;
+  new_password: string;
+}

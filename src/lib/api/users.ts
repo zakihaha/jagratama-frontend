@@ -89,3 +89,15 @@ export async function fetchUsersApproverReviewer(): Promise<UserModel[]> {
   const json = await res.json()
   return json.data as UserModel[]
 }
+
+export async function updateUserPassword(oldPassword: string, newPassword: string): Promise<void> {
+  const res = await fetchWithAuth(`${API_V1_BASE_URL}/users/password`, {
+    method: 'PUT',
+    body: JSON.stringify({ old_password: oldPassword, new_password: newPassword }),
+  })
+  if (!res.ok) {
+    throw new Error('Failed to update user password')
+  }
+
+  return
+}
