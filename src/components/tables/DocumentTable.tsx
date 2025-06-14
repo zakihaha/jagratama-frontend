@@ -141,49 +141,49 @@ export default function DocumentTable({ documents, totalPage, currentPage, }: Pr
               <TableRow>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-[#262626] text-center text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-center text-theme-sm dark:text-gray-400"
                 >
                   #
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-sm dark:text-gray-400"
                 >
                   Judul
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-sm dark:text-gray-400"
                 >
                   Ditunjukan
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-sm dark:text-gray-400"
                 >
                   Tanggal Dibuat
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-sm dark:text-gray-400"
                 >
                   Tanggal Disetujui
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-sm dark:text-gray-400"
                 >
                   Jenis Surat
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-sm dark:text-gray-400"
                 >
                   Status
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-sm dark:text-gray-400"
                 >
                   {""}
                 </TableCell>

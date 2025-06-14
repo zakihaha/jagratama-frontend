@@ -130,43 +130,43 @@ export default function UserTable({ users, roles, positions, totalPage, currentP
               <TableRow>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-sm dark:text-gray-400"
                 >
                   #
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-sm dark:text-gray-400"
                 >
                   User
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-sm dark:text-gray-400"
                 >
                   Email
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-sm dark:text-gray-400"
                 >
                   Role
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-sm dark:text-gray-400"
                 >
                   Jabatan
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-sm dark:text-gray-400"
                 >
                   Organisasi
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-sm dark:text-gray-400"
                 >
                   {""}
                 </TableCell>

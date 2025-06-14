@@ -54,37 +54,37 @@ export default function DocumentReviewHistoryTable({ documents }: Props) {
               <TableRow>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-[#262626] text-center text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-center text-theme-sm dark:text-gray-400"
                 >
                   #
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-sm dark:text-gray-400"
                 >
                   Judul
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-sm dark:text-gray-400"
                 >
                   Pengaju
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-sm dark:text-gray-400"
                 >
                   Jenis Surat
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-sm dark:text-gray-400"
                 >
                   Tanggal Diajukan
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-xs dark:text-gray-400"
+                  className="px-5 py-3 font-medium text-[#262626] text-start text-theme-sm dark:text-gray-400"
                 >
                   Status
                 </TableCell>
