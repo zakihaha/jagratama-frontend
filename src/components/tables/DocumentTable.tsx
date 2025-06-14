@@ -252,7 +252,7 @@ export default function DocumentTable({ documents, totalPage, currentPage, }: Pr
                       <DropdownMenuContent className="bg-white py-2 rounded-2xl">
                         <DropdownMenuItem className="hover:outline-0 px-4 py-[10px] hover:bg-[#E2F6F7]/30">
                           <Link
-                            href={`/jagratama/documents/${document.slug}/edit`}
+                            href={`/jagratama/documents/${document.slug}`}
                             className="inline-flex items-center gap-2"
                           >
                             <File className="w-4 h-4 mr-2" />
