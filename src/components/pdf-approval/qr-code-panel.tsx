@@ -45,7 +45,7 @@ export const QRCodePanel = ({
       </CardHeader>
       <CardContent className="py-4 pt-0 px-0">
         <div className="space-y-4">
-          <div className="text-sm text-gray-700 space-y-4">
+          <div className="text-sm space-y-4">
             <div className="space-y-2">
               <p className="text-sm">Pilih Status</p>
               <div className="relative">
@@ -76,7 +76,7 @@ export const QRCodePanel = ({
           </div>
 
           {
-            document.is_reviewer && (
+            document.is_reviewer && formInputValue.approved != "approved" && (
               <div className="space-y-2">
                 <p className="text-sm">Catatan</p>
                 <form action="">
@@ -90,6 +90,15 @@ export const QRCodePanel = ({
                   >
                   </textarea>
                 </form>
+              </div>
+            )
+          }
+
+          {
+            document.note && (
+              <div className="space-y-2">
+                <p className="text-sm">Catatan Revisi Sebelumnya:</p>
+                <p className="text-sm text-[#262626]">{document.note}</p>
               </div>
             )
           }

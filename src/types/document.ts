@@ -72,6 +72,7 @@ export type DocumentCounterModel = {
 
 export type DocumentReviewDetailModel = {
   title: string
+  note: string
   file: string
   requires_signature: boolean
   is_reviewer: boolean
