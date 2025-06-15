@@ -118,14 +118,14 @@ const DocumentCreateForm = ({ categories, users }: { categories: CategoryModel[]
 
               <div>
                 <Label className="text-[#262626] mb-2 text-sm" htmlFor="title">
-                  Judul Pengajuan
+                  Judul Pengajuan (Format: Nama Berkas_Asal Ormawa/UKM)
                 </Label>
                 <Input
                   className="!rounded-2xl placeholder:!text-[#A1A1A1]"
                   type="text"
                   id="title"
                   name="title"
-                  placeholder="Masukan Judul"
+                  placeholder="Nama Berkas_Asal Ormawa/UKM"
                 />
                 {state.errors.title && (
                   <p className="text-red-500 text-sm mt-1">
